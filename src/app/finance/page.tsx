@@ -91,30 +91,32 @@ export default function FinancePage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
-            Financial Ledger
+            Financial Health & P&L
           </span>
-          <h2 className="font-sans text-3xl sm:text-4xl font-black text-charcoal tracking-tight">
-            Finance & Cost Management
+          <h2 className="font-sans text-3xl sm:text-4xl font-bold text-charcoal tracking-tight">
+            Exhibition Finance & Ledgers
           </h2>
         </div>
 
-        <div className="flex items-center gap-3 self-start sm:self-auto">
+        {/* Action Buttons */}
+        <div className="flex items-center gap-3 w-full sm:w-auto">
           <button
             onClick={handleExportReport}
-            className="btn-secondary glass-rise-btn px-5 py-2.5 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5"
+            className="flex-1 sm:flex-initial px-5 py-3 rounded-full border border-sage-300 bg-white/90 text-xs font-bold text-charcoal hover:bg-white transition-all shadow-xs flex items-center justify-center gap-2 glass-rise-btn"
           >
-            <Download className="w-3.5 h-3.5" />
-            <span>Export Report</span>
+            <Download className="w-4 h-4 text-sage-700" />
+            <span>Export CSV</span>
           </button>
 
           <button
             onClick={() => setIsFormOpen(true)}
-            className="btn-primary glass-rise-btn px-6 py-2.5 text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-soft"
+            className="flex-1 sm:flex-initial btn-primary px-6 py-3 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-soft glass-rise-btn"
           >
             <Plus className="w-4 h-4" />
             <span>Log Expense</span>
           </button>
         </div>
+
       </div>
 
       {/* Per-Exhibition Selector & Summary Panel */}
@@ -129,7 +131,7 @@ export default function FinancePage() {
               <select
                 value={selectedExhibitionId}
                 onChange={(e) => setSelectedExhibitionId(e.target.value)}
-                className="font-sans text-xl sm:text-2xl font-black text-charcoal bg-white/70 hover:bg-white border-2 border-sage-200 hover:border-sage-400 focus:border-sage-700 outline-none px-4 py-2 rounded-2xl cursor-pointer tracking-tight glass-select shadow-2xs"
+                className="font-sans text-xl sm:text-2xl font-bold text-charcoal bg-white/70 hover:bg-white border-2 border-sage-200 hover:border-sage-400 focus:border-sage-700 outline-none px-4 py-2 rounded-2xl cursor-pointer tracking-tight glass-select shadow-2xs"
               >
                 <option value="All">All Editions Consolidated</option>
                 {exhibitions.map((exh) => (
@@ -157,7 +159,7 @@ export default function FinancePage() {
               <span className="text-[11px] text-charcoal-muted uppercase tracking-wider block mb-1 font-bold">
                 Allocated Budget / Funding
               </span>
-              <span className="font-sans text-2xl sm:text-3xl font-black text-charcoal tracking-tight">
+              <span className="font-sans text-2xl sm:text-3xl font-bold text-charcoal tracking-tight">
                 Rs. {(totalAllocated / 100000).toFixed(1)}L
               </span>
             </div>
@@ -171,7 +173,7 @@ export default function FinancePage() {
               <span className="text-[11px] text-charcoal-muted uppercase tracking-wider block mb-1 font-bold">
                 Total Approved Spent
               </span>
-              <span className="font-sans text-2xl sm:text-3xl font-black text-rose-900 tracking-tight">
+              <span className="font-sans text-2xl sm:text-3xl font-bold text-rose-900 tracking-tight">
                 Rs. {(totalSpent / 100000).toFixed(1)}L
               </span>
               <div className="w-full h-2 bg-cream-200 rounded-full overflow-hidden mt-2.5">
@@ -188,7 +190,7 @@ export default function FinancePage() {
               <span className="text-[11px] text-charcoal-muted uppercase tracking-wider block mb-1 font-bold">
                 Remaining Budget
               </span>
-              <span className={`font-sans text-2xl sm:text-3xl font-black tracking-tight ${remainingBudget >= 0 ? 'text-emerald-800' : 'text-rose-700'}`}>
+              <span className={`font-sans text-2xl sm:text-3xl font-bold tracking-tight ${remainingBudget >= 0 ? 'text-emerald-800' : 'text-rose-700'}`}>
                 Rs. {(remainingBudget / 100000).toFixed(1)}L
               </span>
             </div>
@@ -202,7 +204,7 @@ export default function FinancePage() {
               <span className="text-[11px] text-sage-900 uppercase tracking-wider font-bold block mb-1">
                 Stall Revenue Booked
               </span>
-              <span className="font-sans text-2xl sm:text-3xl font-black text-sage-deep tracking-tight">
+              <span className="font-sans text-2xl sm:text-3xl font-bold text-sage-deep tracking-tight">
                 Rs. {(stallRevenue / 100000).toFixed(1)}L
               </span>
             </div>

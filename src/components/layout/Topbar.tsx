@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 import { 
   Search, 
   Bell, 
@@ -11,7 +12,12 @@ import {
   ExternalLink,
   ChevronDown,
   CheckCircle2,
-  Sparkles
+  Sparkles,
+  Settings,
+  User,
+  LogOut,
+  Store,
+  Check
 } from 'lucide-react';
 import { useAdmin } from '../../context/AdminContext';
 import { UserRole } from '../../types';
@@ -25,6 +31,28 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
   const { currentRole, setCurrentRole, currentUser, staffUsers, settings } = useAdmin();
   const [showRoleDropdown, setShowRoleDropdown] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [logoutMessage, setLogoutMessage] = useState<string | null>(null);
+
+  const profileRef = useRef<HTMLDivElement>(null);
+  const roleRef = useRef<HTMLDivElement>(null);
+  const notifRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+        setShowProfileMenu(false);
+      }
+      if (roleRef.current && !roleRef.current.contains(event.target as Node)) {
+        setShowRoleDropdown(false);
+      }
+      if (notifRef.current && !notifRef.current.contains(event.target as Node)) {
+        setShowNotifications(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const getPageTitle = () => {
     switch (pathname) {
@@ -47,6 +75,14 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
     setShowRoleDropdown(false);
   };
 
+  const handleLogout = () => {
+    setLogoutMessage('Active session cleared. Reverted to default profile.');
+    setTimeout(() => {
+      setLogoutMessage(null);
+      setShowProfileMenu(false);
+    }, 2000);
+  };
+
   return (
     <header className="h-20 glass-topbar sticky top-0 z-30 px-6 sm:px-10 flex items-center justify-between gap-4">
       
@@ -60,7 +96,7 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
         </button>
 
         <div>
-          <h1 className="font-sans text-xl sm:text-2xl font-black text-charcoal tracking-tight">
+          <h1 className="font-sans text-xl sm:text-2xl font-bold text-charcoal tracking-tight">
             {pageInfo.title}
           </h1>
           <p className="text-xs text-charcoal-muted hidden sm:block font-medium">
@@ -69,11 +105,11 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
         </div>
       </div>
 
-      {/* Right Actions: Search + Role Switcher + WhatsApp + Notifications + Avatar */}
+      {/* Right Actions: Role Switcher + WhatsApp + Notifications + User Avatar */}
       <div className="flex items-center gap-3 sm:gap-4">
         
-        {/* Role Simulator Pill (Allows testing Owner vs Staff permissions live) */}
-        <div className="relative">
+        {/* Role Simulator Pill */}
+        <div className="relative" ref={roleRef}>
           <button
             onClick={() => setShowRoleDropdown(!showRoleDropdown)}
             className="flex items-center gap-2 px-3.5 py-2 rounded-full glass-pill hover:bg-white text-xs font-semibold transition-all shadow-xs border border-sage-300/80 glass-rise-btn"
@@ -121,7 +157,7 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
         </a>
 
         {/* Notification Bell Dropdown */}
-        <div className="relative">
+        <div className="relative" ref={notifRef}>
           <button
             onClick={() => setShowNotifications(!showNotifications)}
             className="w-10 h-10 rounded-full glass-pill hover:bg-white flex items-center justify-center text-charcoal-light hover:text-charcoal relative transition-all glass-rise-btn"
@@ -157,13 +193,123 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
           )}
         </div>
 
-        {/* User Profile Avatar */}
-        <div className="flex items-center gap-2 pl-2 border-l border-sage-200">
-          <img
-            src={currentUser.avatar}
-            alt={currentUser.name}
-            className="w-9 h-9 rounded-full object-cover border border-sage-300 ring-2 ring-cream"
-          />
+        {/* User Profile Avatar with Working Dropdown Menu */}
+        <div className="relative pl-2 border-l border-sage-200" ref={profileRef}>
+          <button
+            onClick={() => setShowProfileMenu(!showProfileMenu)}
+            className="flex items-center gap-2 rounded-full p-0.5 hover:ring-2 hover:ring-sage-400 transition-all glass-rise-btn"
+            title={`${currentUser.name} (${currentRole}) - Click for options`}
+          >
+            <img
+              src={currentUser.avatar}
+              alt={currentUser.name}
+              className="w-9 h-9 rounded-full object-cover border border-sage-300 ring-2 ring-cream"
+            />
+          </button>
+
+          {showProfileMenu && (
+            <div className="absolute right-0 mt-3 w-72 bg-white/95 backdrop-blur-2xl rounded-3xl shadow-soft-xl border border-sage-200/90 p-4 z-50 animate-fadeIn">
+              
+              {/* User Identity Header */}
+              <div className="flex items-center gap-3 pb-3 border-b border-sage-100">
+                <img
+                  src={currentUser.avatar}
+                  alt={currentUser.name}
+                  className="w-11 h-11 rounded-full object-cover border-2 border-sage-300 shadow-xs"
+                />
+                <div className="min-w-0 flex-1">
+                  <span className="block text-xs font-bold text-charcoal truncate">
+                    {currentUser.name}
+                  </span>
+                  <span className="block text-[11px] text-charcoal-muted truncate font-medium">
+                    {currentUser.email}
+                  </span>
+                  <span className={`inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full mt-1 ${
+                    currentRole === 'owner' ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' :
+                    currentRole === 'admin' ? 'bg-purple-50 text-purple-800 border border-purple-200' :
+                    'bg-amber-50 text-amber-800 border border-amber-200'
+                  }`}>
+                    <ShieldCheck className="w-3 h-3" />
+                    {currentRole}
+                  </span>
+                </div>
+              </div>
+
+              {/* Navigation Options */}
+              <div className="py-2 space-y-1">
+                <Link
+                  href="/settings"
+                  onClick={() => setShowProfileMenu(false)}
+                  className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold text-charcoal hover:bg-cream-100 hover:text-sage-900 transition-colors"
+                >
+                  <Settings className="w-4 h-4 text-sage-700" />
+                  <span>Profile & Agency Settings</span>
+                </Link>
+
+                <Link
+                  href="/exhibitions"
+                  onClick={() => setShowProfileMenu(false)}
+                  className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold text-charcoal hover:bg-cream-100 hover:text-sage-900 transition-colors"
+                >
+                  <Store className="w-4 h-4 text-sage-700" />
+                  <span>Exhibitions Directory</span>
+                </Link>
+
+                <a
+                  href="http://localhost:5173/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold text-charcoal hover:bg-cream-100 hover:text-sage-900 transition-colors"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <ExternalLink className="w-4 h-4 text-sage-700" />
+                    <span>Public Landing Page</span>
+                  </div>
+                  <span className="text-[10px] text-sage-600 font-bold bg-sage-50 px-2 py-0.5 rounded-full">Live</span>
+                </a>
+              </div>
+
+              {/* Quick Role Switcher in Menu */}
+              <div className="pt-2 pb-1 border-t border-sage-100">
+                <span className="text-[10px] font-bold text-charcoal-muted uppercase tracking-wider block mb-1.5 px-3">
+                  Quick Role Switch
+                </span>
+                <div className="grid grid-cols-3 gap-1 px-1">
+                  {(['owner', 'admin', 'staff'] as UserRole[]).map((r) => (
+                    <button
+                      key={r}
+                      onClick={() => handleRoleChange(r)}
+                      className={`py-1.5 px-2 rounded-xl text-[11px] font-bold capitalize transition-all ${
+                        currentRole === r
+                          ? 'bg-sage-800 text-cream shadow-xs'
+                          : 'text-charcoal-muted hover:text-charcoal hover:bg-cream-100'
+                      }`}
+                    >
+                      {r}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Logout Feedback or Button */}
+              <div className="pt-2 border-t border-sage-100">
+                {logoutMessage ? (
+                  <div className="p-2 text-center text-xs text-emerald-800 bg-emerald-50 rounded-xl border border-emerald-200 font-medium">
+                    {logoutMessage}
+                  </div>
+                ) : (
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-rose-700 hover:bg-rose-50 transition-colors"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span>Log Out</span>
+                  </button>
+                )}
+              </div>
+
+            </div>
+          )}
         </div>
 
       </div>

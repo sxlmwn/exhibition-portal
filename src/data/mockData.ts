@@ -81,7 +81,7 @@ export const INITIAL_EXHIBITIONS: Exhibition[] = [
     endDate: '2026-03-30',
     status: 'upcoming',
     category: 'Lifestyle & Artisan Craft',
-    coverImage: '/images/More Stalls Added.png',
+    coverImage: '/images/1.jpg',
     totalStallCapacity: 50,
     bookedStallsCount: 38,
     budgetAllocated: 3200000, // PKR 3.2M
@@ -100,7 +100,7 @@ export const INITIAL_EXHIBITIONS: Exhibition[] = [
     endDate: '2026-05-17',
     status: 'upcoming',
     category: 'Home, Decor & Wellness',
-    coverImage: '/images/Exhibition Agency BG.png',
+    coverImage: '/images/2.jpg',
     totalStallCapacity: 40,
     bookedStallsCount: 22,
     budgetAllocated: 2800000,
@@ -516,11 +516,11 @@ export const INITIAL_PAST_EVENTS: PastEventStory[] = [
     totalRevenueGMV: 'Rs. 42M+',
     satisfactionRate: '96%',
     narrativeExcerpt: 'A 3-day showcase of artisan studios and culinary craft with record urban footfall.',
-    coverImage: '/images/Exhibition Agency BG.png',
+    coverImage: '/images/1.jpg',
     photos: [
-      '/images/Exhibition Agency BG.png',
+      '/images/1.jpg',
       '/images/More Stalls Added.png',
-      '/images/Landing Hero _ Wide Group_ No Slate.png'
+      '/images/Exhibition Agency BG.png'
     ],
     tags: ['Artisan Craft', 'Winter Edition', 'Record Sales']
   },
@@ -535,10 +535,10 @@ export const INITIAL_PAST_EVENTS: PastEventStory[] = [
     totalRevenueGMV: 'Rs. 28M+',
     satisfactionRate: '98%',
     narrativeExcerpt: 'Eco-conscious personal care, organic foods, and slow fashion in the capital.',
-    coverImage: '/images/More Stalls Added.png',
+    coverImage: '/images/2.jpg',
     photos: [
-      '/images/More Stalls Added.png',
-      '/images/Exhibition Agency BG.png'
+      '/images/2.jpg',
+      '/images/More Stalls Added.png'
     ],
     tags: ['Eco-Living', 'Organic', 'Diplomatic Footfall']
   },
@@ -553,9 +553,9 @@ export const INITIAL_PAST_EVENTS: PastEventStory[] = [
     totalRevenueGMV: 'Rs. 51M+',
     satisfactionRate: '94%',
     narrativeExcerpt: 'Resort wear, contemporary decor, fine jewelry, and gourmet dining.',
-    coverImage: '/images/Landing Hero _ Wide Group_ No Slate.png',
+    coverImage: '/images/More Stalls Added.png',
     photos: [
-      '/images/Landing Hero _ Wide Group_ No Slate.png',
+      '/images/More Stalls Added.png',
       '/images/Exhibition Agency BG.png'
     ],
     tags: ['Lifestyle', 'Resort Pret', 'Gourmet']

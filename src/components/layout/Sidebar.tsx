@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { BrandLogo } from '../BrandLogo';
@@ -17,9 +17,13 @@ import {
   ChevronRight,
   Sparkles,
   ShieldCheck,
-  Building2
+  Building2,
+  ExternalLink,
+  LogOut,
+  ChevronUp
 } from 'lucide-react';
 import { useAdmin } from '../../context/AdminContext';
+import { UserRole } from '../../types';
 
 interface SidebarProps {
   collapsed: boolean;
@@ -28,7 +32,33 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => {
   const pathname = usePathname();
-  const { currentUser, currentRole, vendorRequests, expenses } = useAdmin();
+  const { currentUser, currentRole, setCurrentRole, vendorRequests, expenses } = useAdmin();
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [logoutMessage, setLogoutMessage] = useState<string | null>(null);
+
+  const profileRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+        setShowProfileMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleRoleChange = (role: UserRole) => {
+    setCurrentRole(role);
+  };
+
+  const handleLogout = () => {
+    setLogoutMessage('Session reset.');
+    setTimeout(() => {
+      setLogoutMessage(null);
+      setShowProfileMenu(false);
+    }, 2000);
+  };
 
   const pendingRequestsCount = vendorRequests.filter(r => r.status === 'pending').length;
   const pendingExpensesCount = expenses.filter(e => e.status === 'pending_approval').length;
@@ -50,11 +80,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
       label: 'Vendor Requests',
       href: '/requests',
       icon: Store,
-      badge: pendingRequestsCount > 0 ? pendingRequestsCount : null,
+      badge: pendingRequestsCount > 0 ? `${pendingRequestsCount}` : null,
       badgeColor: 'bg-amber-100 text-amber-900 border-amber-300'
     },
     {
-      label: 'Contacts / CRM',
+      label: 'Contacts & CRM',
       href: '/crm',
       icon: Users,
       badge: null
@@ -63,17 +93,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
       label: 'Finance & Costs',
       href: '/finance',
       icon: Receipt,
-      badge: (currentRole !== 'staff' && pendingExpensesCount > 0) ? pendingExpensesCount : null,
-      badgeColor: 'bg-rose-100 text-rose-800 border-rose-200'
+      badge: pendingExpensesCount > 0 ? `${pendingExpensesCount}` : null,
+      badgeColor: 'bg-rose-100 text-rose-900 border-rose-300'
     },
     {
-      label: 'Marketing Log',
+      label: 'Marketing Logs',
       href: '/marketing',
       icon: Megaphone,
       badge: null
     },
     {
-      label: 'Past Events',
+      label: 'Past Editions',
       href: '/past-events',
       icon: History,
       badge: null
@@ -157,10 +187,112 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
         </nav>
       </div>
 
-      {/* Bottom Section: Active User Card */}
-      <div className="p-3 border-t border-sage-200/40">
+      {/* Bottom Section: Active User Card with Working Interactive Menu */}
+      <div className="p-3 border-t border-sage-200/40 relative" ref={profileRef}>
+        
+        {/* Profile Popover / Dropdown Menu */}
+        {showProfileMenu && (
+          <div className={`absolute bottom-full mb-3 ${collapsed ? 'left-2 w-72' : 'left-3 right-3'} bg-white/95 backdrop-blur-2xl rounded-3xl shadow-soft-xl border border-sage-200/90 p-4 z-50 animate-fadeIn`}>
+            
+            {/* User Identity */}
+            <div className="flex items-center gap-3 pb-3 border-b border-sage-100">
+              <img
+                src={currentUser.avatar}
+                alt={currentUser.name}
+                className="w-10 h-10 rounded-full object-cover border border-sage-300 shrink-0"
+              />
+              <div className="min-w-0 flex-1">
+                <span className="block text-xs font-bold text-charcoal truncate">
+                  {currentUser.name}
+                </span>
+                <span className="block text-[11px] text-charcoal-muted truncate font-medium">
+                  {currentUser.email}
+                </span>
+                <span className={`inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full mt-1 ${
+                  currentRole === 'owner' ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' :
+                  currentRole === 'admin' ? 'bg-purple-50 text-purple-800 border border-purple-200' :
+                  'bg-amber-50 text-amber-800 border border-amber-200'
+                }`}>
+                  <ShieldCheck className="w-3 h-3" />
+                  {currentRole}
+                </span>
+              </div>
+            </div>
+
+            {/* Menu Links */}
+            <div className="py-2 space-y-1">
+              <Link
+                href="/settings"
+                onClick={() => setShowProfileMenu(false)}
+                className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-charcoal hover:bg-cream-100 hover:text-sage-900 transition-colors"
+              >
+                <Settings className="w-4 h-4 text-sage-700" />
+                <span>Profile & Settings</span>
+              </Link>
+
+              <a
+                href="http://localhost:5173/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-charcoal hover:bg-cream-100 hover:text-sage-900 transition-colors"
+              >
+                <div className="flex items-center gap-2.5">
+                  <ExternalLink className="w-4 h-4 text-sage-700" />
+                  <span>Public Landing Page</span>
+                </div>
+                <span className="text-[10px] text-sage-600 font-bold bg-sage-50 px-2 py-0.5 rounded-full">Live</span>
+              </a>
+            </div>
+
+            {/* Role Switcher */}
+            <div className="pt-2 pb-1 border-t border-sage-100">
+              <span className="text-[10px] font-bold text-charcoal-muted uppercase tracking-wider block mb-1.5 px-3">
+                Switch Role
+              </span>
+              <div className="grid grid-cols-3 gap-1 px-1">
+                {(['owner', 'admin', 'staff'] as UserRole[]).map((r) => (
+                  <button
+                    key={r}
+                    onClick={() => handleRoleChange(r)}
+                    className={`py-1 px-2 rounded-xl text-[10px] font-bold capitalize transition-all ${
+                      currentRole === r
+                        ? 'bg-sage-800 text-cream shadow-xs'
+                        : 'text-charcoal-muted hover:text-charcoal hover:bg-cream-100'
+                    }`}
+                  >
+                    {r}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Log Out */}
+            <div className="pt-2 border-t border-sage-100">
+              {logoutMessage ? (
+                <div className="p-1.5 text-center text-xs text-emerald-800 bg-emerald-50 rounded-xl border border-emerald-200 font-medium">
+                  {logoutMessage}
+                </div>
+              ) : (
+                <button
+                  onClick={handleLogout}
+                  className="w-full flex items-center gap-2.5 px-3 py-1.5 rounded-xl text-xs font-bold text-rose-700 hover:bg-rose-50 transition-colors"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span>Log Out</span>
+                </button>
+              )}
+            </div>
+
+          </div>
+        )}
+
+        {/* The Clickable User Card Button */}
         {!collapsed ? (
-          <div className="p-3 rounded-2xl bg-white/70 border border-sage-200/60 shadow-xs flex items-center justify-between">
+          <button
+            onClick={() => setShowProfileMenu(!showProfileMenu)}
+            className="w-full p-3 rounded-2xl bg-white/70 hover:bg-white border border-sage-200/60 shadow-xs flex items-center justify-between transition-all glass-rise-btn text-left group"
+            title="Click for account options"
+          >
             <div className="flex items-center gap-3 min-w-0">
               <img
                 src={currentUser.avatar}
@@ -168,7 +300,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
                 className="w-9 h-9 rounded-full object-cover border border-sage-300 shrink-0"
               />
               <div className="min-w-0">
-                <span className="block text-xs font-semibold text-charcoal truncate">
+                <span className="block text-xs font-bold text-charcoal truncate group-hover:text-sage-900">
                   {currentUser.name}
                 </span>
                 <span className="inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider text-sage-800">
@@ -177,15 +309,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
                 </span>
               </div>
             </div>
-          </div>
+            <ChevronUp className={`w-4 h-4 text-charcoal-muted transition-transform duration-200 ${showProfileMenu ? 'rotate-180' : ''}`} />
+          </button>
         ) : (
           <div className="flex justify-center py-2">
-            <img
-              src={currentUser.avatar}
-              alt={currentUser.name}
-              className="w-9 h-9 rounded-full object-cover border border-sage-300"
-              title={`${currentUser.name} (${currentRole})`}
-            />
+            <button
+              onClick={() => setShowProfileMenu(!showProfileMenu)}
+              className="rounded-full p-0.5 hover:ring-2 hover:ring-sage-400 transition-all glass-rise-btn"
+              title={`${currentUser.name} (${currentRole}) - Click for options`}
+            >
+              <img
+                src={currentUser.avatar}
+                alt={currentUser.name}
+                className="w-9 h-9 rounded-full object-cover border border-sage-300"
+              />
+            </button>
           </div>
         )}
       </div>

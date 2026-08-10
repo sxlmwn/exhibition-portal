@@ -61,8 +61,8 @@ export default function ExhibitionsPage() {
           <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
             Portfolio Management
           </span>
-          <h2 className="font-sans text-3xl sm:text-4xl font-black text-charcoal tracking-tight">
-            Exhibitions Directory
+          <h2 className="font-sans text-3xl sm:text-4xl font-bold text-charcoal tracking-tight">
+            Exhibitions & Schedule
           </h2>
         </div>
 

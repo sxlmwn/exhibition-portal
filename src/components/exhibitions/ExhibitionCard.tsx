@@ -80,7 +80,7 @@ export const ExhibitionCard: React.FC<ExhibitionCardProps> = ({
             <span className="text-[10px] uppercase tracking-wider text-sage-200 font-bold block">
               {exhibition.category}
             </span>
-            <h3 className="font-sans text-xl font-black leading-tight truncate tracking-tight">
+            <h3 className="font-sans text-xl font-bold leading-tight truncate tracking-tight">
               {exhibition.title}
             </h3>
           </div>

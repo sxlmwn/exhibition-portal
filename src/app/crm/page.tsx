@@ -118,8 +118,8 @@ export default function CRMPage() {
           <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
             Vendor Directory
           </span>
-          <h2 className="font-sans text-3xl sm:text-4xl font-black text-charcoal tracking-tight">
-            Contacts & Exhibitor CRM
+          <h2 className="font-sans text-3xl sm:text-4xl font-bold text-charcoal tracking-tight">
+            Vendor Directory & CRM
           </h2>
         </div>
 

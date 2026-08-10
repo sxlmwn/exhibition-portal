@@ -42,19 +42,19 @@ export default function MarketingPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
-            Growth & Outreach
+            Growth & Campaigns
           </span>
-          <h2 className="font-sans text-3xl sm:text-4xl font-black text-charcoal tracking-tight">
-            Marketing Logs & Lead Attribution
+          <h2 className="font-sans text-3xl sm:text-4xl font-bold text-charcoal tracking-tight">
+            Marketing & Lead Acquisition
           </h2>
         </div>
 
         <button
           onClick={() => setIsFormOpen(true)}
-          className="btn-primary glass-rise-btn px-6 py-3 text-xs font-bold uppercase tracking-wider flex items-center gap-2 self-start sm:self-auto shadow-soft"
+          className="btn-primary glass-rise-btn px-6 py-2.5 text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-soft self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
-          <span>Add Campaign</span>
+          <span>New Campaign</span>
         </button>
       </div>
 
@@ -67,7 +67,7 @@ export default function MarketingPage() {
             <span className="text-xs font-bold uppercase tracking-wider text-sage-800 block mb-1">
               Total Marketing Investment
             </span>
-            <span className="font-sans text-3xl font-black text-charcoal tracking-tight">
+            <span className="font-sans text-3xl font-bold text-charcoal tracking-tight">
               Rs. {(totalMarketingSpend / 100000).toFixed(1)}L
             </span>
             <p className="text-xs text-charcoal-muted mt-2 font-medium">
@@ -79,7 +79,7 @@ export default function MarketingPage() {
             <span className="text-xs font-bold uppercase tracking-wider text-sage-800 block mb-1">
               Direct Vendor Leads
             </span>
-            <span className="font-sans text-3xl font-black text-sage-deep tracking-tight">
+            <span className="font-sans text-3xl font-bold text-sage-deep tracking-tight">
               {totalLeads} Applicants
             </span>
             <p className="text-xs text-charcoal-muted mt-2 font-medium">

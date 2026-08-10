@@ -20,7 +20,7 @@ export const UpcomingExhibitionsWidget: React.FC<UpcomingExhibitionsWidgetProps>
             <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
               Active Editions
             </span>
-            <h3 className="font-sans text-xl font-black text-charcoal tracking-tight">
+            <h3 className="font-sans text-xl font-bold text-charcoal tracking-tight">
               Upcoming Schedule
             </h3>
           </div>

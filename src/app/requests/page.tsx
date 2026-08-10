@@ -71,8 +71,8 @@ export default function VendorRequestsPage() {
           <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
             Exhibitor Onboarding
           </span>
-          <h2 className="font-sans text-3xl sm:text-4xl font-black text-charcoal tracking-tight">
-            Vendor Requests & Floor Plan Allocation
+          <h2 className="font-sans text-3xl sm:text-4xl font-bold text-charcoal tracking-tight">
+            Vendor Requests & Stalls
           </h2>
         </div>
 

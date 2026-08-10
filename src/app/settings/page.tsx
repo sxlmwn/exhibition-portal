@@ -66,8 +66,8 @@ export default function SettingsPage() {
           <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
             System Administration
           </span>
-          <h2 className="font-sans text-3xl sm:text-4xl font-black text-charcoal tracking-tight">
-            Agency Settings & Access Roles
+          <h2 className="font-sans text-3xl sm:text-4xl font-bold text-charcoal tracking-tight">
+            Settings & Permissions
           </h2>
         </div>
 
@@ -76,7 +76,7 @@ export default function SettingsPage() {
           className="btn-primary glass-rise-btn px-6 py-3 text-xs font-bold uppercase tracking-wider flex items-center gap-2 self-start sm:self-auto shadow-soft"
         >
           <UserPlus className="w-4 h-4" />
-          <span>Invite Team Member</span>
+          <span>Invite Member</span>
         </button>
       </div>
 
@@ -88,7 +88,7 @@ export default function SettingsPage() {
             <span className="text-xs uppercase tracking-wider font-bold text-sage-800 block">
               Team Directory
             </span>
-            <h3 className="font-sans text-2xl font-black text-charcoal tracking-tight">
+            <h3 className="font-sans text-2xl font-bold text-charcoal tracking-tight">
               Staff Members & Role Permissions
             </h3>
           </div>

@@ -108,9 +108,10 @@ export const ExhibitionFormModal: React.FC<ExhibitionFormModalProps> = ({
   };
 
   const sampleImages = [
+    { label: 'Artisan Boutique Stalls', path: '/images/1.jpg' },
+    { label: 'Design Pavilion & Exhibits', path: '/images/2.jpg' },
     { label: 'Exhibition Hall (Hero)', path: '/images/More Stalls Added.png' },
     { label: 'Outdoor Bazaar Greenery', path: '/images/Exhibition Agency BG.png' },
-    { label: 'Artisan Pavilion Stalls', path: '/images/Landing Hero _ Wide Group_ No Slate.png' },
   ];
 
   return (
