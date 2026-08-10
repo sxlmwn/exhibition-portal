@@ -124,10 +124,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-3.5 py-3 rounded-2xl text-xs font-medium transition-all duration-200 relative group ${
+                className={`flex items-center gap-3 px-3.5 py-3 rounded-2xl text-xs font-medium transition-all duration-200 relative group sidebar-nav-item glass-rise-btn ${
                   isActive
-                    ? 'bg-sage-800 text-cream shadow-sm font-semibold'
-                    : 'text-charcoal-light hover:bg-white/80 hover:text-charcoal hover:shadow-xs'
+                    ? 'bg-sage-800 text-cream shadow-soft font-bold'
+                    : 'text-charcoal-light hover:bg-white hover:text-charcoal hover:shadow-xs font-semibold'
                 } ${collapsed ? 'justify-center' : ''}`}
                 title={collapsed ? item.label : undefined}
               >

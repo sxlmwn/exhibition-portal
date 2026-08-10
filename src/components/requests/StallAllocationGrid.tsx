@@ -81,12 +81,12 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
           </span>
           <div className="flex items-center gap-3">
             <select
-              value={currentExhibition.id}
+              value={selectedExhibitionId}
               onChange={(e) => onSelectExhibition(e.target.value)}
-              className="font-sans text-xl sm:text-2xl font-extrabold text-charcoal bg-transparent border-b-2 border-sage-300 focus:border-sage-700 outline-none pb-0.5 cursor-pointer tracking-tight"
+              className="font-sans text-lg sm:text-xl font-bold text-charcoal bg-white/70 hover:bg-white border-2 border-sage-200 hover:border-sage-400 focus:border-sage-700 outline-none px-3.5 py-1.5 rounded-2xl cursor-pointer tracking-tight glass-select"
             >
               {exhibitions.map((exh) => (
-                <option key={exh.id} value={exh.id} className="text-sm font-sans">
+                <option key={exh.id} value={exh.id}>
                   {exh.title} ({exh.city})
                 </option>
               ))}
@@ -95,18 +95,18 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
         </div>
 
         {/* Legend */}
-        <div className="flex flex-wrap items-center gap-4 bg-white/80 px-5 py-2.5 rounded-2xl border border-sage-200 text-xs">
+        <div className="flex flex-wrap items-center gap-4 bg-white/80 px-5 py-2.5 rounded-2xl border border-sage-200 text-xs shadow-2xs">
           <div className="flex items-center gap-2">
             <span className="w-3.5 h-3.5 rounded-md border-2 border-sage-500 bg-sage-50" />
-            <span className="text-charcoal-muted">Available</span>
+            <span className="text-charcoal-muted font-medium">Available</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="w-3.5 h-3.5 rounded-md bg-sage-800" />
-            <span className="text-charcoal font-semibold">Booked / Allocated</span>
+            <span className="text-charcoal font-bold">Booked / Allocated</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="w-3.5 h-3.5 rounded-md bg-amber-200 border border-amber-400" />
-            <span className="text-charcoal-muted">Corner Slot</span>
+            <span className="text-charcoal-muted font-medium">Corner Slot</span>
           </div>
         </div>
       </div>
@@ -143,12 +143,12 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
                   <button
                     key={stall.id}
                     onClick={() => handleStallClick(stall)}
-                    className={`relative p-3.5 rounded-2xl flex flex-col items-center justify-center transition-all min-h-[105px] text-center border-2 ${
+                    className={`relative p-3.5 rounded-2xl flex flex-col items-center justify-center transition-all duration-200 min-h-[105px] text-center border-2 glass-rise-btn ${
                       isBooked
-                        ? 'bg-charcoal/10 border-charcoal/20 text-charcoal hover:bg-charcoal/15'
+                        ? 'bg-charcoal/10 border-charcoal/20 text-charcoal hover:bg-charcoal/20 hover:shadow-soft'
                         : isSelected
                         ? 'bg-sage text-white shadow-soft-lg ring-4 ring-sage-300 scale-105 z-10'
-                        : `${getTierColor(stall.tier)} hover:border-sage-600 hover:scale-[1.02]`
+                        : `${getTierColor(stall.tier)} hover:border-sage-600 hover:shadow-soft`
                     }`}
                   >
                     <span className={`text-xs font-extrabold font-sans ${isSelected ? 'text-white' : 'text-charcoal'}`}>
@@ -195,12 +195,12 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
                   <button
                     key={stall.id}
                     onClick={() => handleStallClick(stall)}
-                    className={`relative p-3.5 rounded-2xl flex flex-col items-center justify-center transition-all min-h-[105px] text-center border-2 ${
+                    className={`relative p-3.5 rounded-2xl flex flex-col items-center justify-center transition-all duration-200 min-h-[105px] text-center border-2 glass-rise-btn ${
                       isBooked
-                        ? 'bg-charcoal/10 border-charcoal/20 text-charcoal hover:bg-charcoal/15'
+                        ? 'bg-charcoal/10 border-charcoal/20 text-charcoal hover:bg-charcoal/20 hover:shadow-soft'
                         : isSelected
                         ? 'bg-sage text-white shadow-soft-lg ring-4 ring-sage-300 scale-105 z-10'
-                        : `${getTierColor(stall.tier)} hover:border-sage-600 hover:scale-[1.02]`
+                        : `${getTierColor(stall.tier)} hover:border-sage-600 hover:shadow-soft`
                     }`}
                   >
                     <span className={`text-xs font-extrabold font-sans ${isSelected ? 'text-white' : 'text-charcoal'}`}>
@@ -240,12 +240,12 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
                   <button
                     key={stall.id}
                     onClick={() => handleStallClick(stall)}
-                    className={`relative p-3.5 rounded-2xl flex flex-col items-center justify-center transition-all min-h-[105px] text-center border-2 ${
+                    className={`relative p-3.5 rounded-2xl flex flex-col items-center justify-center transition-all duration-200 min-h-[105px] text-center border-2 glass-rise-btn ${
                       isBooked
-                        ? 'bg-charcoal/10 border-charcoal/20 text-charcoal hover:bg-charcoal/15'
+                        ? 'bg-charcoal/10 border-charcoal/20 text-charcoal hover:bg-charcoal/20 hover:shadow-soft'
                         : isSelected
                         ? 'bg-sage text-white shadow-soft-lg ring-4 ring-sage-300 scale-105 z-10'
-                        : `${getTierColor(stall.tier)} hover:border-sage-600 hover:scale-[1.02]`
+                        : `${getTierColor(stall.tier)} hover:border-sage-600 hover:shadow-soft`
                     }`}
                   >
                     <span className={`text-xs font-extrabold font-sans ${isSelected ? 'text-white' : 'text-charcoal'}`}>

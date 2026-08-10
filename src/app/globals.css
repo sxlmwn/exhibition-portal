@@ -28,7 +28,11 @@
 }
 
 @layer utilities {
-  /* Soft Glassmorphism Card System with Smooth Rise on Hover */
+  /* =========================================================================
+     UNIVERSAL GLASSY RISE ON HOVER SYSTEM (Applied Everywhere)
+     ========================================================================= */
+
+  /* Glass Card Base & Hover Elevation */
   .glass-card {
     background: rgba(255, 255, 255, 0.88);
     backdrop-filter: blur(20px);
@@ -38,14 +42,37 @@
     transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.22s ease;
   }
 
-  .glass-card-hover {
-    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.22s ease;
+  .glass-card-hover,
+  .glass-rise-card {
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.22s ease, background-color 0.22s ease;
+    will-change: transform, box-shadow;
   }
 
-  .glass-card-hover:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 16px 36px -6px rgba(74, 93, 74, 0.16), 0 6px 14px -2px rgba(74, 93, 74, 0.08);
-    border-color: rgba(143, 166, 142, 0.45);
+  .glass-card-hover:hover,
+  .glass-rise-card:hover {
+    transform: translateY(-3px) !important;
+    background-color: rgba(255, 255, 255, 0.98) !important;
+    box-shadow: 0 16px 36px -6px rgba(74, 93, 74, 0.16), 0 6px 14px -2px rgba(74, 93, 74, 0.08) !important;
+    border-color: rgba(143, 166, 142, 0.48) !important;
+    position: relative;
+    z-index: 5;
+  }
+
+  /* Stat & KPI Tiles Hover Rise */
+  .stat-tile,
+  .kpi-card {
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.22s ease, background-color 0.22s ease;
+    will-change: transform, box-shadow;
+  }
+
+  .stat-tile:hover,
+  .kpi-card:hover {
+    transform: translateY(-3px) !important;
+    background-color: #FFFFFF !important;
+    box-shadow: 0 12px 28px -4px rgba(74, 93, 74, 0.15), 0 4px 10px -2px rgba(74, 93, 74, 0.08) !important;
+    border-color: rgba(143, 166, 142, 0.5) !important;
+    position: relative;
+    z-index: 10;
   }
 
   /* Frosted Sidebar & Navigation */
@@ -63,7 +90,7 @@
     border-bottom: 1px solid rgba(143, 166, 142, 0.2);
   }
 
-  /* Glassy Rise on Hover for All Buttons Across Admin Portal */
+  /* Universal Buttons Rise on Hover */
   .btn-primary {
     background-color: #4A5D4A;
     color: #F7F5F0;
@@ -77,7 +104,7 @@
   .btn-primary:hover {
     background-color: #344234;
     transform: translateY(-2px);
-    box-shadow: 0 10px 22px -2px rgba(74, 93, 74, 0.32), 0 4px 8px -2px rgba(74, 93, 74, 0.15);
+    box-shadow: 0 10px 24px -2px rgba(74, 93, 74, 0.35), 0 4px 8px -2px rgba(74, 93, 74, 0.15);
   }
 
   .btn-primary:active {
@@ -99,7 +126,7 @@
     background-color: #FFFFFF;
     border-color: #8FA68E;
     transform: translateY(-2px);
-    box-shadow: 0 10px 22px -2px rgba(74, 93, 74, 0.15), 0 4px 8px -2px rgba(74, 93, 74, 0.08);
+    box-shadow: 0 10px 24px -2px rgba(74, 93, 74, 0.16), 0 4px 8px -2px rgba(74, 93, 74, 0.08);
   }
 
   .btn-secondary:active {
@@ -114,7 +141,7 @@
 
   .glass-rise-row:hover {
     transform: translateY(-2px);
-    background-color: rgba(255, 255, 255, 0.96) !important;
+    background-color: rgba(255, 255, 255, 0.98) !important;
     box-shadow: 0 10px 24px -4px rgba(74, 93, 74, 0.14), 0 4px 8px -2px rgba(74, 93, 74, 0.06);
     z-index: 10;
     position: relative;
@@ -122,16 +149,83 @@
 
   /* Glassy Button & Action Pills */
   .glass-rise-btn {
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease;
     will-change: transform, box-shadow;
   }
 
   .glass-rise-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px -2px rgba(74, 93, 74, 0.2), 0 3px 6px -1px rgba(74, 93, 74, 0.1);
+    box-shadow: 0 8px 20px -2px rgba(74, 93, 74, 0.22), 0 3px 6px -1px rgba(74, 93, 74, 0.1);
   }
 
   .glass-rise-btn:active {
     transform: translateY(0);
+  }
+
+  /* Selects & Dropdown Inputs Hover Rise */
+  .glass-select,
+  select {
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, background-color 0.2s ease;
+    cursor: pointer;
+  }
+
+  .glass-select:hover,
+  select:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px -3px rgba(74, 93, 74, 0.16);
+    border-color: #7A9579 !important;
+  }
+
+  .glass-select:focus,
+  select:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px -4px rgba(74, 93, 74, 0.2);
+    border-color: #4A5D4A !important;
+  }
+
+  /* Inputs Hover Rise & Focus Glow */
+  .glass-input,
+  input[type="text"],
+  input[type="search"],
+  input[type="email"],
+  input[type="number"],
+  input[type="tel"],
+  textarea {
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .glass-input:hover,
+  input[type="text"]:hover,
+  input[type="search"]:hover,
+  input[type="email"]:hover,
+  input[type="number"]:hover,
+  input[type="tel"]:hover,
+  textarea:hover {
+    transform: translateY(-1.5px);
+    box-shadow: 0 6px 18px -2px rgba(74, 93, 74, 0.12);
+    border-color: #8FA68E;
+  }
+
+  .glass-input:focus,
+  input[type="text"]:focus,
+  input[type="search"]:focus,
+  input[type="email"]:focus,
+  input[type="number"]:focus,
+  input[type="tel"]:focus,
+  textarea:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px -3px rgba(74, 93, 74, 0.18);
+    border-color: #4A5D4A;
+    background-color: #FFFFFF !important;
+  }
+
+  /* Sidebar Nav Items */
+  .sidebar-nav-item {
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease;
+  }
+
+  .sidebar-nav-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px -2px rgba(74, 93, 74, 0.12);
   }
 }

@@ -119,7 +119,7 @@ export default function VendorRequestsPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search brand, vendor, phone..."
-                className="w-full pl-11 pr-4 py-2.5 rounded-full border border-sage-200 text-xs text-charcoal bg-white/80 outline-none focus:border-sage-500"
+                className="w-full pl-11 pr-4 py-2.5 rounded-full border border-sage-200 text-xs text-charcoal bg-white/80 outline-none focus:border-sage-500 font-medium glass-input"
               />
             </div>
 
@@ -129,7 +129,7 @@ export default function VendorRequestsPage() {
               <select
                 value={selectedExhibitionId}
                 onChange={(e) => setSelectedExhibitionId(e.target.value)}
-                className="px-4 py-2.5 rounded-full border border-sage-200 bg-white/80 text-xs font-medium text-charcoal outline-none"
+                className="px-4 py-2.5 rounded-full border border-sage-200 bg-white/80 text-xs font-bold text-charcoal outline-none glass-select"
               >
                 <option value="All">All Exhibitions</option>
                 {exhibitions.map((exh) => (
@@ -142,7 +142,7 @@ export default function VendorRequestsPage() {
               <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
-                className="px-4 py-2.5 rounded-full border border-sage-200 bg-white/80 text-xs font-medium text-charcoal outline-none"
+                className="px-4 py-2.5 rounded-full border border-sage-200 bg-white/80 text-xs font-bold text-charcoal outline-none glass-select"
               >
                 <option value="All">All Statuses</option>
                 <option value="pending">Pending Review</option>

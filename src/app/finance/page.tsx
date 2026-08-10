@@ -120,24 +120,25 @@ export default function FinancePage() {
       {/* Per-Exhibition Selector & Summary Panel */}
       <div className="glass-card p-6 sm:p-8 rounded-4xl border border-sage-200 relative overflow-hidden">
         
-        {/* Exhibition Selector */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-sage-100">
           <div>
             <span className="text-[11px] uppercase tracking-wider font-bold text-sage-800 block mb-1">
               Select Exhibition Scope
             </span>
-            <select
-              value={selectedExhibitionId}
-              onChange={(e) => setSelectedExhibitionId(e.target.value)}
-              className="font-sans text-xl sm:text-2xl font-extrabold text-charcoal bg-transparent border-b-2 border-sage-300 focus:border-sage-700 outline-none pb-0.5 cursor-pointer tracking-tight"
-            >
-              <option value="All">All Editions Consolidated</option>
-              {exhibitions.map((exh) => (
-                <option key={exh.id} value={exh.id} className="text-sm font-sans font-bold">
-                  {exh.title} ({exh.city})
-                </option>
-              ))}
-            </select>
+            <div className="relative inline-block">
+              <select
+                value={selectedExhibitionId}
+                onChange={(e) => setSelectedExhibitionId(e.target.value)}
+                className="font-sans text-xl sm:text-2xl font-black text-charcoal bg-white/70 hover:bg-white border-2 border-sage-200 hover:border-sage-400 focus:border-sage-700 outline-none px-4 py-2 rounded-2xl cursor-pointer tracking-tight glass-select shadow-2xs"
+              >
+                <option value="All">All Editions Consolidated</option>
+                {exhibitions.map((exh) => (
+                  <option key={exh.id} value={exh.id} className="text-sm font-sans font-bold">
+                    {exh.title} ({exh.city})
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           {currentRole === 'staff' && (
@@ -151,53 +152,61 @@ export default function FinancePage() {
         {/* 4 Financial KPI Counters */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-6">
           
-          <div className="p-4 rounded-2xl bg-white/70 border border-sage-100">
-            <span className="text-[11px] text-charcoal-muted uppercase tracking-wider block mb-1 font-bold">
-              Allocated Budget / Funding
-            </span>
-            <span className="font-sans text-2xl sm:text-3xl font-extrabold text-charcoal tracking-tight">
-              Rs. {(totalAllocated / 100000).toFixed(1)}L
-            </span>
-            <span className="text-[11px] text-charcoal-muted block mt-1 font-normal">
+          <div className="kpi-card p-5 rounded-3xl bg-white/75 border border-sage-200/80 shadow-soft cursor-pointer flex flex-col justify-between">
+            <div>
+              <span className="text-[11px] text-charcoal-muted uppercase tracking-wider block mb-1 font-bold">
+                Allocated Budget / Funding
+              </span>
+              <span className="font-sans text-2xl sm:text-3xl font-black text-charcoal tracking-tight">
+                Rs. {(totalAllocated / 100000).toFixed(1)}L
+              </span>
+            </div>
+            <span className="text-[11px] text-charcoal-muted block mt-2 font-medium">
               Approved sponsor/organizer capital
             </span>
           </div>
 
-          <div className="p-4 rounded-2xl bg-white/70 border border-sage-100">
-            <span className="text-[11px] text-charcoal-muted uppercase tracking-wider block mb-1 font-bold">
-              Total Approved Spent
-            </span>
-            <span className="font-sans text-2xl sm:text-3xl font-extrabold text-rose-900 tracking-tight">
-              Rs. {(totalSpent / 100000).toFixed(1)}L
-            </span>
-            <div className="w-full h-1.5 bg-cream-200 rounded-full overflow-hidden mt-2">
-              <div className="h-full bg-rose-600 rounded-full" style={{ width: `${Math.min(100, spendPct)}%` }} />
+          <div className="kpi-card p-5 rounded-3xl bg-white/75 border border-sage-200/80 shadow-soft cursor-pointer flex flex-col justify-between">
+            <div>
+              <span className="text-[11px] text-charcoal-muted uppercase tracking-wider block mb-1 font-bold">
+                Total Approved Spent
+              </span>
+              <span className="font-sans text-2xl sm:text-3xl font-black text-rose-900 tracking-tight">
+                Rs. {(totalSpent / 100000).toFixed(1)}L
+              </span>
+              <div className="w-full h-2 bg-cream-200 rounded-full overflow-hidden mt-2.5">
+                <div className="h-full bg-rose-600 rounded-full transition-all duration-500" style={{ width: `${Math.min(100, spendPct)}%` }} />
+              </div>
             </div>
-            <span className="text-[10px] text-charcoal-muted block mt-1 font-semibold">
+            <span className="text-[10px] text-charcoal-muted block mt-2 font-bold">
               {spendPct}% of allocated budget utilized
             </span>
           </div>
 
-          <div className="p-4 rounded-2xl bg-white/70 border border-sage-100">
-            <span className="text-[11px] text-charcoal-muted uppercase tracking-wider block mb-1 font-bold">
-              Remaining Budget
-            </span>
-            <span className={`font-sans text-2xl sm:text-3xl font-extrabold tracking-tight ${remainingBudget >= 0 ? 'text-emerald-800' : 'text-rose-700'}`}>
-              Rs. {(remainingBudget / 100000).toFixed(1)}L
-            </span>
-            <span className="text-[11px] text-charcoal-muted block mt-1 font-normal">
+          <div className="kpi-card p-5 rounded-3xl bg-white/75 border border-sage-200/80 shadow-soft cursor-pointer flex flex-col justify-between">
+            <div>
+              <span className="text-[11px] text-charcoal-muted uppercase tracking-wider block mb-1 font-bold">
+                Remaining Budget
+              </span>
+              <span className={`font-sans text-2xl sm:text-3xl font-black tracking-tight ${remainingBudget >= 0 ? 'text-emerald-800' : 'text-rose-700'}`}>
+                Rs. {(remainingBudget / 100000).toFixed(1)}L
+              </span>
+            </div>
+            <span className="text-[11px] text-charcoal-muted block mt-2 font-medium">
               Liquidity buffer remaining
             </span>
           </div>
 
-          <div className="p-4 rounded-2xl bg-sage-50/80 border border-sage-200">
-            <span className="text-[11px] text-sage-900 uppercase tracking-wider font-bold block mb-1">
-              Stall Revenue Booked
-            </span>
-            <span className="font-sans text-2xl sm:text-3xl font-extrabold text-sage-deep tracking-tight">
-              Rs. {(stallRevenue / 100000).toFixed(1)}L
-            </span>
-            <span className="text-[11px] text-sage-800 block mt-1 font-semibold">
+          <div className="kpi-card p-5 rounded-3xl bg-sage-50/90 border border-sage-200 shadow-soft cursor-pointer flex flex-col justify-between">
+            <div>
+              <span className="text-[11px] text-sage-900 uppercase tracking-wider font-bold block mb-1">
+                Stall Revenue Booked
+              </span>
+              <span className="font-sans text-2xl sm:text-3xl font-black text-sage-deep tracking-tight">
+                Rs. {(stallRevenue / 100000).toFixed(1)}L
+              </span>
+            </div>
+            <span className="text-[11px] text-sage-800 block mt-2 font-bold">
               Net Surplus: Rs. {((stallRevenue - totalSpent) / 100000).toFixed(1)}L
             </span>
           </div>
@@ -209,22 +218,25 @@ export default function FinancePage() {
       {/* Filters */}
       <div className="glass-card p-4 sm:p-5 rounded-3xl flex flex-col lg:flex-row items-center justify-between gap-4">
         
+        {/* Search */}
         <div className="relative w-full lg:w-80">
           <Search className="w-4 h-4 text-sage-600 absolute left-4 top-3.5" />
           <input
             type="text"
+            placeholder="Search description, memo, staff..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search memo, vendor, category..."
-            className="w-full pl-11 pr-4 py-2.5 rounded-full border border-sage-200 text-xs text-charcoal bg-white/80 outline-none focus:border-sage-500"
+            className="w-full pl-11 pr-4 py-2.5 rounded-full border border-sage-200 text-xs text-charcoal bg-white/80 outline-none focus:border-sage-500 font-medium glass-input"
           />
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-start lg:justify-end">
+        {/* Dropdowns */}
+        <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+          
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="px-4 py-2.5 rounded-full border border-sage-200 bg-white/80 text-xs font-medium text-charcoal outline-none cursor-pointer"
+            className="px-4 py-2.5 rounded-full border border-sage-200 bg-white/80 text-xs font-bold text-charcoal outline-none cursor-pointer glass-select"
           >
             <option value="All">All Categories</option>
             <option value="Venue Rent">Venue Rent</option>
@@ -236,6 +248,20 @@ export default function FinancePage() {
             <option value="Refreshments">Refreshments</option>
             <option value="Miscellaneous">Miscellaneous</option>
           </select>
+
+          <select
+            value={selectedExhibitionId}
+            onChange={(e) => setSelectedExhibitionId(e.target.value)}
+            className="px-4 py-2.5 rounded-full border border-sage-200 bg-white/80 text-xs font-bold text-charcoal outline-none cursor-pointer glass-select"
+          >
+            <option value="All">All Exhibitions</option>
+            {exhibitions.map((e) => (
+              <option key={e.id} value={e.id}>
+                {e.title}
+              </option>
+            ))}
+          </select>
+
         </div>
 
       </div>

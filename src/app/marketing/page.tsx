@@ -63,26 +63,26 @@ export default function MarketingPage() {
         
         {/* Left: Summary cards (4 Cols) */}
         <div className="lg:col-span-4 space-y-4">
-          <div className="glass-card p-6 rounded-3xl">
+          <div className="kpi-card p-6 rounded-3xl bg-white/80 border border-sage-200 shadow-soft cursor-pointer">
             <span className="text-xs font-bold uppercase tracking-wider text-sage-800 block mb-1">
               Total Marketing Investment
             </span>
-            <span className="font-sans text-3xl font-extrabold text-charcoal tracking-tight">
+            <span className="font-sans text-3xl font-black text-charcoal tracking-tight">
               Rs. {(totalMarketingSpend / 100000).toFixed(1)}L
             </span>
-            <p className="text-xs text-charcoal-muted mt-1 font-normal">
+            <p className="text-xs text-charcoal-muted mt-2 font-medium">
               Across Instagram Reels, TikTok, Meta Ads & Outdoor
             </p>
           </div>
 
-          <div className="glass-card p-6 rounded-3xl">
+          <div className="kpi-card p-6 rounded-3xl bg-white/80 border border-sage-200 shadow-soft cursor-pointer">
             <span className="text-xs font-bold uppercase tracking-wider text-sage-800 block mb-1">
               Direct Vendor Leads
             </span>
-            <span className="font-sans text-3xl font-extrabold text-sage-deep tracking-tight">
+            <span className="font-sans text-3xl font-black text-sage-deep tracking-tight">
               {totalLeads} Applicants
             </span>
-            <p className="text-xs text-charcoal-muted mt-1 font-normal">
+            <p className="text-xs text-charcoal-muted mt-2 font-medium">
               Avg Acquisition Cost: Rs. {totalLeads > 0 ? Math.round(totalMarketingSpend / totalLeads).toLocaleString() : 0} / Lead
             </p>
           </div>
@@ -104,14 +104,14 @@ export default function MarketingPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search campaign, exhibition..."
-            className="w-full pl-11 pr-4 py-2.5 rounded-full border border-sage-200 text-xs text-charcoal bg-white/80 outline-none focus:border-sage-500"
+            className="w-full pl-11 pr-4 py-2.5 rounded-full border border-sage-200 text-xs text-charcoal bg-white/80 outline-none focus:border-sage-500 font-medium glass-input"
           />
         </div>
 
         <select
           value={selectedPlatform}
           onChange={(e) => setSelectedPlatform(e.target.value)}
-          className="px-4 py-2.5 rounded-full border border-sage-200 bg-white/80 text-xs font-medium text-charcoal outline-none cursor-pointer self-start sm:self-auto"
+          className="px-4 py-2.5 rounded-full border border-sage-200 bg-white/80 text-xs font-bold text-charcoal outline-none cursor-pointer self-start sm:self-auto glass-select"
         >
           <option value="All">All Platforms</option>
           <option value="Instagram">Instagram</option>

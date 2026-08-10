@@ -165,7 +165,7 @@ export default function SettingsPage() {
                         value={user.role}
                         onChange={(e) => updateStaffRole(user.id, e.target.value as UserRole)}
                         disabled={currentRole !== 'owner' && user.role === 'owner'}
-                        className="px-3 py-1.5 rounded-xl border border-sage-200 bg-white text-xs font-semibold text-charcoal outline-none cursor-pointer disabled:opacity-50"
+                        className="px-3 py-1.5 rounded-xl border border-sage-200 bg-white text-xs font-bold text-charcoal outline-none cursor-pointer disabled:opacity-50 glass-select shadow-2xs"
                       >
                         <option value="owner">Owner</option>
                         <option value="admin">Admin</option>
@@ -296,63 +296,63 @@ export default function SettingsPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-charcoal mb-1.5">
                 Agency Name *
               </label>
               <input
                 type="text"
                 value={agencyForm.agencyName}
                 onChange={(e) => setAgencyForm({ ...agencyForm, agencyName: e.target.value })}
-                className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none focus:border-sage-500"
+                className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none focus:border-sage-500 font-medium glass-input"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-charcoal mb-1.5">
                 Brand Tagline
               </label>
               <input
                 type="text"
                 value={agencyForm.tagline}
                 onChange={(e) => setAgencyForm({ ...agencyForm, tagline: e.target.value })}
-                className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none focus:border-sage-500"
+                className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none focus:border-sage-500 font-medium glass-input"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-charcoal mb-1.5">
                 Curation Desk Email *
               </label>
               <input
                 type="email"
                 value={agencyForm.supportEmail}
                 onChange={(e) => setAgencyForm({ ...agencyForm, supportEmail: e.target.value })}
-                className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none focus:border-sage-500"
+                className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none focus:border-sage-500 font-medium glass-input"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-charcoal mb-1.5">
                 Lead Coordinator WhatsApp *
               </label>
               <input
                 type="text"
                 value={agencyForm.coordinatorWhatsApp}
                 onChange={(e) => setAgencyForm({ ...agencyForm, coordinatorWhatsApp: e.target.value })}
-                className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none focus:border-sage-500"
+                className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none focus:border-sage-500 font-medium glass-input"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-charcoal mb-1.5">
                 Default Currency
               </label>
               <select
                 value={agencyForm.currency}
                 onChange={(e) => setAgencyForm({ ...agencyForm, currency: e.target.value })}
-                className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none"
+                className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none font-bold glass-select"
               >
                 <option value="PKR (Rs.)">PKR (Rs.)</option>
                 <option value="USD ($)">USD ($)</option>
@@ -362,21 +362,21 @@ export default function SettingsPage() {
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
+            <label className="block text-xs font-bold uppercase tracking-wider text-charcoal mb-1.5">
               Headquarters Office Address
             </label>
             <input
               type="text"
               value={agencyForm.headquartersAddress}
               onChange={(e) => setAgencyForm({ ...agencyForm, headquartersAddress: e.target.value })}
-              className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none focus:border-sage-500"
+              className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none focus:border-sage-500 font-medium glass-input"
             />
           </div>
 
           <div className="pt-4 border-t border-sage-100 flex items-center justify-end">
             <button
               type="submit"
-              className="btn-primary px-8 py-3 text-xs font-semibold uppercase tracking-wider flex items-center gap-2 shadow-soft"
+              className="btn-primary glass-rise-btn px-8 py-3 text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-soft"
             >
               <Check className="w-4 h-4" />
               <span>Save Agency Settings</span>

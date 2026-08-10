@@ -86,7 +86,7 @@ export default function ExhibitionsPage() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by title, venue, category..."
-            className="w-full pl-11 pr-4 py-2.5 rounded-full border border-sage-200 focus:border-sage-500 focus:ring-2 focus:ring-sage-200 outline-none text-xs text-charcoal bg-white/80"
+            className="w-full pl-11 pr-4 py-2.5 rounded-full border border-sage-200 focus:border-sage-500 focus:ring-2 focus:ring-sage-200 outline-none text-xs text-charcoal bg-white/80 font-medium glass-input"
           />
         </div>
 
@@ -99,10 +99,10 @@ export default function ExhibitionsPage() {
               <button
                 key={city}
                 onClick={() => setSelectedCity(city)}
-                className={`px-4 py-1.5 rounded-full text-xs font-medium transition-all ${
+                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all glass-rise-btn ${
                   selectedCity === city
-                    ? 'bg-sage-800 text-cream font-semibold shadow-xs'
-                    : 'text-charcoal-muted hover:text-charcoal'
+                    ? 'bg-sage-800 text-cream shadow-xs'
+                    : 'text-charcoal-muted hover:text-charcoal hover:bg-white/60'
                 }`}
               >
                 {city}
@@ -114,7 +114,7 @@ export default function ExhibitionsPage() {
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="px-4 py-2 rounded-full border border-sage-200 bg-white/80 text-xs font-medium text-charcoal outline-none cursor-pointer"
+            className="px-4 py-2 rounded-full border border-sage-200 bg-white/80 text-xs font-bold text-charcoal outline-none cursor-pointer glass-select"
           >
             <option value="All">All Statuses</option>
             <option value="upcoming">Upcoming</option>

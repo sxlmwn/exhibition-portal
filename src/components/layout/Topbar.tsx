@@ -113,7 +113,7 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
           href={`https://wa.me/${settings.coordinatorWhatsApp.replace(/[^0-9]/g, '')}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="hidden md:flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 hover:bg-emerald-100 text-xs font-semibold tracking-wide transition-colors"
+          className="hidden md:flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 hover:bg-emerald-100 text-xs font-semibold tracking-wide transition-all glass-rise-btn"
           title="Open WhatsApp Vendor Support Desk"
         >
           <MessageSquare className="w-3.5 h-3.5" />
@@ -124,7 +124,7 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
         <div className="relative">
           <button
             onClick={() => setShowNotifications(!showNotifications)}
-            className="w-10 h-10 rounded-full glass-pill hover:bg-white flex items-center justify-center text-charcoal-light hover:text-charcoal relative transition-colors"
+            className="w-10 h-10 rounded-full glass-pill hover:bg-white flex items-center justify-center text-charcoal-light hover:text-charcoal relative transition-all glass-rise-btn"
             aria-label="Notifications"
           >
             <Bell className="w-4 h-4" />

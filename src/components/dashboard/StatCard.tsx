@@ -25,7 +25,7 @@ export const StatCard: React.FC<StatCardProps> = ({
   iconColor = 'text-sage-800'
 }) => {
   return (
-    <div className="glass-card glass-card-hover p-6 rounded-3xl relative overflow-hidden flex flex-col justify-between hover:-translate-y-1">
+    <div className="glass-card kpi-card stat-tile glass-rise-card p-6 rounded-3xl relative overflow-hidden flex flex-col justify-between cursor-pointer">
       {/* Top row: Title and Icon */}
       <div className="flex items-start justify-between gap-4 mb-4">
         <div>
