@@ -9,7 +9,6 @@ import {
   Users, 
   Plus, 
   ArrowRight, 
-  Sparkles,
   TrendingUp,
   MapPin,
   CheckCircle2
@@ -46,10 +45,6 @@ export default function DashboardPage() {
       {/* Editorial Welcome Banner */}
       <div className="glass-card p-8 rounded-4xl relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div className="relative z-10 max-w-2xl">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-sage-100/90 text-sage-900 text-xs font-semibold uppercase tracking-wider mb-3 border border-sage-300/60">
-            <Sparkles className="w-3.5 h-3.5 text-sage-700" />
-            <span>Season 2026 Live Dashboard</span>
-          </div>
           <h2 className="font-sans text-2xl sm:text-3xl lg:text-4xl font-bold text-charcoal leading-tight tracking-tight">
             Curated Exhibition Management
           </h2>

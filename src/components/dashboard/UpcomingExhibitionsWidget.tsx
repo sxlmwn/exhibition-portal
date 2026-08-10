@@ -63,8 +63,8 @@ export const UpcomingExhibitionsWidget: React.FC<UpcomingExhibitionsWidgetProps>
                   </div>
                   <span className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${
                     fillPct >= 90 
-                      ? 'bg-amber-100 text-amber-900 border-amber-300' 
-                      : 'bg-sage-100 text-sage-800 border-sage-200'
+                      ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-900 dark:text-amber-300 border-amber-300 dark:border-amber-700/40' 
+                      : 'bg-sage-100 dark:bg-sage-800/30 text-sage-800 dark:text-sage-300 border-sage-200 dark:border-sage-700/40'
                   }`}>
                     {fillPct >= 100 ? 'Sold Out' : `${exh.daysLeft || 14}d Left`}
                   </span>

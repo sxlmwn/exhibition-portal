@@ -80,9 +80,9 @@ export default function FinancePage() {
 
   const getStatusBadge = (status: ExpenseItem['status']) => {
     switch (status) {
-      case 'approved': return 'bg-emerald-100 text-emerald-900 border-emerald-300';
-      case 'pending_approval': return 'bg-amber-100 text-amber-900 border-amber-300';
-      case 'rejected': return 'bg-rose-100 text-rose-800 border-rose-200';
+      case 'approved': return 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-900 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700/40';
+      case 'pending_approval': return 'bg-amber-100 dark:bg-amber-900/30 text-amber-900 dark:text-amber-300 border-amber-300 dark:border-amber-700/40';
+      case 'rejected': return 'bg-rose-100 dark:bg-rose-900/30 text-rose-800 dark:text-rose-300 border-rose-200 dark:border-rose-700/40';
     }
   };
 

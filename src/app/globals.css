@@ -496,33 +496,153 @@
     border-color: rgba(255, 255, 255, 0.08) !important;
   }
 
+  /* =========================================================================
+     DARK MODE STATUS BADGE & TAG OVERRIDES
+     — covers every status combo used across Vendor Requests, CRM, Finance,
+       Overview stat cards, and the Upcoming Schedule widget.
+     ========================================================================= */
+
+  /* Emerald badges: Approved, Booked, Active */
+  .dark .bg-emerald-100 {
+    background-color: rgba(16, 185, 129, 0.15) !important;
+  }
+  .dark .text-emerald-900 {
+    color: #6EE7B7 !important;
+  }
+  .dark .border-emerald-300 {
+    border-color: rgba(52, 211, 153, 0.25) !important;
+  }
+  .dark .text-emerald-800 {
+    color: #6EE7B7 !important;
+  }
+  .dark .border-emerald-200 {
+    border-color: rgba(52, 211, 153, 0.2) !important;
+  }
+  .dark .bg-emerald-50 {
+    background-color: rgba(16, 185, 129, 0.10) !important;
+  }
+
+  /* Amber badges: Pending, Corner slot, Alert */
+  .dark .bg-amber-100 {
+    background-color: rgba(245, 158, 11, 0.15) !important;
+  }
+  .dark .text-amber-900 {
+    color: #FCD34D !important;
+  }
+  .dark .border-amber-300 {
+    border-color: rgba(251, 191, 36, 0.25) !important;
+  }
+  .dark .text-amber-800 {
+    color: #FCD34D !important;
+  }
+  .dark .bg-amber-50 {
+    background-color: rgba(245, 158, 11, 0.10) !important;
+  }
+  .dark .bg-amber-200 {
+    background-color: rgba(245, 158, 11, 0.20) !important;
+  }
+  .dark .border-amber-200 {
+    border-color: rgba(251, 191, 36, 0.20) !important;
+  }
+
+  /* Rose badges: Rejected, Overbudget */
+  .dark .bg-rose-100 {
+    background-color: rgba(244, 63, 94, 0.15) !important;
+  }
+  .dark .text-rose-800 {
+    color: #FDA4AF !important;
+  }
+  .dark .text-rose-700 {
+    color: #FB7185 !important;
+  }
+  .dark .border-rose-200 {
+    border-color: rgba(251, 113, 133, 0.22) !important;
+  }
+  .dark .border-rose-300 {
+    border-color: rgba(251, 113, 133, 0.28) !important;
+  }
+  .dark .bg-rose-50 {
+    background-color: rgba(244, 63, 94, 0.10) !important;
+  }
+
+  /* Purple badges: Waitlisted, Premium */
+  .dark .bg-purple-100 {
+    background-color: rgba(139, 92, 246, 0.15) !important;
+  }
+  .dark .text-purple-900 {
+    color: #C4B5FD !important;
+  }
+  .dark .text-purple-800 {
+    color: #C4B5FD !important;
+  }
+  .dark .border-purple-300 {
+    border-color: rgba(196, 181, 253, 0.25) !important;
+  }
+  .dark .border-purple-200 {
+    border-color: rgba(196, 181, 253, 0.20) !important;
+  }
+  .dark .bg-purple-50 {
+    background-color: rgba(139, 92, 246, 0.10) !important;
+  }
+
+  /* Blue badges: Referral, Info */
+  .dark .bg-blue-100 {
+    background-color: rgba(59, 130, 246, 0.15) !important;
+  }
+  .dark .text-blue-900 {
+    color: #93C5FD !important;
+  }
+  .dark .border-blue-300 {
+    border-color: rgba(147, 197, 253, 0.25) !important;
+  }
+
+  /* CRM tag badges (bg-sage-50 + text-sage-900) */
+  .dark .bg-sage-50 {
+    background-color: rgba(143, 166, 142, 0.18) !important;
+  }
+  .dark .text-sage-900 {
+    color: #D6E8D5 !important;
+  }
+  .dark .bg-sage-100 {
+    background-color: rgba(143, 166, 142, 0.20) !important;
+  }
+  .dark .border-sage-300 {
+    border-color: rgba(143, 166, 142, 0.25) !important;
+  }
+
+  /* Cream/past-client tag background */
+  .dark .bg-cream-200 {
+    background-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  /* White tinted background overrides (tags, insets) */
+  .dark .bg-white\/70,
+  .dark .bg-white\/75,
+  .dark .bg-white\/80,
+  .dark .bg-white\/90,
+  .dark .bg-white\/95,
+  .dark .bg-white {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+  }
+
+  .dark .bg-cream-50,
+  .dark .bg-cream-100 {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+  }
+
+  .dark .border-sage-200,
+  .dark .border-sage-100 {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
   .dark .divide-sage-100 > :not([hidden]) ~ :not([hidden]),
   .dark .divide-sage-200 > :not([hidden]) ~ :not([hidden]) {
     border-color: rgba(255, 255, 255, 0.06) !important;
   }
 
-  /* =========================================================================
-     DARK MODE TAG & BADGE FIXES
-     ========================================================================= */
-
-  /* CRM tag badges (bg-sage-50 + text-sage-900) become unreadable white-on-white in dark */
-  .dark .bg-sage-50 {
-    background-color: rgba(143, 166, 142, 0.18) !important;
-  }
-
-  .dark .text-sage-900 {
-    color: #D6E8D5 !important;
-  }
-
-  /* sage-100 tinted chips */
-  .dark .bg-sage-100 {
-    background-color: rgba(143, 166, 142, 0.20) !important;
-  }
-
-  /* cream/white tinted tag backgrounds (bg-white used for past-event tags) */
-  .dark .bg-white,
-  .dark .bg-white\/40 {
-    background-color: rgba(255, 255, 255, 0.05) !important;
+  /* High-contrast muted text in dark */
+  .dark .text-charcoal-muted {
+    color: #B0B9B0 !important;
   }
 
   /* Inset detail blocks inside modals (bg-cream-50, bg-white used for description boxes) */

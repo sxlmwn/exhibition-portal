@@ -101,11 +101,11 @@ export default function CRMPage() {
 
   const getStatusBadge = (status: CRMContact['status']) => {
     switch (status) {
-      case 'booked': return 'bg-emerald-100 text-emerald-900 border-emerald-300';
-      case 'enquired': return 'bg-amber-100 text-amber-900 border-amber-300';
-      case 'waitlisted': return 'bg-purple-100 text-purple-900 border-purple-300';
-      case 'past-client': return 'bg-cream-200 text-charcoal border-sage-300';
-      case 'referral': return 'bg-blue-100 text-blue-900 border-blue-300';
+      case 'booked': return 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-900 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700/40';
+      case 'enquired': return 'bg-amber-100 dark:bg-amber-900/30 text-amber-900 dark:text-amber-300 border-amber-300 dark:border-amber-700/40';
+      case 'waitlisted': return 'bg-purple-100 dark:bg-purple-900/30 text-purple-900 dark:text-purple-300 border-purple-300 dark:border-purple-700/40';
+      case 'past-client': return 'bg-cream-200 dark:bg-white/10 text-charcoal dark:text-white/80 border-sage-300 dark:border-white/15';
+      case 'referral': return 'bg-blue-100 dark:bg-blue-900/30 text-blue-900 dark:text-blue-300 border-blue-300 dark:border-blue-700/40';
     }
   };
 

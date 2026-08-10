@@ -51,9 +51,9 @@ export default function SettingsPage() {
 
   const getRoleBadge = (role: UserRole) => {
     switch (role) {
-      case 'owner': return 'bg-emerald-100 text-emerald-900 border-emerald-300';
-      case 'admin': return 'bg-purple-100 text-purple-900 border-purple-300';
-      case 'staff': return 'bg-amber-100 text-amber-900 border-amber-300';
+      case 'owner': return 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-900 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700/40';
+      case 'admin': return 'bg-purple-100 dark:bg-purple-900/30 text-purple-900 dark:text-purple-300 border-purple-300 dark:border-purple-700/40';
+      case 'staff': return 'bg-amber-100 dark:bg-amber-900/30 text-amber-900 dark:text-amber-300 border-amber-300 dark:border-amber-700/40';
     }
   };
 

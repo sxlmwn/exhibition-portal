@@ -175,8 +175,8 @@ export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
                     <div className="text-right">
                       <span className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${
                         req.status === 'approved' 
-                          ? 'bg-emerald-100 text-emerald-900 border-emerald-300' 
-                          : 'bg-amber-100 text-amber-900 border-amber-300'
+                          ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-900 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700/40' 
+                          : 'bg-amber-100 dark:bg-amber-900/30 text-amber-900 dark:text-amber-300 border-amber-300 dark:border-amber-700/40'
                       }`}>
                         {req.status}
                       </span>
