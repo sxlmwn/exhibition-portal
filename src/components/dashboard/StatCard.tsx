@@ -25,18 +25,18 @@ export const StatCard: React.FC<StatCardProps> = ({
   iconColor = 'text-sage-800'
 }) => {
   return (
-    <div className="glass-card glass-card-hover p-6 rounded-3xl relative overflow-hidden flex flex-col justify-between">
+    <div className="glass-card glass-card-hover p-6 rounded-3xl relative overflow-hidden flex flex-col justify-between hover:-translate-y-1">
       {/* Top row: Title and Icon */}
       <div className="flex items-start justify-between gap-4 mb-4">
         <div>
-          <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
+          <span className="text-xs uppercase tracking-wider font-bold text-sage-800 block mb-1">
             {title}
           </span>
-          <h3 className="font-sans text-3xl sm:text-4xl font-extrabold text-charcoal tracking-tight">
+          <h3 className="font-sans text-3xl sm:text-4xl font-black text-charcoal tracking-tight">
             {value}
           </h3>
           {subvalue && (
-            <p className="text-xs text-charcoal-muted mt-1 font-normal">
+            <p className="text-xs text-charcoal-muted mt-1 font-medium">
               {subvalue}
             </p>
           )}

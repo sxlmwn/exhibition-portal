@@ -71,7 +71,7 @@ export default function VendorRequestsPage() {
           <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
             Exhibitor Onboarding
           </span>
-          <h2 className="font-sans text-3xl font-extrabold text-charcoal tracking-tight">
+          <h2 className="font-sans text-3xl sm:text-4xl font-black text-charcoal tracking-tight">
             Vendor Requests & Floor Plan Allocation
           </h2>
         </div>
@@ -80,7 +80,7 @@ export default function VendorRequestsPage() {
         <div className="flex items-center gap-2 bg-cream-200/90 p-1.5 rounded-full border border-sage-200/60 self-start sm:self-auto">
           <button
             onClick={() => setActiveTab('table')}
-            className={`flex items-center gap-2 px-5 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all ${
+            className={`flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all glass-rise-btn ${
               activeTab === 'table'
                 ? 'bg-sage-800 text-cream shadow-xs'
                 : 'text-charcoal-muted hover:text-charcoal'
@@ -92,7 +92,7 @@ export default function VendorRequestsPage() {
           
           <button
             onClick={() => setActiveTab('floor-plan')}
-            className={`flex items-center gap-2 px-5 py-2 rounded-full text-xs font-semibold uppercase tracking-wider transition-all ${
+            className={`flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all glass-rise-btn ${
               activeTab === 'floor-plan'
                 ? 'bg-sage-800 text-cream shadow-xs'
                 : 'text-charcoal-muted hover:text-charcoal'
@@ -172,7 +172,7 @@ export default function VendorRequestsPage() {
                 </thead>
                 <tbody className="divide-y divide-sage-100">
                   {filteredRequests.map((req) => (
-                    <tr key={req.id} className="hover:bg-white/80 transition-colors">
+                    <tr key={req.id} className="glass-rise-row hover:bg-white/80 transition-colors">
                       
                       {/* Brand & Vendor */}
                       <td className="py-4 px-5">
@@ -243,7 +243,7 @@ export default function VendorRequestsPage() {
                           {req.status !== 'approved' && (
                             <button
                               onClick={() => handleOpenAction(req, 'approved')}
-                              className="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition-colors"
+                              className="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition-colors glass-rise-btn"
                               title="Approve Applicant"
                             >
                               <CheckCircle2 className="w-4 h-4" />
@@ -253,7 +253,7 @@ export default function VendorRequestsPage() {
                           {req.status !== 'waitlisted' && (
                             <button
                               onClick={() => handleOpenAction(req, 'waitlisted')}
-                              className="p-1.5 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 transition-colors"
+                              className="p-1.5 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 transition-colors glass-rise-btn"
                               title="Move to Waitlist"
                             >
                               <Clock className="w-4 h-4" />
@@ -263,7 +263,7 @@ export default function VendorRequestsPage() {
                           {req.status !== 'rejected' && (
                             <button
                               onClick={() => handleOpenAction(req, 'rejected')}
-                              className="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200 transition-colors"
+                              className="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200 transition-colors glass-rise-btn"
                               title="Reject Application"
                             >
                               <XCircle className="w-4 h-4" />
@@ -275,7 +275,7 @@ export default function VendorRequestsPage() {
                               setSelectedExhibitionId(req.exhibitionId);
                               setActiveTab('floor-plan');
                             }}
-                            className="px-3 py-1.5 rounded-lg bg-sage-800 hover:bg-sage-900 text-cream text-[11px] font-semibold uppercase tracking-wider ml-1"
+                            className="px-3 py-1.5 rounded-lg bg-sage-800 hover:bg-sage-900 text-cream text-[11px] font-semibold uppercase tracking-wider ml-1 glass-rise-btn"
                           >
                             Allocate
                           </button>

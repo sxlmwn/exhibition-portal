@@ -42,14 +42,14 @@ export default function PastEventsPage() {
           <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
             Track Record & Case Studies
           </span>
-          <h2 className="font-sans text-3xl font-extrabold text-charcoal tracking-tight">
+          <h2 className="font-sans text-3xl sm:text-4xl font-black text-charcoal tracking-tight">
             Past Events & Portfolio Editor
           </h2>
         </div>
 
         <button
           onClick={handleOpenAdd}
-          className="btn-primary px-6 py-3 text-xs font-semibold uppercase tracking-wider flex items-center gap-2 self-start sm:self-auto shadow-soft"
+          className="btn-primary glass-rise-btn px-6 py-3 text-xs font-bold uppercase tracking-wider flex items-center gap-2 self-start sm:self-auto shadow-soft"
         >
           <Plus className="w-4 h-4" />
           <span>Add Past Event</span>
@@ -61,7 +61,7 @@ export default function PastEventsPage() {
         {pastEvents.map((event) => (
           <div
             key={event.id}
-            className="glass-card glass-card-hover rounded-3xl overflow-hidden flex flex-col justify-between group border border-sage-200/80"
+            className="glass-card glass-card-hover rounded-3xl overflow-hidden flex flex-col justify-between group border border-sage-200/80 hover:-translate-y-2 hover:shadow-soft-xl transition-all duration-300"
           >
             <div>
               {/* Cover image & tags */}

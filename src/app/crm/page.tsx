@@ -38,6 +38,9 @@ export default function CRMPage() {
   const [isBulkWAOpen, setIsBulkWAOpen] = useState(false);
   const [isBulkEmailOpen, setIsBulkEmailOpen] = useState(false);
 
+  const categories = ['All', 'Apparel & Couture', 'Jewellery & Gems', 'Home & Living', 'Art & Pottery', 'Leather Goods', 'Beauty & Wellness', 'Footwear'];
+  const statuses = ['All', 'booked', 'enquired', 'waitlisted', 'past-client', 'referral'];
+
   const filteredContacts = contacts.filter((c) => {
     const matchesSearch = c.businessName.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -47,6 +50,8 @@ export default function CRMPage() {
     const matchesCategory = selectedCategory === 'All' || c.category.toLowerCase().includes(selectedCategory.toLowerCase());
     return matchesSearch && matchesStatus && matchesCategory;
   });
+
+  const isAllSelected = selectedContactIds.length === filteredContacts.length && filteredContacts.length > 0;
 
   const handleSelectAll = () => {
     if (selectedContactIds.length === filteredContacts.length) {
@@ -60,6 +65,11 @@ export default function CRMPage() {
     setSelectedContactIds(prev => 
       prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
     );
+  };
+
+  const handleOpenBulkModal = (type: 'whatsapp' | 'email') => {
+    if (type === 'whatsapp') setIsBulkWAOpen(true);
+    if (type === 'email') setIsBulkEmailOpen(true);
   };
 
   const selectedContactsList = contacts.filter(c => selectedContactIds.includes(c.id));
@@ -108,7 +118,7 @@ export default function CRMPage() {
           <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
             Vendor Directory
           </span>
-          <h2 className="font-sans text-3xl font-extrabold text-charcoal tracking-tight">
+          <h2 className="font-sans text-3xl sm:text-4xl font-black text-charcoal tracking-tight">
             Contacts & Exhibitor CRM
           </h2>
         </div>
@@ -118,7 +128,7 @@ export default function CRMPage() {
             setContactToEdit(null);
             setIsFormOpen(true);
           }}
-          className="btn-primary px-6 py-3 text-xs font-semibold uppercase tracking-wider flex items-center gap-2 self-start sm:self-auto shadow-soft"
+          className="btn-primary glass-rise-btn px-6 py-3 text-xs font-bold uppercase tracking-wider flex items-center gap-2 self-start sm:self-auto shadow-soft"
         >
           <Plus className="w-4 h-4" />
           <span>Add Contact</span>
@@ -140,92 +150,85 @@ export default function CRMPage() {
           />
         </div>
 
-        {/* Filters */}
-        <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-start lg:justify-end">
+        {/* Filters and Actions */}
+        <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto">
           
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="px-4 py-2.5 rounded-full border border-sage-200 text-xs text-charcoal bg-white/80 outline-none focus:border-sage-500 font-bold"
+          >
+            {categories.map((c) => (
+              <option key={c} value={c}>
+                {c === 'All' ? 'All Categories' : c}
+              </option>
+            ))}
+          </select>
+
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="px-4 py-2.5 rounded-full border border-sage-200 bg-white/80 text-xs font-medium text-charcoal outline-none cursor-pointer"
+            className="px-4 py-2.5 rounded-full border border-sage-200 text-xs text-charcoal bg-white/80 outline-none focus:border-sage-500 capitalize font-bold"
           >
-            <option value="All">All Statuses</option>
-            <option value="booked">Confirmed Booked</option>
-            <option value="enquired">Enquiry / Lead</option>
-            <option value="waitlisted">Waitlisted</option>
-            <option value="past-client">Past Client</option>
-            <option value="referral">Referral Partner</option>
+            {statuses.map((s) => (
+              <option key={s} value={s}>
+                {s === 'All' ? 'All Statuses' : s}
+              </option>
+            ))}
           </select>
 
+          {/* Bulk WhatsApp */}
+          <button
+            onClick={() => handleOpenBulkModal('whatsapp')}
+            className="btn-primary glass-rise-btn px-4 py-2.5 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs"
+          >
+            <MessageSquare className="w-3.5 h-3.5" />
+            <span>WhatsApp Queue ({selectedContactIds.length > 0 ? selectedContactIds.length : 'All'})</span>
+          </button>
+
+          {/* Bulk Email */}
+          <button
+            onClick={() => handleOpenBulkModal('email')}
+            className="btn-secondary glass-rise-btn px-4 py-2.5 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5"
+          >
+            <Mail className="w-3.5 h-3.5" />
+            <span>Email Blast</span>
+          </button>
+
+          {/* Export CSV */}
           <button
             onClick={handleExportCSV}
-            className="px-4 py-2.5 rounded-full border border-sage-300 hover:bg-cream-100 text-xs font-semibold text-charcoal flex items-center gap-1.5 transition-colors"
+            className="btn-secondary glass-rise-btn p-2.5 rounded-full text-charcoal hover:bg-cream-200"
+            title="Export CSV"
           >
-            <Download className="w-3.5 h-3.5" />
-            <span>Export CSV</span>
+            <Download className="w-4 h-4" />
           </button>
 
         </div>
 
       </div>
 
-      {/* Floating Bulk Action Bar (When 1+ Contacts Selected) */}
-      {selectedContactIds.length > 0 && (
-        <div className="p-4 rounded-2xl bg-sage-800 text-cream shadow-soft-lg flex flex-col sm:flex-row items-center justify-between gap-4 animate-fadeIn sticky top-24 z-20">
-          <div className="flex items-center gap-3">
-            <span className="w-7 h-7 rounded-full bg-cream text-sage-900 font-bold text-xs flex items-center justify-center">
-              {selectedContactIds.length}
-            </span>
-            <span className="text-xs font-medium">
-              Contact(s) selected for bulk action
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2.5">
-            <button
-              onClick={() => setIsBulkWAOpen(true)}
-              className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 transition-colors shadow-xs"
-            >
-              <MessageSquare className="w-3.5 h-3.5" />
-              <span>Queue WhatsApp ({selectedContactIds.length})</span>
-            </button>
-
-            <button
-              onClick={() => setIsBulkEmailOpen(true)}
-              className="px-4 py-2 rounded-xl bg-white/20 hover:bg-white/30 text-cream text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 transition-colors"
-            >
-              <Mail className="w-3.5 h-3.5" />
-              <span>Email Blast</span>
-            </button>
-
-            <button
-              onClick={handleExportCSV}
-              className="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-cream text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 transition-colors"
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span>Export</span>
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Unified Contacts Table */}
-      <div className="glass-card rounded-3xl overflow-hidden border border-sage-200/80 shadow-soft">
+      {/* Contacts Table */}
+      <div className="glass-card rounded-3xl overflow-hidden shadow-soft border border-sage-200/80">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-cream-100/90 border-b border-sage-200 text-[11px] font-semibold uppercase tracking-wider text-charcoal-muted">
+            <thead className="bg-cream-100/80 border-b border-sage-200 text-[11px] font-bold uppercase tracking-wider text-charcoal-muted">
               <tr>
                 <th className="py-4 px-4 w-10">
-                  <button onClick={handleSelectAll} className="p-1 text-charcoal-muted hover:text-charcoal">
-                    {selectedContactIds.length === filteredContacts.length && filteredContacts.length > 0 ? (
+                  <button
+                    onClick={handleSelectAll}
+                    className="p-1 text-charcoal-muted hover:text-charcoal"
+                  >
+                    {isAllSelected ? (
                       <CheckSquare className="w-4 h-4 text-sage-800" />
                     ) : (
                       <Square className="w-4 h-4" />
                     )}
                   </button>
                 </th>
-                <th className="py-4 px-4">Brand & Contact</th>
+                <th className="py-4 px-4">Brand / Contact</th>
                 <th className="py-4 px-4">Category</th>
-                <th className="py-4 px-4">Contact Details</th>
+                <th className="py-4 px-4">Contact Info</th>
                 <th className="py-4 px-4">Tags</th>
                 <th className="py-4 px-4">Status</th>
                 <th className="py-4 px-4">Total Spend</th>
@@ -240,7 +243,7 @@ export default function CRMPage() {
                   <tr
                     key={contact.id}
                     onClick={() => setDrawerContact(contact)}
-                    className={`hover:bg-white/80 transition-colors cursor-pointer ${
+                    className={`glass-rise-row hover:bg-white/90 transition-all cursor-pointer ${
                       isSelected ? 'bg-sage-50/80' : ''
                     }`}
                   >

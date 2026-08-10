@@ -66,14 +66,14 @@ export default function SettingsPage() {
           <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
             System Administration
           </span>
-          <h2 className="font-sans text-3xl font-extrabold text-charcoal tracking-tight">
+          <h2 className="font-sans text-3xl sm:text-4xl font-black text-charcoal tracking-tight">
             Agency Settings & Access Roles
           </h2>
         </div>
 
         <button
           onClick={() => setIsInviteOpen(true)}
-          className="btn-primary px-6 py-3 text-xs font-semibold uppercase tracking-wider flex items-center gap-2 self-start sm:self-auto shadow-soft"
+          className="btn-primary glass-rise-btn px-6 py-3 text-xs font-bold uppercase tracking-wider flex items-center gap-2 self-start sm:self-auto shadow-soft"
         >
           <UserPlus className="w-4 h-4" />
           <span>Invite Team Member</span>
@@ -85,10 +85,10 @@ export default function SettingsPage() {
         
         <div className="flex items-center justify-between pb-4 border-b border-sage-100">
           <div>
-            <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block">
+            <span className="text-xs uppercase tracking-wider font-bold text-sage-800 block">
               Team Directory
             </span>
-            <h3 className="font-sans text-2xl font-extrabold text-charcoal tracking-tight">
+            <h3 className="font-sans text-2xl font-black text-charcoal tracking-tight">
               Staff Members & Role Permissions
             </h3>
           </div>
@@ -100,7 +100,7 @@ export default function SettingsPage() {
         {/* Staff Table */}
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-cream-100/80 border-b border-sage-200 text-[11px] font-semibold uppercase tracking-wider text-charcoal-muted">
+            <thead className="bg-cream-100/80 border-b border-sage-200 text-[11px] font-bold uppercase tracking-wider text-charcoal-muted">
               <tr>
                 <th className="py-4 px-4">Member</th>
                 <th className="py-4 px-4">Role Badge</th>
@@ -112,7 +112,7 @@ export default function SettingsPage() {
             </thead>
             <tbody className="divide-y divide-sage-100">
               {staffUsers.map((user) => (
-                <tr key={user.id} className="hover:bg-white/80 transition-colors">
+                <tr key={user.id} className="glass-rise-row hover:bg-white transition-all">
                   
                   {/* User info */}
                   <td className="py-4 px-4">

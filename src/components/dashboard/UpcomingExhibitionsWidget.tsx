@@ -20,31 +20,31 @@ export const UpcomingExhibitionsWidget: React.FC<UpcomingExhibitionsWidgetProps>
             <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
               Active Editions
             </span>
-            <h3 className="font-sans text-xl font-bold text-charcoal tracking-tight">
+            <h3 className="font-sans text-xl font-black text-charcoal tracking-tight">
               Upcoming Schedule
             </h3>
           </div>
           <Link
             href="/exhibitions"
-            className="text-xs font-semibold text-sage-800 hover:text-sage-950 flex items-center gap-1 transition-colors"
+            className="text-xs font-bold text-sage-800 hover:text-sage-950 flex items-center gap-1 transition-colors glass-rise-btn px-3 py-1 rounded-full hover:bg-white"
           >
             <span>View All</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-3.5">
           {activeExhibitions.map((exh) => {
             const fillPct = Math.round((exh.bookedStallsCount / exh.totalStallCapacity) * 100);
 
             return (
               <div
                 key={exh.id}
-                className="p-4 rounded-2xl bg-white/70 hover:bg-white border border-sage-200/60 transition-all duration-200 shadow-2xs"
+                className="p-4 rounded-2xl bg-white/75 hover:bg-white border border-sage-200/60 shadow-2xs glass-rise-row"
               >
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div>
-                    <h4 className="font-sans text-base font-bold text-charcoal leading-snug tracking-tight">
+                    <h4 className="font-sans text-base font-extrabold text-charcoal leading-snug tracking-tight">
                       {exh.title}
                     </h4>
                     <div className="flex items-center gap-2 text-xs text-charcoal-muted mt-1 font-light">

@@ -44,14 +44,14 @@ export default function MarketingPage() {
           <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
             Growth & Outreach
           </span>
-          <h2 className="font-sans text-3xl font-extrabold text-charcoal tracking-tight">
+          <h2 className="font-sans text-3xl sm:text-4xl font-black text-charcoal tracking-tight">
             Marketing Logs & Lead Attribution
           </h2>
         </div>
 
         <button
           onClick={() => setIsFormOpen(true)}
-          className="btn-primary px-6 py-3 text-xs font-semibold uppercase tracking-wider flex items-center gap-2 self-start sm:self-auto shadow-soft"
+          className="btn-primary glass-rise-btn px-6 py-3 text-xs font-bold uppercase tracking-wider flex items-center gap-2 self-start sm:self-auto shadow-soft"
         >
           <Plus className="w-4 h-4" />
           <span>Add Campaign</span>
@@ -140,7 +140,7 @@ export default function MarketingPage() {
             </thead>
             <tbody className="divide-y divide-sage-100">
               {filteredCampaigns.map((cmp) => (
-                <tr key={cmp.id} className="hover:bg-white/80 transition-colors">
+                <tr key={cmp.id} className="glass-rise-row hover:bg-white transition-all">
                   
                   {/* Title & Notes */}
                   <td className="py-4 px-5">

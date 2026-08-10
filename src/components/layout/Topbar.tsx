@@ -60,10 +60,10 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
         </button>
 
         <div>
-          <h1 className="font-sans text-xl sm:text-2xl font-bold text-charcoal tracking-tight">
+          <h1 className="font-sans text-xl sm:text-2xl font-black text-charcoal tracking-tight">
             {pageInfo.title}
           </h1>
-          <p className="text-xs text-charcoal-muted hidden sm:block font-normal">
+          <p className="text-xs text-charcoal-muted hidden sm:block font-medium">
             {pageInfo.subtitle}
           </p>
         </div>
@@ -76,7 +76,7 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
         <div className="relative">
           <button
             onClick={() => setShowRoleDropdown(!showRoleDropdown)}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-full glass-pill hover:bg-white text-xs font-medium transition-all shadow-xs border border-sage-300/80"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-full glass-pill hover:bg-white text-xs font-semibold transition-all shadow-xs border border-sage-300/80 glass-rise-btn"
             title="Switch User Role to test permissions"
           >
             <span className={`w-2 h-2 rounded-full ${

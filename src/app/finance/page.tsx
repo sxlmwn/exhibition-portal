@@ -93,7 +93,7 @@ export default function FinancePage() {
           <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
             Financial Ledger
           </span>
-          <h2 className="font-sans text-3xl font-extrabold text-charcoal tracking-tight">
+          <h2 className="font-sans text-3xl sm:text-4xl font-black text-charcoal tracking-tight">
             Finance & Cost Management
           </h2>
         </div>
@@ -101,7 +101,7 @@ export default function FinancePage() {
         <div className="flex items-center gap-3 self-start sm:self-auto">
           <button
             onClick={handleExportReport}
-            className="btn-secondary px-5 py-2.5 text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5"
+            className="btn-secondary glass-rise-btn px-5 py-2.5 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Export Report</span>
@@ -109,7 +109,7 @@ export default function FinancePage() {
 
           <button
             onClick={() => setIsFormOpen(true)}
-            className="btn-primary px-6 py-2.5 text-xs font-semibold uppercase tracking-wider flex items-center gap-2 shadow-soft"
+            className="btn-primary glass-rise-btn px-6 py-2.5 text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-soft"
           >
             <Plus className="w-4 h-4" />
             <span>Log Expense</span>
@@ -258,7 +258,7 @@ export default function FinancePage() {
             </thead>
             <tbody className="divide-y divide-sage-100">
               {filteredExpenses.map((exp) => (
-                <tr key={exp.id} className="hover:bg-white/80 transition-colors">
+                <tr key={exp.id} className="glass-rise-row hover:bg-white transition-all">
                   
                   {/* Category & Memo */}
                   <td className="py-4 px-5">

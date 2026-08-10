@@ -50,7 +50,7 @@ export const ExhibitionCard: React.FC<ExhibitionCardProps> = ({
   return (
     <div 
       onClick={() => onViewDetails(exhibition)}
-      className="glass-card glass-card-hover rounded-3xl overflow-hidden flex flex-col justify-between cursor-pointer group border border-sage-200/80"
+      className="glass-card glass-card-hover rounded-3xl overflow-hidden flex flex-col justify-between cursor-pointer group border border-sage-200/80 hover:-translate-y-2 hover:shadow-soft-xl"
     >
       <div>
         {/* Cover Image with Badges */}
@@ -77,10 +77,10 @@ export const ExhibitionCard: React.FC<ExhibitionCardProps> = ({
 
           {/* Bottom Overlay Title & Category */}
           <div className="absolute bottom-3 left-4 right-4 text-white">
-            <span className="text-[10px] uppercase tracking-wider text-sage-200 font-medium block">
+            <span className="text-[10px] uppercase tracking-wider text-sage-200 font-bold block">
               {exhibition.category}
             </span>
-            <h3 className="font-sans text-xl font-extrabold leading-tight truncate tracking-tight">
+            <h3 className="font-sans text-xl font-black leading-tight truncate tracking-tight">
               {exhibition.title}
             </h3>
           </div>
