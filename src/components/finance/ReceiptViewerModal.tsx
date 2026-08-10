@@ -16,14 +16,14 @@ export const ReceiptViewerModal: React.FC<ReceiptViewerModalProps> = ({
   if (!expense) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
       {/* Full-Screen Frosted Glass Backdrop */}
       <div 
-        className="fixed inset-0 bg-black/60 backdrop-blur-xl transition-opacity"
+        className="fixed inset-0 bg-black/65 backdrop-blur-xl transition-opacity"
         onClick={onClose}
       />
 
-      <div className="relative z-10 modal-glass-container dark:bg-[#161C16] dark:text-[#F7F5F0] rounded-4xl w-full max-w-lg overflow-hidden shadow-soft-2xl animate-scaleUp">
+      <div className="relative z-10 modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full max-w-lg overflow-hidden shadow-soft-2xl animate-scaleUp">
         
         {/* Header */}
         <div className="p-5 border-b border-sage-100 flex items-center justify-between">

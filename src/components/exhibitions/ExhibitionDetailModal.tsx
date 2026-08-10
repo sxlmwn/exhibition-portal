@@ -39,14 +39,14 @@ export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
   const netMargin = exhibition.stallRevenueBooked - exhibition.totalExpensesLogged;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
       {/* Full-Screen Frosted Glass Backdrop */}
       <div 
-        className="fixed inset-0 bg-black/60 backdrop-blur-xl transition-opacity"
+        className="fixed inset-0 bg-black/65 backdrop-blur-xl transition-opacity"
         onClick={onClose}
       />
 
-      <div className="relative z-10 modal-glass-container dark:bg-[#161C16] dark:text-[#F7F5F0] rounded-4xl w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-soft-2xl animate-scaleUp">
+      <div className="relative z-10 modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-soft-2xl animate-scaleUp">
         
         {/* Visual Cover Banner */}
         <div className="relative h-64 overflow-hidden bg-sage-900 rounded-t-4xl">

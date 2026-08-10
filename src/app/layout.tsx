@@ -5,6 +5,11 @@ import { AdminShell } from '../components/layout/AdminShell';
 export const metadata: Metadata = {
   title: 'Exhibition Agency — Admin Portal',
   description: 'Curated Exhibition & Stall Booking Management System',
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({

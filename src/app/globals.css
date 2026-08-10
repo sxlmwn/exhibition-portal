@@ -29,7 +29,7 @@
 
 @layer utilities {
   /* =========================================================================
-     UNIVERSAL GLASSY RISE ON HOVER SYSTEM (Applied Everywhere)
+     UNIVERSAL GLASSY RISE ON HOVER SYSTEM (Light & Dark)
      ========================================================================= */
 
   /* Glass Card Base & Hover Elevation */
@@ -178,67 +178,81 @@
 
   .glass-select:focus,
   select:focus {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 24px -4px rgba(74, 93, 74, 0.2);
     border-color: #4A5D4A !important;
+    box-shadow: 0 0 0 3px rgba(143, 166, 142, 0.25) !important;
   }
 
-  /* Inputs Hover Rise & Focus Glow */
+  /* Input fields glassy hover */
   .glass-input,
   input[type="text"],
-  input[type="search"],
   input[type="email"],
   input[type="number"],
-  input[type="tel"],
+  input[type="date"],
   textarea {
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, background-color 0.2s ease;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
   }
 
   .glass-input:hover,
   input[type="text"]:hover,
-  input[type="search"]:hover,
   input[type="email"]:hover,
   input[type="number"]:hover,
-  input[type="tel"]:hover,
+  input[type="date"]:hover,
   textarea:hover {
-    transform: translateY(-1.5px);
-    box-shadow: 0 6px 18px -2px rgba(74, 93, 74, 0.12);
-    border-color: #8FA68E;
+    border-color: #7A9579;
+    box-shadow: 0 4px 12px -2px rgba(74, 93, 74, 0.1);
   }
 
   .glass-input:focus,
   input[type="text"]:focus,
-  input[type="search"]:focus,
   input[type="email"]:focus,
   input[type="number"]:focus,
-  input[type="tel"]:focus,
+  input[type="date"]:focus,
   textarea:focus {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 22px -3px rgba(74, 93, 74, 0.18);
     border-color: #4A5D4A;
-    background-color: #FFFFFF !important;
+    box-shadow: 0 0 0 3px rgba(143, 166, 142, 0.25);
   }
 
-  /* Sidebar Nav Items */
-  .sidebar-nav-item {
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease;
+  /* Floor Plan Stall Interactive Elements */
+  .stall-interactive-slot {
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, background-color 0.2s ease;
+    will-change: transform, box-shadow;
   }
 
-  .sidebar-nav-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px -2px rgba(74, 93, 74, 0.12);
+  .stall-interactive-slot:hover {
+    transform: translateY(-3px) scale(1.02) !important;
+    box-shadow: 0 12px 28px -4px rgba(74, 93, 74, 0.22), 0 4px 8px -2px rgba(74, 93, 74, 0.1) !important;
+    z-index: 20;
   }
 
-  /* =========================================================================
-     FULL-SCREEN FROSTED MODAL BACKDROP & DIALOG SYSTEM
-     ========================================================================= */
+  /* Exhibition Card Specific */
+  .exhibition-grid-card {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+    will-change: transform, box-shadow;
+  }
+
+  .exhibition-grid-card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 20px 40px -8px rgba(74, 93, 74, 0.18), 0 8px 16px -4px rgba(74, 93, 74, 0.08) !important;
+  }
+
+  /* Badge and Tag Rise */
+  .glass-badge {
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .glass-badge:hover {
+    transform: translateY(-1.5px);
+    box-shadow: 0 6px 14px -2px rgba(74, 93, 74, 0.16);
+  }
+
+  /* Full Screen Frosted Glass Modal Backdrop & Container */
   .modal-backdrop-blur {
     position: fixed;
     inset: 0;
-    z-index: 50;
-    background-color: rgba(18, 23, 18, 0.55);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -255,7 +269,7 @@
   }
 
   /* =========================================================================
-     DARK THEME GLASS STYLING SYSTEM
+     NEUTRAL BLACK DARK THEME (Black Surface with Crisp Green Accents)
      ========================================================================= */
   .dark {
     color-scheme: dark;
@@ -263,78 +277,94 @@
 
   .dark html,
   .dark body {
-    background-color: #121612 !important;
-    color: #F7F5F0 !important;
+    background-color: #0B0C0E !important;
+    color: #F3F4F6 !important;
   }
 
+  /* Dark Cards - True Neutral Charcoal-Black */
   .dark .glass-card {
-    background: rgba(22, 28, 22, 0.85) !important;
-    border-color: rgba(143, 166, 142, 0.2) !important;
-    box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.4), 0 2px 6px -1px rgba(0, 0, 0, 0.25) !important;
-    color: #F7F5F0;
+    background: rgba(18, 20, 24, 0.88) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.6), 0 2px 6px -1px rgba(0, 0, 0, 0.4) !important;
+    color: #F3F4F6;
   }
 
   .dark .glass-card-hover:hover,
   .dark .glass-rise-card:hover {
-    background-color: rgba(28, 36, 28, 0.96) !important;
-    box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.65), 0 0 20px rgba(143, 166, 142, 0.15) !important;
+    background-color: rgba(24, 27, 32, 0.98) !important;
+    box-shadow: 0 18px 42px -6px rgba(0, 0, 0, 0.8), 0 0 18px rgba(74, 93, 74, 0.25) !important;
     border-color: rgba(143, 166, 142, 0.45) !important;
   }
 
   .dark .stat-tile,
   .dark .kpi-card {
-    background-color: rgba(22, 28, 22, 0.82) !important;
-    border-color: rgba(143, 166, 142, 0.2) !important;
+    background-color: rgba(18, 20, 24, 0.85) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
   }
 
   .dark .stat-tile:hover,
   .dark .kpi-card:hover {
-    background-color: rgba(30, 38, 30, 0.98) !important;
-    box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.65), 0 0 24px rgba(143, 166, 142, 0.18) !important;
-    border-color: rgba(143, 166, 142, 0.55) !important;
+    background-color: rgba(24, 27, 32, 0.98) !important;
+    box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.8), 0 0 20px rgba(74, 93, 74, 0.25) !important;
+    border-color: rgba(143, 166, 142, 0.5) !important;
   }
 
+  /* Dark Sidebar & Topbar - Neutral Black Glass */
   .dark .glass-sidebar {
-    background: rgba(18, 23, 18, 0.95) !important;
-    border-right-color: rgba(143, 166, 142, 0.18) !important;
+    background: rgba(13, 15, 18, 0.96) !important;
+    border-right-color: rgba(255, 255, 255, 0.08) !important;
   }
 
   .dark .glass-topbar {
-    background: rgba(18, 23, 18, 0.92) !important;
-    border-bottom-color: rgba(143, 166, 142, 0.18) !important;
+    background: rgba(13, 15, 18, 0.92) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.08) !important;
   }
 
+  /* Dark Modals - Neutral Black Container with Crisp Accents */
   .dark .modal-glass-container {
-    background: rgba(20, 26, 20, 0.98) !important;
-    border-color: rgba(143, 166, 142, 0.3) !important;
-    box-shadow: 0 32px 80px -12px rgba(0, 0, 0, 0.75), 0 0 30px rgba(143, 166, 142, 0.15) !important;
+    background: rgba(15, 17, 21, 0.98) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 32px 80px -12px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 0, 0, 0.5) !important;
+    color: #F3F4F6 !important;
   }
 
   .dark .glass-rise-row:hover {
-    background-color: rgba(32, 42, 32, 0.85) !important;
-    box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.5) !important;
+    background-color: rgba(28, 31, 38, 0.9) !important;
+    box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.7) !important;
+  }
+
+  /* Dark Buttons - Green Accent & Neutral Secondary */
+  .dark .btn-primary {
+    background-color: #4A5D4A;
+    color: #F7F5F0;
+  }
+
+  .dark .btn-primary:hover {
+    background-color: #5C725C;
+    box-shadow: 0 10px 24px -2px rgba(74, 93, 74, 0.5), 0 0 20px rgba(143, 166, 142, 0.3);
   }
 
   .dark .btn-secondary {
-    background-color: rgba(28, 36, 28, 0.9) !important;
-    color: #F7F5F0 !important;
-    border-color: rgba(143, 166, 142, 0.3) !important;
+    background-color: rgba(24, 27, 32, 0.9) !important;
+    color: #F3F4F6 !important;
+    border-color: rgba(255, 255, 255, 0.14) !important;
   }
 
   .dark .btn-secondary:hover {
-    background-color: rgba(36, 46, 36, 1) !important;
-    border-color: rgba(143, 166, 142, 0.6) !important;
-    box-shadow: 0 10px 24px -2px rgba(0, 0, 0, 0.5) !important;
+    background-color: rgba(32, 36, 44, 1) !important;
+    border-color: rgba(143, 166, 142, 0.5) !important;
+    box-shadow: 0 10px 24px -2px rgba(0, 0, 0, 0.6) !important;
   }
 
+  /* Dark Inputs & Selects */
   .dark .glass-select,
   .dark select,
   .dark .glass-input,
   .dark input,
   .dark textarea {
-    background-color: rgba(26, 34, 26, 0.88) !important;
-    border-color: rgba(143, 166, 142, 0.25) !important;
-    color: #F7F5F0 !important;
+    background-color: rgba(20, 23, 28, 0.92) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #F3F4F6 !important;
   }
 
   .dark .glass-select:focus,
@@ -343,48 +373,66 @@
   .dark input:focus,
   .dark textarea:focus {
     border-color: #8FA68E !important;
-    box-shadow: 0 0 18px rgba(143, 166, 142, 0.25) !important;
+    box-shadow: 0 0 0 3px rgba(143, 166, 142, 0.25) !important;
   }
 
   .dark thead {
-    background-color: rgba(24, 32, 24, 0.95) !important;
-    border-color: rgba(143, 166, 142, 0.2) !important;
-    color: #98A898 !important;
+    background-color: rgba(18, 20, 24, 0.95) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    color: #9CA3AF !important;
   }
 
+  /* High-Contrast Typography Tokens for Dark Mode */
   .dark .text-charcoal {
-    color: #F7F5F0 !important;
+    color: #FFFFFF !important;
   }
 
   .dark .text-charcoal-muted {
-    color: #98A898 !important;
+    color: #9CA3AF !important;
   }
 
   .dark .text-charcoal-light {
-    color: #CCD6CC !important;
+    color: #D1D5DB !important;
   }
 
+  .dark .text-sage-800 {
+    color: #A4C2A3 !important;
+  }
+
+  .dark .text-sage-900 {
+    color: #E2EFE1 !important;
+  }
+
+  .dark .text-sage-deep {
+    color: #8FA68E !important;
+  }
+
+  /* Neutral Insets in Dark Mode (No grey haze!) */
   .dark .bg-white\/70,
   .dark .bg-white\/75,
   .dark .bg-white\/80,
   .dark .bg-white\/90,
   .dark .bg-white\/95,
   .dark .bg-white {
-    background-color: rgba(24, 31, 24, 0.88) !important;
+    background-color: rgba(255, 255, 255, 0.04) !important;
   }
 
   .dark .bg-cream-50,
   .dark .bg-cream-100 {
-    background-color: rgba(28, 36, 28, 0.7) !important;
+    background-color: rgba(255, 255, 255, 0.04) !important;
+  }
+
+  .dark .bg-cream-200 {
+    background-color: rgba(255, 255, 255, 0.08) !important;
   }
 
   .dark .border-sage-200,
   .dark .border-sage-100 {
-    border-color: rgba(143, 166, 142, 0.18) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
   }
 
   .dark .divide-sage-100 > :not([hidden]) ~ :not([hidden]),
   .dark .divide-sage-200 > :not([hidden]) ~ :not([hidden]) {
-    border-color: rgba(143, 166, 142, 0.15) !important;
+    border-color: rgba(255, 255, 255, 0.06) !important;
   }
 }
