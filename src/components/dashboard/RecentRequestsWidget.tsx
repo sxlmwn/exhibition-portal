@@ -7,21 +7,22 @@ import { VendorRequest } from '../../types';
 
 interface RecentRequestsWidgetProps {
   requests: VendorRequest[];
+  onSelectRequest?: (request: VendorRequest) => void;
 }
 
-export const RecentRequestsWidget: React.FC<RecentRequestsWidgetProps> = ({ requests }) => {
+export const RecentRequestsWidget: React.FC<RecentRequestsWidgetProps> = ({ requests, onSelectRequest }) => {
   const recentList = requests.slice(0, 4);
 
   const getStatusBadge = (status: VendorRequest['status']) => {
     switch (status) {
       case 'approved':
-        return 'bg-emerald-100 text-emerald-900 border-emerald-300';
+        return 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700';
       case 'pending':
-        return 'bg-amber-100 text-amber-900 border-amber-300';
+        return 'bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border-amber-300 dark:border-amber-700';
       case 'rejected':
-        return 'bg-rose-100 text-rose-800 border-rose-200';
+        return 'bg-rose-100 dark:bg-rose-950/60 text-rose-800 dark:text-rose-300 border-rose-200 dark:border-rose-700';
       case 'waitlisted':
-        return 'bg-purple-100 text-purple-900 border-purple-300';
+        return 'bg-purple-100 dark:bg-purple-950/60 text-purple-900 dark:text-purple-300 border-purple-300 dark:border-purple-700';
     }
   };
 
@@ -50,7 +51,8 @@ export const RecentRequestsWidget: React.FC<RecentRequestsWidgetProps> = ({ requ
           {recentList.map((req) => (
             <div
               key={req.id}
-              className="p-3.5 rounded-2xl bg-white/75 hover:bg-white border border-sage-200/60 shadow-2xs flex items-center justify-between gap-3 glass-rise-row"
+              onClick={() => onSelectRequest && onSelectRequest(req)}
+              className="p-3.5 rounded-2xl bg-white/75 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 border border-sage-200/60 dark:border-white/10 shadow-2xs flex items-center justify-between gap-3 glass-rise-row cursor-pointer transition-all"
             >
               <div className="min-w-0">
                 <div className="flex items-center gap-2">

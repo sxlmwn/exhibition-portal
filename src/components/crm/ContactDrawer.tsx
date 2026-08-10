@@ -14,7 +14,9 @@ import {
   Edit3, 
   Trash2,
   CheckCircle2,
-  Store
+  Store,
+  Sparkles,
+  Send
 } from 'lucide-react';
 import { CRMContact } from '../../types';
 import { useAdmin } from '../../context/AdminContext';
@@ -30,7 +32,7 @@ export const ContactDrawer: React.FC<ContactDrawerProps> = ({
   onClose,
   onEdit
 }) => {
-  const { updateContact, deleteContact } = useAdmin();
+  const { updateContact, deleteContact, currentRole } = useAdmin();
   const [newNote, setNewNote] = useState('');
 
   if (!contact) return null;
@@ -52,98 +54,150 @@ export const ContactDrawer: React.FC<ContactDrawerProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-charcoal/40 backdrop-blur-xs animate-fadeIn">
-      <div className="bg-white w-full max-w-md h-full shadow-soft-2xl border-l border-sage-200 p-6 sm:p-8 flex flex-col justify-between overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
+      {/* Full-Screen Frosted Glass Backdrop */}
+      <div 
+        className="fixed inset-0 bg-black/60 backdrop-blur-xl transition-opacity"
+        onClick={onClose}
+      />
+
+      {/* Elevated Centered Modal Card */}
+      <div className="relative z-10 modal-glass-container dark:bg-[#161C16] dark:text-[#F7F5F0] rounded-4xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-soft-2xl animate-scaleUp">
         
-        <div>
-          {/* Header */}
-          <div className="flex items-center justify-between pb-4 border-b border-sage-100 mb-6">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-sage-800 text-cream font-sans font-extrabold text-xl flex items-center justify-center">
-                {contact.businessName.substring(0, 2).toUpperCase()}
-              </div>
-              <div>
-                <h3 className="font-sans text-2xl font-extrabold text-charcoal leading-tight tracking-tight">
-                  {contact.businessName}
-                </h3>
-                <span className="text-xs text-charcoal-muted font-normal">
-                  {contact.name}
+        {/* Header */}
+        <div className="flex items-start justify-between pb-5 border-b border-sage-100 dark:border-white/10 mb-6">
+          <div className="flex items-center gap-3.5">
+            <div className="w-12 h-12 rounded-2xl bg-sage-800 text-cream font-sans font-bold text-xl flex items-center justify-center shadow-xs">
+              {contact.businessName.substring(0, 2).toUpperCase()}
+            </div>
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border border-sage-200 dark:border-white/10 text-sage-800 dark:text-sage-300">
+                  {contact.category}
+                </span>
+                <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800">
+                  {contact.status}
                 </span>
               </div>
+              <h2 className="font-sans text-2xl sm:text-3xl font-bold text-charcoal tracking-tight">
+                {contact.businessName}
+              </h2>
+              <span className="text-xs text-charcoal-muted font-medium">
+                POC: {contact.name}
+              </span>
             </div>
-            <button
-              onClick={onClose}
-              className="p-2 rounded-full hover:bg-cream-200 text-charcoal-muted hover:text-charcoal"
-            >
-              <X className="w-5 h-5" />
-            </button>
           </div>
 
-          {/* Quick Info Grid */}
-          <div className="space-y-4 mb-6">
-            <div className="flex items-center gap-3 p-3 rounded-2xl bg-cream-50 border border-sage-200 text-xs">
-              <Phone className="w-4 h-4 text-sage-700" />
-              <div className="flex-1">
-                <span className="text-charcoal-muted text-[10px] block uppercase tracking-wider font-semibold">Phone / WhatsApp</span>
+          <button
+            onClick={onClose}
+            className="p-2 rounded-full hover:bg-cream-100 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal transition-colors"
+            title="Close modal"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Modal Body */}
+        <div className="space-y-6">
+          
+          {/* Quick Metrics */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            
+            <div className="p-4 rounded-2xl bg-cream-50 dark:bg-white/5 border border-sage-200/80 dark:border-white/10">
+              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted block mb-0.5">
+                Lifetime Stall Spend
+              </span>
+              <span className="font-sans text-2xl font-bold text-sage-deep dark:text-sage-300">
+                Rs. {contact.totalSpend.toLocaleString()}
+              </span>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-cream-50 dark:bg-white/5 border border-sage-200/80 dark:border-white/10">
+              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted block mb-0.5">
+                Last Event Activity
+              </span>
+              <span className="font-sans text-base font-bold text-charcoal">
+                {contact.lastActivityDate || 'Season 2026'}
+              </span>
+            </div>
+
+          </div>
+
+          {/* Contact Details Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            
+            <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-sage-200/70 dark:border-white/10 space-y-2">
+              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted block">
+                Direct Contact Channels
+              </span>
+              <div className="flex items-center gap-2">
+                <Phone className="w-4 h-4 text-sage-700 dark:text-sage-400" />
                 <a
-                  href={`https://wa.me/${contact.phone.replace(/[^0-9]/g, '')}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-bold text-emerald-800 hover:underline"
+                  href={`tel:${contact.phone}`}
+                  className="font-bold text-charcoal hover:underline"
                 >
                   {contact.phone}
                 </a>
               </div>
-            </div>
-
-            <div className="flex items-center gap-3 p-3 rounded-2xl bg-cream-50 border border-sage-200 text-xs">
-              <Mail className="w-4 h-4 text-sage-700" />
-              <div className="flex-1">
-                <span className="text-charcoal-muted text-[10px] block uppercase tracking-wider font-semibold">Email</span>
-                <span className="font-medium text-charcoal">{contact.email}</span>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="p-3 rounded-2xl bg-cream-50 border border-sage-200">
-                <span className="text-charcoal-muted text-[10px] block uppercase tracking-wider font-semibold">Total Spend</span>
-                <span className="font-sans text-lg font-extrabold text-sage-deep">
-                  Rs. {contact.totalSpend.toLocaleString()}
-                </span>
-              </div>
-              <div className="p-3 rounded-2xl bg-cream-50 border border-sage-200">
-                <span className="text-charcoal-muted text-[10px] block uppercase tracking-wider">Status</span>
-                <span className="font-bold text-charcoal capitalize">
-                  {contact.status}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {/* Tags */}
-          <div className="mb-6">
-            <span className="text-xs uppercase tracking-wider font-semibold text-charcoal block mb-2">
-              Assigned Tags
-            </span>
-            <div className="flex flex-wrap gap-1.5">
-              {contact.tags.map((tag, idx) => (
-                <span
-                  key={idx}
-                  className="text-xs bg-sage-100 text-sage-900 px-3 py-1 rounded-full border border-sage-200 font-medium"
+              <div className="flex items-center gap-2 text-charcoal-muted">
+                <Mail className="w-4 h-4 text-sage-700 dark:text-sage-400" />
+                <a
+                  href={`mailto:${contact.email}`}
+                  className="hover:underline font-medium text-charcoal truncate"
                 >
-                  {tag}
-                </span>
-              ))}
+                  {contact.email}
+                </a>
+              </div>
             </div>
+
+            <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 flex flex-col justify-between">
+              <div>
+                <span className="text-[10px] uppercase tracking-wider font-bold text-emerald-900 dark:text-emerald-300 block mb-1">
+                  WhatsApp Direct Action
+                </span>
+                <span className="text-[11px] text-emerald-800 dark:text-emerald-300 block font-medium">
+                  Dispatch catalog or invitation on WhatsApp
+                </span>
+              </div>
+              <a
+                href={`https://wa.me/${contact.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello ${contact.name}, regarding your exhibition stall reservation for "${contact.businessName}"...`)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 px-4 py-2 rounded-full bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold shadow-xs transition-all glass-rise-btn flex items-center justify-center gap-1.5 self-start"
+              >
+                <MessageSquare className="w-3.5 h-3.5" />
+                <span>Open Chat</span>
+              </a>
+            </div>
+
           </div>
+
+          {/* Assigned Tags */}
+          {contact.tags && contact.tags.length > 0 && (
+            <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-sage-200/70 dark:border-white/10">
+              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted block mb-2">
+                Assigned Segmentation Tags
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {contact.tags.map((tag, idx) => (
+                  <span
+                    key={idx}
+                    className="text-xs bg-sage-100 dark:bg-sage-900/60 text-sage-900 dark:text-sage-200 px-3 py-1 rounded-full border border-sage-200 dark:border-white/10 font-bold"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Notes & Activity Log */}
-          <div className="mb-6">
-            <span className="text-xs uppercase tracking-wider font-semibold text-charcoal block mb-2">
+          <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-sage-200/70 dark:border-white/10">
+            <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted block mb-2">
               Curator Notes & Activity Log
             </span>
-            <div className="p-4 rounded-2xl bg-cream-50 border border-sage-200 text-xs font-light text-charcoal-muted whitespace-pre-line leading-relaxed mb-3 max-h-40 overflow-y-auto">
-              {contact.notes || 'No notes logged yet.'}
+            <div className="p-3.5 rounded-xl bg-cream-50 dark:bg-white/5 border border-sage-200/60 dark:border-white/10 text-xs text-charcoal whitespace-pre-line leading-relaxed mb-3 max-h-36 overflow-y-auto font-medium">
+              {contact.notes || 'No activity notes logged yet.'}
             </div>
 
             <div className="flex items-center gap-2">
@@ -151,42 +205,47 @@ export const ContactDrawer: React.FC<ContactDrawerProps> = ({
                 type="text"
                 value={newNote}
                 onChange={(e) => setNewNote(e.target.value)}
-                placeholder="Append a note..."
-                className="flex-1 px-3.5 py-2 rounded-xl border border-sage-200 text-xs outline-none focus:border-sage-500"
+                placeholder="Append a CRM interaction note..."
+                className="flex-1 px-3.5 py-2 rounded-xl border border-sage-200 text-xs outline-none focus:border-sage-500 font-medium"
               />
               <button
                 onClick={handleAddNote}
-                className="btn-primary px-4 py-2 text-xs font-semibold uppercase tracking-wider"
+                className="btn-primary px-4 py-2 text-xs font-bold uppercase tracking-wider glass-rise-btn flex items-center gap-1"
               >
-                Add
+                <Send className="w-3 h-3" />
+                <span>Save</span>
               </button>
             </div>
           </div>
-        </div>
 
-        {/* Drawer Actions */}
-        <div className="pt-4 border-t border-sage-100 flex items-center justify-between gap-3">
-          <button
-            onClick={() => {
-              onEdit(contact);
-              onClose();
-            }}
-            className="flex-1 py-2.5 rounded-xl border border-sage-300 text-charcoal hover:bg-cream-100 text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-1.5"
-          >
-            <Edit3 className="w-3.5 h-3.5" />
-            <span>Edit Profile</span>
-          </button>
+          {/* Actions */}
+          <div className="pt-4 border-t border-sage-100 dark:border-white/10 flex items-center justify-between gap-3">
+            <button
+              onClick={() => {
+                onEdit(contact);
+                onClose();
+              }}
+              className="flex-1 py-2.5 rounded-2xl border border-sage-300 dark:border-white/10 text-charcoal hover:bg-cream-100 dark:hover:bg-white/10 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 glass-rise-btn"
+            >
+              <Edit3 className="w-3.5 h-3.5" />
+              <span>Edit Contact</span>
+            </button>
 
-          <button
-            onClick={handleDelete}
-            className="p-2.5 rounded-xl hover:bg-rose-100 text-rose-700 transition-colors"
-            title="Delete Contact"
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
+            {currentRole === 'owner' && (
+              <button
+                onClick={handleDelete}
+                className="p-2.5 rounded-2xl hover:bg-rose-100 dark:hover:bg-rose-950/40 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-800 transition-colors"
+                title="Delete Contact"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+
         </div>
 
       </div>
     </div>
   );
 };
+

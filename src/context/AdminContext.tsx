@@ -79,6 +79,11 @@ interface AdminContextType {
   // Agency Settings
   settings: AgencySettings;
   updateSettings: (updates: Partial<AgencySettings>) => void;
+
+  // Theme Management
+  theme: 'light' | 'dark';
+  toggleTheme: () => void;
+  setTheme: (theme: 'light' | 'dark') => void;
 }
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
@@ -94,6 +99,33 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [campaigns, setCampaigns] = useState<MarketingCampaign[]>(INITIAL_CAMPAIGNS);
   const [pastEvents, setPastEvents] = useState<PastEventStory[]>(INITIAL_PAST_EVENTS);
   const [settings, setSettings] = useState<AgencySettings>(INITIAL_AGENCY_SETTINGS);
+  const [theme, setThemeState] = useState<'light' | 'dark'>('light');
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('exhibition_admin_theme') as 'light' | 'dark' | null;
+    if (savedTheme) {
+      setThemeState(savedTheme);
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+  }, []);
+
+  const setTheme = (newTheme: 'light' | 'dark') => {
+    setThemeState(newTheme);
+    localStorage.setItem('exhibition_admin_theme', newTheme);
+    if (newTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  };
+
+  const toggleTheme = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light');
+  };
 
   const currentUser = staffUsers.find(u => u.role === currentRole) || staffUsers[0];
 
@@ -405,7 +437,10 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       updatePastEvent,
       deletePastEvent,
       settings,
-      updateSettings
+      updateSettings,
+      theme,
+      toggleTheme,
+      setTheme
     }}>
       {children}
     </AdminContext.Provider>

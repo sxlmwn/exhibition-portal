@@ -7,9 +7,10 @@ import { Exhibition } from '../../types';
 
 interface UpcomingExhibitionsWidgetProps {
   exhibitions: Exhibition[];
+  onSelectExhibition?: (exhibition: Exhibition) => void;
 }
 
-export const UpcomingExhibitionsWidget: React.FC<UpcomingExhibitionsWidgetProps> = ({ exhibitions }) => {
+export const UpcomingExhibitionsWidget: React.FC<UpcomingExhibitionsWidgetProps> = ({ exhibitions, onSelectExhibition }) => {
   const activeExhibitions = exhibitions.filter(e => e.status !== 'completed').slice(0, 3);
 
   return (
@@ -40,7 +41,8 @@ export const UpcomingExhibitionsWidget: React.FC<UpcomingExhibitionsWidgetProps>
             return (
               <div
                 key={exh.id}
-                className="p-4 rounded-2xl bg-white/75 hover:bg-white border border-sage-200/60 shadow-2xs glass-rise-row"
+                onClick={() => onSelectExhibition && onSelectExhibition(exh)}
+                className="p-4 rounded-2xl bg-white/75 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 border border-sage-200/60 dark:border-white/10 shadow-2xs glass-rise-row cursor-pointer transition-all"
               >
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div>

@@ -121,10 +121,16 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal/50 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-white rounded-3xl shadow-soft-2xl border border-sage-200 w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 sm:p-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
+      {/* Full-Screen Frosted Glass Backdrop */}
+      <div 
+        className="fixed inset-0 bg-black/60 backdrop-blur-xl transition-opacity"
+        onClick={onClose}
+      />
+
+      <div className="relative z-10 modal-glass-container dark:bg-[#161C16] dark:text-[#F7F5F0] rounded-4xl w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-soft-2xl animate-scaleUp">
         
-        <div className="flex items-center justify-between pb-4 border-b border-sage-100 mb-6">
+        <div className="flex items-center justify-between pb-4 border-b border-sage-100 dark:border-white/10 mb-6">
           <div>
             <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
               CRM Record

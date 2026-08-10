@@ -15,13 +15,18 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { useAdmin } from '../context/AdminContext';
+import { Exhibition, VendorRequest } from '../types';
 import { StatCard } from '../components/dashboard/StatCard';
 import { RevenueChart } from '../components/dashboard/RevenueChart';
 import { UpcomingExhibitionsWidget } from '../components/dashboard/UpcomingExhibitionsWidget';
 import { RecentRequestsWidget } from '../components/dashboard/RecentRequestsWidget';
+import { ExhibitionDetailModal } from '../components/exhibitions/ExhibitionDetailModal';
+import { RequestDetailModal } from '../components/requests/RequestDetailModal';
 
 export default function DashboardPage() {
   const { exhibitions, stalls, vendorRequests, expenses } = useAdmin();
+  const [selectedExhibition, setSelectedExhibition] = React.useState<Exhibition | null>(null);
+  const [selectedRequest, setSelectedRequest] = React.useState<VendorRequest | null>(null);
 
   // Calculated Stats
   const activeExhibitions = exhibitions.filter(e => e.status !== 'completed');
@@ -125,9 +130,27 @@ export default function DashboardPage() {
 
       {/* Two Column Panels: Schedule Mini-List + Recent Requests */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <UpcomingExhibitionsWidget exhibitions={exhibitions} />
-        <RecentRequestsWidget requests={vendorRequests} />
+        <UpcomingExhibitionsWidget 
+          exhibitions={exhibitions} 
+          onSelectExhibition={(exh) => setSelectedExhibition(exh)} 
+        />
+        <RecentRequestsWidget 
+          requests={vendorRequests} 
+          onSelectRequest={(req) => setSelectedRequest(req)} 
+        />
       </div>
+
+      {/* Exhibition Detail Modal with Full Screen Frosted Glass Blur */}
+      <ExhibitionDetailModal
+        exhibition={selectedExhibition}
+        onClose={() => setSelectedExhibition(null)}
+      />
+
+      {/* Request Detail Modal with Full Screen Frosted Glass Blur */}
+      <RequestDetailModal
+        request={selectedRequest}
+        onClose={() => setSelectedRequest(null)}
+      />
 
     </div>
   );

@@ -16,12 +16,14 @@ import {
 import { useAdmin } from '../../context/AdminContext';
 import { PastEventStory } from '../../types';
 import { PastEventFormModal } from '../../components/past-events/PastEventFormModal';
+import { PastEventDetailModal } from '../../components/past-events/PastEventDetailModal';
 
 export default function PastEventsPage() {
   const { pastEvents, deletePastEvent } = useAdmin();
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [eventToEdit, setEventToEdit] = useState<PastEventStory | null>(null);
+  const [detailEvent, setDetailEvent] = useState<PastEventStory | null>(null);
 
   const handleOpenAdd = () => {
     setEventToEdit(null);
@@ -61,7 +63,8 @@ export default function PastEventsPage() {
         {pastEvents.map((event) => (
           <div
             key={event.id}
-            className="glass-card glass-card-hover rounded-3xl overflow-hidden flex flex-col justify-between group border border-sage-200/80 hover:-translate-y-2 hover:shadow-soft-xl transition-all duration-300"
+            onClick={() => setDetailEvent(event)}
+            className="glass-card glass-card-hover rounded-3xl overflow-hidden flex flex-col justify-between group border border-sage-200/80 hover:-translate-y-2 hover:shadow-soft-xl transition-all duration-300 cursor-pointer"
           >
             <div>
               {/* Cover image & tags */}
@@ -83,7 +86,7 @@ export default function PastEventsPage() {
                 </div>
 
                 <div className="absolute bottom-3 left-4 right-4 text-white">
-                  <h3 className="font-sans text-xl font-extrabold leading-tight tracking-tight">
+                  <h3 className="font-sans text-xl font-bold leading-tight tracking-tight">
                     {event.title}
                   </h3>
                   <span className="text-xs text-cream-200 font-normal flex items-center gap-1 mt-0.5">
@@ -97,38 +100,44 @@ export default function PastEventsPage() {
               <div className="p-6 space-y-4">
                 
                 {/* Stats Counters */}
-                <div className="grid grid-cols-3 gap-2 p-3.5 rounded-2xl bg-cream-50 border border-sage-200/70 text-center">
+                <div className="grid grid-cols-3 gap-2 p-3.5 rounded-2xl bg-cream-50 dark:bg-white/5 border border-sage-200/70 dark:border-white/10 text-center">
                   <div>
-                    <span className="text-[10px] text-charcoal-muted uppercase block font-semibold">Footfall</span>
-                    <span className="font-sans text-sm font-extrabold text-charcoal">
-                      {(event.footfallNumber / 1000).toFixed(1)}k
+                    <span className="text-[10px] text-charcoal-muted uppercase tracking-wider block font-bold">
+                      Footfall
+                    </span>
+                    <span className="font-sans text-xs font-bold text-charcoal">
+                      {event.footfallNumber.toLocaleString()}
                     </span>
                   </div>
-                  <div className="border-x border-sage-200">
-                    <span className="text-[10px] text-charcoal-muted uppercase block font-semibold">Vendors</span>
-                    <span className="font-sans text-sm font-extrabold text-charcoal">
+                  <div>
+                    <span className="text-[10px] text-charcoal-muted uppercase tracking-wider block font-bold">
+                      Brands
+                    </span>
+                    <span className="font-sans text-xs font-bold text-charcoal">
                       {event.vendorCount}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-charcoal-muted uppercase block font-semibold">GMV Sales</span>
-                    <span className="font-sans text-sm font-extrabold text-sage-deep">
+                    <span className="text-[10px] text-charcoal-muted uppercase tracking-wider block font-bold">
+                      GMV
+                    </span>
+                    <span className="font-sans text-xs font-bold text-sage-deep dark:text-sage-300">
                       {event.totalRevenueGMV}
                     </span>
                   </div>
                 </div>
 
-                {/* Narrative excerpt */}
-                <p className="text-xs text-charcoal-muted font-light leading-relaxed">
-                  "{event.narrativeExcerpt}"
+                {/* Narrative Excerpt */}
+                <p className="text-xs text-charcoal-muted leading-relaxed line-clamp-3 font-medium">
+                  {event.narrativeExcerpt}
                 </p>
 
                 {/* Tags */}
-                <div className="flex flex-wrap gap-1.5 pt-1">
+                <div className="flex flex-wrap gap-1.5 pt-2">
                   {event.tags.map((tag, idx) => (
                     <span
                       key={idx}
-                      className="text-[10px] bg-white px-2.5 py-0.5 rounded-md border border-sage-200 text-charcoal-light font-medium"
+                      className="text-[10px] bg-white dark:bg-white/10 px-2.5 py-0.5 rounded-md border border-sage-200 dark:border-white/10 text-charcoal-light font-medium"
                     >
                       {tag}
                     </span>
@@ -139,8 +148,8 @@ export default function PastEventsPage() {
             </div>
 
             {/* Actions */}
-            <div className="p-4 border-t border-sage-100 flex items-center justify-between bg-white/40">
-              <span className="text-[11px] text-sage-800 font-semibold flex items-center gap-1">
+            <div className="p-4 border-t border-sage-100 dark:border-white/10 flex items-center justify-between bg-white/40 dark:bg-white/5" onClick={(e) => e.stopPropagation()}>
+              <span className="text-[11px] text-sage-800 dark:text-sage-300 font-semibold flex items-center gap-1">
                 <Award className="w-3.5 h-3.5" />
                 <span>{event.satisfactionRate} Satisfaction</span>
               </span>
@@ -148,7 +157,7 @@ export default function PastEventsPage() {
               <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => handleOpenEdit(event)}
-                  className="p-2 rounded-xl hover:bg-sage-100 text-charcoal-muted hover:text-charcoal transition-colors"
+                  className="p-2 rounded-xl hover:bg-sage-100 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal transition-colors"
                   title="Edit Story"
                 >
                   <Edit3 className="w-4 h-4" />
@@ -159,7 +168,7 @@ export default function PastEventsPage() {
                       deletePastEvent(event.id);
                     }
                   }}
-                  className="p-2 rounded-xl hover:bg-rose-100 text-charcoal-muted hover:text-rose-700 transition-colors"
+                  className="p-2 rounded-xl hover:bg-rose-100 dark:hover:bg-rose-950/40 text-charcoal-muted hover:text-rose-700 transition-colors"
                   title="Delete Story"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -170,6 +179,13 @@ export default function PastEventsPage() {
           </div>
         ))}
       </div>
+
+      {/* Detail Modal with Full Screen Frosted Glass Blur */}
+      <PastEventDetailModal
+        event={detailEvent}
+        onClose={() => setDetailEvent(null)}
+        onEdit={(e) => handleOpenEdit(e)}
+      />
 
       {/* Modal */}
       <PastEventFormModal

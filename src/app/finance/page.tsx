@@ -18,9 +18,10 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { useAdmin } from '../../context/AdminContext';
-import { ExpenseItem, ExpenseCategory } from '../../types';
+import { ExpenseItem } from '../../types';
 import { ExpenseFormModal } from '../../components/finance/ExpenseFormModal';
 import { ReceiptViewerModal } from '../../components/finance/ReceiptViewerModal';
+import { ExpenseDetailModal } from '../../components/finance/ExpenseDetailModal';
 
 export default function FinancePage() {
   const { expenses, exhibitions, currentRole, updateExpenseStatus, deleteExpense } = useAdmin();
@@ -32,6 +33,7 @@ export default function FinancePage() {
   // Modals state
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [viewingReceiptExpense, setViewingReceiptExpense] = useState<ExpenseItem | null>(null);
+  const [detailExpense, setDetailExpense] = useState<ExpenseItem | null>(null);
 
   const currentExhibition = exhibitions.find(e => e.id === selectedExhibitionId) || exhibitions[0];
 
@@ -286,7 +288,11 @@ export default function FinancePage() {
             </thead>
             <tbody className="divide-y divide-sage-100">
               {filteredExpenses.map((exp) => (
-                <tr key={exp.id} className="glass-rise-row hover:bg-white transition-all">
+                <tr 
+                  key={exp.id} 
+                  onClick={() => setDetailExpense(exp)}
+                  className="glass-rise-row hover:bg-white/90 transition-all cursor-pointer"
+                >
                   
                   {/* Category & Memo */}
                   <td className="py-4 px-5">
@@ -327,7 +333,7 @@ export default function FinancePage() {
                   </td>
 
                   {/* Receipt Scan Preview */}
-                  <td className="py-4 px-4">
+                  <td className="py-4 px-4" onClick={(e) => e.stopPropagation()}>
                     {exp.receiptUrl ? (
                       <button
                         onClick={() => setViewingReceiptExpense(exp)}
@@ -348,33 +354,34 @@ export default function FinancePage() {
                     </span>
                   </td>
 
-                  {/* Actions (Role restricted) */}
-                  <td className="py-4 px-5 text-right">
+                  {/* Actions */}
+                  <td className="py-4 px-5 text-right" onClick={(e) => e.stopPropagation()}>
                     <div className="flex items-center justify-end gap-1.5">
                       
-                      {currentRole !== 'staff' && exp.status === 'pending_approval' && (
-                        <>
-                          <button
-                            onClick={() => updateExpenseStatus(exp.id, 'approved')}
-                            className="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition-colors"
-                            title="Approve Expense"
-                          >
-                            <CheckCircle2 className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => updateExpenseStatus(exp.id, 'rejected')}
-                            className="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200 transition-colors"
-                            title="Reject Expense"
-                          >
-                            <XCircle className="w-4 h-4" />
-                          </button>
-                        </>
+                      {currentRole !== 'staff' && exp.status !== 'approved' && (
+                        <button
+                          onClick={() => updateExpenseStatus(exp.id, 'approved')}
+                          className="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition-colors"
+                          title="Approve Voucher"
+                        >
+                          <CheckCircle2 className="w-4 h-4" />
+                        </button>
+                      )}
+
+                      {currentRole !== 'staff' && exp.status !== 'rejected' && (
+                        <button
+                          onClick={() => updateExpenseStatus(exp.id, 'rejected')}
+                          className="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200 transition-colors"
+                          title="Reject Voucher"
+                        >
+                          <XCircle className="w-4 h-4" />
+                        </button>
                       )}
 
                       <button
-                        onClick={() => setViewingReceiptExpense(exp)}
+                        onClick={() => setDetailExpense(exp)}
                         className="p-1.5 rounded-lg hover:bg-sage-100 text-charcoal-muted hover:text-charcoal transition-colors"
-                        title="View Voucher"
+                        title="Inspect Voucher"
                       >
                         <Eye className="w-4 h-4" />
                       </button>
@@ -403,7 +410,17 @@ export default function FinancePage() {
         </div>
       </div>
 
-      {/* Modals */}
+      {/* Modals with Full Screen Frosted Blur */}
+      <ExpenseDetailModal
+        expense={detailExpense}
+        onClose={() => setDetailExpense(null)}
+        onViewReceipt={(url) => {
+          if (detailExpense) {
+            setViewingReceiptExpense(detailExpense);
+          }
+        }}
+      />
+
       <ExpenseFormModal
         isOpen={isFormOpen}
         onClose={() => setIsFormOpen(false)}

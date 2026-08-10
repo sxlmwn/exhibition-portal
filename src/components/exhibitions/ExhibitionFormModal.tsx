@@ -115,11 +115,17 @@ export const ExhibitionFormModal: React.FC<ExhibitionFormModalProps> = ({
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal/50 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-white rounded-3xl shadow-soft-2xl border border-sage-200 w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
+      {/* Full-Screen Frosted Glass Backdrop */}
+      <div 
+        className="fixed inset-0 bg-black/60 backdrop-blur-xl transition-opacity"
+        onClick={onClose}
+      />
+
+      <div className="relative z-10 modal-glass-container dark:bg-[#161C16] dark:text-[#F7F5F0] rounded-4xl w-full max-w-3xl max-h-[90vh] overflow-y-auto shadow-soft-2xl animate-scaleUp">
         
         {/* Header */}
-        <div className="p-6 sm:p-8 border-b border-sage-100 flex items-center justify-between sticky top-0 bg-white/95 backdrop-blur-md z-10">
+        <div className="p-6 sm:p-8 border-b border-sage-100 dark:border-white/10 flex items-center justify-between sticky top-0 bg-white/95 dark:bg-[#161C16]/95 backdrop-blur-md z-10">
           <div>
             <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
               {exhibitionToEdit ? 'Edit Edition' : 'New Exhibition'}

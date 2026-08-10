@@ -17,11 +17,13 @@ import { useAdmin } from '../../context/AdminContext';
 import { MarketingCampaign } from '../../types';
 import { CampaignFormModal } from '../../components/marketing/CampaignFormModal';
 import { LeadSourceChart } from '../../components/marketing/LeadSourceChart';
+import { CampaignDetailModal } from '../../components/marketing/CampaignDetailModal';
 
 export default function MarketingPage() {
   const { campaigns, deleteCampaign, exhibitions } = useAdmin();
 
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [detailCampaign, setDetailCampaign] = useState<MarketingCampaign | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPlatform, setSelectedPlatform] = useState('All');
 
@@ -140,7 +142,11 @@ export default function MarketingPage() {
             </thead>
             <tbody className="divide-y divide-sage-100">
               {filteredCampaigns.map((cmp) => (
-                <tr key={cmp.id} className="glass-rise-row hover:bg-white transition-all">
+                <tr 
+                  key={cmp.id} 
+                  onClick={() => setDetailCampaign(cmp)}
+                  className="glass-rise-row hover:bg-white/90 transition-all cursor-pointer"
+                >
                   
                   {/* Title & Notes */}
                   <td className="py-4 px-5">
@@ -188,22 +194,22 @@ export default function MarketingPage() {
                   <td className="py-4 px-4">
                     <span className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${
                       cmp.status === 'active' 
-                        ? 'bg-emerald-100 text-emerald-900 border-emerald-300' 
-                        : 'bg-cream-200 text-charcoal border-sage-300'
+                        ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700' 
+                        : 'bg-cream-200 dark:bg-white/10 text-charcoal border-sage-300 dark:border-white/10'
                     }`}>
                       {cmp.status}
                     </span>
                   </td>
 
                   {/* Actions */}
-                  <td className="py-4 px-5 text-right">
+                  <td className="py-4 px-5 text-right" onClick={(e) => e.stopPropagation()}>
                     <button
                       onClick={() => {
                         if (confirm('Delete this campaign log?')) {
                           deleteCampaign(cmp.id);
                         }
                       }}
-                      className="p-1.5 rounded-lg hover:bg-rose-100 text-charcoal-muted hover:text-rose-700 transition-colors"
+                      className="p-1.5 rounded-lg hover:bg-rose-100 dark:hover:bg-rose-950/40 text-charcoal-muted hover:text-rose-700 transition-colors"
                       title="Delete Campaign"
                     >
                       <Trash2 className="w-4 h-4" />
@@ -216,6 +222,12 @@ export default function MarketingPage() {
           </table>
         </div>
       </div>
+
+      {/* Detail Modal with Full Screen Frosted Glass Blur */}
+      <CampaignDetailModal
+        campaign={detailCampaign}
+        onClose={() => setDetailCampaign(null)}
+      />
 
       {/* Add Campaign Modal */}
       <CampaignFormModal

@@ -20,6 +20,7 @@ import { useAdmin } from '../../context/AdminContext';
 import { VendorRequest, RequestStatus } from '../../types';
 import { StallAllocationGrid } from '../../components/requests/StallAllocationGrid';
 import { RequestActionModal } from '../../components/requests/RequestActionModal';
+import { RequestDetailModal } from '../../components/requests/RequestDetailModal';
 
 export default function VendorRequestsPage() {
   const { vendorRequests, exhibitions } = useAdmin();
@@ -30,9 +31,10 @@ export default function VendorRequestsPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  // Action modal state
+  // Modals state
   const [selectedRequest, setSelectedRequest] = useState<VendorRequest | null>(null);
   const [targetStatus, setTargetStatus] = useState<RequestStatus | null>(null);
+  const [detailRequest, setDetailRequest] = useState<VendorRequest | null>(null);
 
   const filteredRequests = vendorRequests.filter((req) => {
     const matchesExh = selectedExhibitionId === 'All' || req.exhibitionId === selectedExhibitionId;
@@ -172,7 +174,11 @@ export default function VendorRequestsPage() {
                 </thead>
                 <tbody className="divide-y divide-sage-100">
                   {filteredRequests.map((req) => (
-                    <tr key={req.id} className="glass-rise-row hover:bg-white/80 transition-colors">
+                    <tr 
+                      key={req.id} 
+                      onClick={() => setDetailRequest(req)}
+                      className="glass-rise-row hover:bg-white/90 transition-all cursor-pointer"
+                    >
                       
                       {/* Brand & Vendor */}
                       <td className="py-4 px-5">
@@ -215,7 +221,7 @@ export default function VendorRequestsPage() {
                       </td>
 
                       {/* Contact */}
-                      <td className="py-4 px-4">
+                      <td className="py-4 px-4" onClick={(e) => e.stopPropagation()}>
                         <a
                           href={`https://wa.me/${req.phone.replace(/[^0-9]/g, '')}`}
                           target="_blank"
@@ -238,7 +244,7 @@ export default function VendorRequestsPage() {
                       </td>
 
                       {/* Actions */}
-                      <td className="py-4 px-5 text-right">
+                      <td className="py-4 px-5 text-right" onClick={(e) => e.stopPropagation()}>
                         <div className="flex items-center justify-end gap-1.5">
                           {req.status !== 'approved' && (
                             <button
@@ -297,6 +303,17 @@ export default function VendorRequestsPage() {
           onSelectExhibition={setSelectedExhibitionId}
         />
       )}
+
+      {/* Detail Modal */}
+      <RequestDetailModal
+        request={detailRequest}
+        onClose={() => setDetailRequest(null)}
+        onOpenAction={(status) => {
+          if (detailRequest) {
+            handleOpenAction(detailRequest, status);
+          }
+        }}
+      />
 
       {/* Action Confirmation Modal */}
       <RequestActionModal

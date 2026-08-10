@@ -34,11 +34,17 @@ export const BulkWhatsAppModal: React.FC<BulkWhatsAppModalProps> = ({
   const openedCount = Object.keys(openedContacts).length;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal/50 backdrop-blur-sm animate-fadeIn">
-      <div className="bg-white rounded-4xl shadow-soft-2xl border border-sage-200 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
+      {/* Full-Screen Frosted Glass Backdrop */}
+      <div 
+        className="fixed inset-0 bg-black/60 backdrop-blur-xl transition-opacity"
+        onClick={onClose}
+      />
+
+      <div className="relative z-10 modal-glass-container dark:bg-[#161C16] dark:text-[#F7F5F0] rounded-4xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-soft-2xl animate-scaleUp">
         
         {/* Header */}
-        <div className="p-6 sm:p-8 border-b border-sage-100 flex items-center justify-between sticky top-0 bg-white/95 backdrop-blur-md z-10">
+        <div className="p-6 sm:p-8 border-b border-sage-100 dark:border-white/10 flex items-center justify-between sticky top-0 bg-white/95 dark:bg-[#161C16]/95 backdrop-blur-md z-10">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center">
               <MessageSquare className="w-6 h-6" />
