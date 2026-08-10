@@ -116,8 +116,8 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
           </button>
 
           {showRoleDropdown && (
-            <div className="absolute right-0 mt-2 w-56 bg-white/95 dark:bg-[#182018]/95 backdrop-blur-xl rounded-2xl shadow-soft-lg border border-sage-200 dark:border-white/10 p-2 z-50 animate-fadeIn">
-              <div className="px-3 py-2 border-b border-sage-100 dark:border-white/10 text-[11px] text-charcoal-muted font-medium">
+            <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-[#14171E] backdrop-blur-2xl rounded-2xl shadow-2xl border border-sage-200 dark:border-white/15 p-2 z-50 animate-fadeIn">
+              <div className="px-3 py-2 border-b border-sage-100 dark:border-white/10 text-[11px] text-charcoal-muted font-bold uppercase tracking-wider">
                 Switch Role (Permission Test)
               </div>
               {(['owner', 'admin', 'staff'] as UserRole[]).map((role) => (
@@ -126,12 +126,12 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
                   onClick={() => handleRoleChange(role)}
                   className={`w-full text-left px-3 py-2.5 rounded-xl text-xs flex items-center justify-between transition-colors ${
                     currentRole === role 
-                      ? 'bg-sage-100 dark:bg-sage-900/60 text-sage-900 dark:text-sage-100 font-semibold' 
+                      ? 'bg-sage-100 dark:bg-white/10 text-sage-900 dark:text-white font-bold' 
                       : 'text-charcoal-light hover:bg-cream-100 dark:hover:bg-white/5'
                   }`}
                 >
                   <span className="capitalize">{role === 'owner' ? 'Owner (Full Access)' : role === 'admin' ? 'Admin' : 'Staff (Restricted)'}</span>
-                  {currentRole === role && <CheckCircle2 className="w-4 h-4 text-sage-700 dark:text-sage-400" />}
+                  {currentRole === role && <CheckCircle2 className="w-4 h-4 text-sage-700 dark:text-sage-300" />}
                 </button>
               ))}
             </div>
@@ -162,25 +162,25 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 mt-2 w-80 bg-white/95 dark:bg-[#182018]/95 backdrop-blur-xl rounded-2xl shadow-soft-lg border border-sage-200 dark:border-white/10 p-4 z-50 animate-fadeIn">
+            <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-[#14171E] backdrop-blur-2xl rounded-3xl shadow-2xl border border-sage-200 dark:border-white/15 p-4 z-50 animate-fadeIn">
               <div className="flex items-center justify-between pb-3 border-b border-sage-100 dark:border-white/10 mb-3">
                 <span className="text-xs font-bold text-charcoal uppercase tracking-wider">
                   Live Notifications
                 </span>
-                <span className="text-[10px] bg-sage-100 dark:bg-sage-900/60 text-sage-800 dark:text-sage-200 px-2 py-0.5 rounded-full font-bold">
+                <span className="text-[10px] bg-sage-100 dark:bg-emerald-950/80 text-sage-800 dark:text-emerald-300 border border-transparent dark:border-emerald-700/60 px-2 py-0.5 rounded-full font-bold">
                   3 New
                 </span>
               </div>
               <div className="space-y-2.5 text-xs">
-                <div className="p-2.5 rounded-xl bg-cream-50 dark:bg-white/5 hover:bg-sage-50 dark:hover:bg-white/10 transition-colors">
-                  <span className="font-semibold text-charcoal block">New Stall Request</span>
-                  <span className="text-charcoal-muted text-[11px] block">Cuir Leather Goods applied for Stall B-02 (Lahore).</span>
-                  <span className="text-[10px] text-sage-700 dark:text-sage-400 font-medium">10 mins ago</span>
+                <div className="p-3 rounded-2xl bg-cream-50 dark:bg-white/[0.04] hover:bg-sage-50 dark:hover:bg-white/[0.08] border border-sage-100 dark:border-white/10 transition-colors">
+                  <span className="font-bold text-charcoal block">New Stall Request</span>
+                  <span className="text-charcoal-muted text-[11px] block mt-0.5">Cuir Leather Goods applied for Stall B-02 (Lahore).</span>
+                  <span className="text-[10px] text-sage-700 dark:text-sage-300 font-bold block mt-1">10 mins ago</span>
                 </div>
-                <div className="p-2.5 rounded-xl bg-cream-50 dark:bg-white/5 hover:bg-sage-50 dark:hover:bg-white/10 transition-colors">
-                  <span className="font-semibold text-charcoal block">Expense Logged for Approval</span>
-                  <span className="text-charcoal-muted text-[11px] block">Hamza Tariq logged Rs. 150,000 for Security.</span>
-                  <span className="text-[10px] text-sage-700 dark:text-sage-400 font-medium">1 hour ago</span>
+                <div className="p-3 rounded-2xl bg-cream-50 dark:bg-white/[0.04] hover:bg-sage-50 dark:hover:bg-white/[0.08] border border-sage-100 dark:border-white/10 transition-colors">
+                  <span className="font-bold text-charcoal block">Expense Logged for Approval</span>
+                  <span className="text-charcoal-muted text-[11px] block mt-0.5">Hamza Tariq logged Rs. 150,000 for Security.</span>
+                  <span className="text-[10px] text-sage-700 dark:text-sage-300 font-bold block mt-1">1 hour ago</span>
                 </div>
               </div>
             </div>

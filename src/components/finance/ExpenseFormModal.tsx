@@ -7,6 +7,7 @@ import * as z from 'zod';
 import { X, Receipt, Upload, DollarSign, CalendarDays } from 'lucide-react';
 import { ExpenseCategory, ExpenseItem } from '../../types';
 import { useAdmin } from '../../context/AdminContext';
+import { ModalPortal } from '../common/ModalPortal';
 
 const expenseSchema = z.z.object({
   exhibitionId: z.string().min(1, 'Exhibition is required'),
@@ -40,43 +41,42 @@ export const ExpenseFormModal: React.FC<ExpenseFormModalProps> = ({
   onClose,
   defaultExhibitionId
 }) => {
-  const { addExpense, exhibitions } = useAdmin();
-  const [selectedReceipt, setSelectedReceipt] = useState<string>(
-    'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400'
-  );
+  const { exhibitions, addExpense } = useAdmin();
 
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     reset,
     formState: { errors, isSubmitting }
   } = useForm<ExpenseFormData>({
     resolver: zodResolver(expenseSchema),
     defaultValues: {
-      exhibitionId: defaultExhibitionId || exhibitions[0]?.id || 'exh-1',
+      exhibitionId: defaultExhibitionId || exhibitions[0]?.id || '',
       category: 'Venue Rent',
-      amount: 150000,
+      amount: 10000,
       date: new Date().toISOString().split('T')[0],
       description: '',
       paymentMethod: 'Bank Transfer',
-      receiptUrl: selectedReceipt,
+      receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400'
     }
   });
 
-  if (!isOpen) return null;
+  const selectedReceipt = watch('receiptUrl');
 
   const onSubmit = (data: ExpenseFormData) => {
     const exh = exhibitions.find(e => e.id === data.exhibitionId);
-
+    
     addExpense({
       exhibitionId: data.exhibitionId,
       exhibitionName: exh ? exh.title : 'Exhibition',
-      category: data.category as ExpenseCategory,
-      amount: data.amount,
-      date: data.date,
+      category: data.category,
+      amount: Number(data.amount),
       description: data.description,
+      date: data.date,
       paymentMethod: data.paymentMethod,
-      receiptUrl: selectedReceipt,
+      receiptUrl: selectedReceipt
     });
 
     reset();
@@ -90,14 +90,8 @@ export const ExpenseFormModal: React.FC<ExpenseFormModalProps> = ({
   ];
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
-      {/* Full-Screen Frosted Glass Backdrop */}
-      <div 
-        className="fixed inset-0 bg-black/65 backdrop-blur-xl transition-opacity"
-        onClick={onClose}
-      />
-
-      <div className="relative z-10 modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-soft-2xl animate-scaleUp">
+    <ModalPortal isOpen={isOpen} onClose={onClose} maxWidthClass="max-w-xl">
+      <div className="modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-soft-2xl">
         
         <div className="flex items-center justify-between pb-4 border-b border-sage-100 dark:border-white/10 mb-6">
           <div className="flex items-center gap-3">
@@ -226,7 +220,7 @@ export const ExpenseFormModal: React.FC<ExpenseFormModalProps> = ({
                 <button
                   type="button"
                   key={idx}
-                  onClick={() => setSelectedReceipt(rcp.url)}
+                  onClick={() => setValue('receiptUrl', rcp.url)}
                   className={`p-2 rounded-2xl border-2 text-left transition-all relative overflow-hidden ${
                     selectedReceipt === rcp.url ? 'border-sage-800 bg-sage-50' : 'border-sage-200 hover:border-sage-400'
                   }`}
@@ -256,8 +250,7 @@ export const ExpenseFormModal: React.FC<ExpenseFormModalProps> = ({
           </div>
 
         </form>
-
       </div>
-    </div>
+    </ModalPortal>
   );
 };

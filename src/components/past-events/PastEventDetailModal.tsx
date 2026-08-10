@@ -17,6 +17,8 @@ import {
 import { PastEventStory } from '../../types';
 import { useAdmin } from '../../context/AdminContext';
 
+import { ModalPortal } from '../common/ModalPortal';
+
 interface PastEventDetailModalProps {
   event: PastEventStory | null;
   onClose: () => void;
@@ -33,15 +35,9 @@ export const PastEventDetailModal: React.FC<PastEventDetailModalProps> = ({
   if (!event) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
-      {/* Full-Screen Frosted Glass Backdrop */}
-      <div 
-        className="fixed inset-0 bg-black/65 backdrop-blur-xl transition-opacity"
-        onClick={onClose}
-      />
-
+    <ModalPortal isOpen={!!event} onClose={onClose} maxWidthClass="max-w-4xl">
       {/* Elevated Modal Container */}
-      <div className="relative z-10 modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full max-w-4xl max-h-[90vh] overflow-y-auto shadow-soft-2xl animate-scaleUp">
+      <div className="modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full max-h-[90vh] overflow-y-auto shadow-soft-2xl">
         
         {/* Cover Photo Banner */}
         <div className="relative h-64 sm:h-72 overflow-hidden bg-sage-900 rounded-t-4xl">
@@ -189,10 +185,8 @@ export const PastEventDetailModal: React.FC<PastEventDetailModalProps> = ({
               </button>
             )}
           </div>
-
         </div>
-
       </div>
-    </div>
+    </ModalPortal>
   );
 };

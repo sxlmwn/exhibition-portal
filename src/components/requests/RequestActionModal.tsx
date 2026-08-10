@@ -4,56 +4,61 @@ import React, { useState } from 'react';
 import { X, CheckCircle2, XCircle, Clock, Send } from 'lucide-react';
 import { VendorRequest, RequestStatus } from '../../types';
 import { useAdmin } from '../../context/AdminContext';
+import { ModalPortal } from '../common/ModalPortal';
 
 interface RequestActionModalProps {
   request: VendorRequest | null;
-  targetStatus: RequestStatus | null;
+  targetStatus?: RequestStatus | null;
+  actionType?: RequestStatus | null;
   onClose: () => void;
 }
 
 export const RequestActionModal: React.FC<RequestActionModalProps> = ({
   request,
   targetStatus,
+  actionType,
   onClose
 }) => {
   const { updateRequestStatus } = useAdmin();
   const [adminNote, setAdminNote] = useState('');
 
-  if (!request || !targetStatus) return null;
+  const effectiveAction = targetStatus || actionType;
+
+  if (!request || !effectiveAction) return null;
 
   const handleConfirm = () => {
-    updateRequestStatus(request.id, targetStatus);
+    updateRequestStatus(request.id, effectiveAction);
     onClose();
   };
 
   const getModalConfig = () => {
-    switch (targetStatus) {
+    switch (effectiveAction) {
       case 'approved':
         return {
-          title: 'Approve Vendor Application',
-          description: `Confirm approval for "${request.brandName}". They will be marked as eligible for stall allocation.`,
-          btnClass: 'bg-emerald-700 hover:bg-emerald-800 text-white',
+          title: 'Approve Vendor Request',
+          description: 'This vendor will be marked as approved. You can assign a specific booth from the floor plan.',
+          btnClass: 'btn-primary',
           btnText: 'Confirm Approval',
           icon: CheckCircle2,
-          iconColor: 'text-emerald-700 bg-emerald-50'
+          iconColor: 'text-emerald-700 bg-emerald-50 dark:bg-emerald-950/60 dark:text-emerald-300'
         };
       case 'rejected':
         return {
-          title: 'Reject Vendor Application',
-          description: `Are you sure you want to reject "${request.brandName}"?`,
+          title: 'Reject Request',
+          description: 'Are you sure you want to reject this application? This action can be reversed later.',
           btnClass: 'bg-rose-700 hover:bg-rose-800 text-white',
-          btnText: 'Confirm Rejection',
+          btnText: 'Reject Vendor',
           icon: XCircle,
-          iconColor: 'text-rose-700 bg-rose-50'
+          iconColor: 'text-rose-700 bg-rose-50 dark:bg-rose-950/60 dark:text-rose-300'
         };
       case 'waitlisted':
         return {
           title: 'Move to Waitlist',
-          description: `Move "${request.brandName}" to waitlist queue for "${request.exhibitionName}".`,
+          description: 'Place this applicant in the standby queue if stall capacity opens up.',
           btnClass: 'bg-purple-700 hover:bg-purple-800 text-white',
-          btnText: 'Confirm Waitlist',
+          btnText: 'Add to Waitlist',
           icon: Clock,
-          iconColor: 'text-purple-700 bg-purple-50'
+          iconColor: 'text-purple-700 bg-purple-50 dark:bg-purple-950/60 dark:text-purple-300'
         };
       default:
         return {
@@ -71,14 +76,8 @@ export const RequestActionModal: React.FC<RequestActionModalProps> = ({
   const Icon = config.icon;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
-      {/* Full-Screen Frosted Glass Backdrop */}
-      <div 
-        className="fixed inset-0 bg-black/65 backdrop-blur-xl transition-opacity"
-        onClick={onClose}
-      />
-
-      <div className="relative z-10 modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full max-w-lg p-6 sm:p-8 shadow-soft-2xl animate-scaleUp">
+    <ModalPortal isOpen={!!request && !!actionType} onClose={onClose} maxWidthClass="max-w-lg">
+      <div className="modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full p-6 sm:p-8 shadow-soft-2xl">
         
         <div className="flex items-center justify-between mb-4">
           <div className={`w-12 h-12 rounded-2xl ${config.iconColor} flex items-center justify-center`}>
@@ -86,7 +85,7 @@ export const RequestActionModal: React.FC<RequestActionModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-cream-200 text-charcoal-muted hover:text-charcoal transition-colors"
+            className="p-2 rounded-full hover:bg-cream-200 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -100,7 +99,7 @@ export const RequestActionModal: React.FC<RequestActionModalProps> = ({
         </p>
 
         {/* Applicant Summary */}
-        <div className="p-4 rounded-2xl bg-cream-50 border border-sage-200 text-xs space-y-1.5 mb-6">
+        <div className="p-4 rounded-2xl bg-cream-50 dark:bg-white/[0.04] border border-sage-200 dark:border-white/10 text-xs space-y-1.5 mb-6">
           <div className="flex justify-between">
             <span className="text-charcoal-muted">Brand:</span>
             <span className="font-bold text-charcoal">{request.brandName}</span>
@@ -115,7 +114,7 @@ export const RequestActionModal: React.FC<RequestActionModalProps> = ({
           </div>
           <div className="flex justify-between">
             <span className="text-charcoal-muted">Target Edition:</span>
-            <span className="text-sage-800 font-semibold">{request.exhibitionName}</span>
+            <span className="text-sage-800 dark:text-sage-300 font-semibold">{request.exhibitionName}</span>
           </div>
         </div>
 
@@ -129,14 +128,14 @@ export const RequestActionModal: React.FC<RequestActionModalProps> = ({
             value={adminNote}
             onChange={(e) => setAdminNote(e.target.value)}
             placeholder="e.g. Approved for Corner slot after Instagram review..."
-            className="w-full px-4 py-2.5 rounded-xl border border-sage-200 text-xs text-charcoal outline-none focus:border-sage-500"
+            className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
           />
         </div>
 
         <div className="flex items-center justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-5 py-2.5 rounded-full border border-sage-300 text-charcoal hover:bg-cream-100 text-xs font-semibold uppercase tracking-wider"
+            className="px-5 py-2.5 rounded-full border border-sage-300 text-charcoal hover:bg-cream-100 dark:hover:bg-white/10 text-xs font-semibold uppercase tracking-wider"
           >
             Cancel
           </button>
@@ -149,6 +148,6 @@ export const RequestActionModal: React.FC<RequestActionModalProps> = ({
         </div>
 
       </div>
-    </div>
+    </ModalPortal>
   );
 };

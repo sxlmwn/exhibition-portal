@@ -4,13 +4,14 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { X, History, MapPin, Users, Sparkles, Image as ImageIcon } from 'lucide-react';
-import { useAdmin } from '../../context/AdminContext';
+import { X, History, CalendarDays, MapPin, Users, TrendingUp, Sparkles, Image as ImageIcon } from 'lucide-react';
 import { PastEventStory } from '../../types';
+import { useAdmin } from '../../context/AdminContext';
+import { ModalPortal } from '../common/ModalPortal';
 
-const pastEventSchema = z.z.object({
-  title: z.string().min(3, 'Title is required'),
-  edition: z.string().min(2, 'Edition tag is required'),
+const pastEventSchema = z.object({
+  title: z.string().min(3, 'Event title is required'),
+  edition: z.string().min(2, 'Edition label is required'),
   city: z.string().min(2, 'City is required'),
   dateRange: z.string().min(3, 'Date range is required'),
   footfallNumber: z.number().min(100, 'Footfall must be at least 100'),
@@ -40,8 +41,9 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
   const {
     register,
     handleSubmit,
-    reset,
     setValue,
+    watch,
+    reset,
     formState: { errors, isSubmitting }
   } = useForm<PastEventFormData>({
     resolver: zodResolver(pastEventSchema),
@@ -55,10 +57,12 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
       totalRevenueGMV: 'Rs. 38M+',
       satisfactionRate: '97%',
       narrativeExcerpt: '',
-      coverImage: '/images/Exhibition Agency BG.png',
+      coverImage: '/images/1.jpg',
       tagsInput: 'Artisan Craft, Festive Edition',
     }
   });
+
+  const selectedCover = watch('coverImage');
 
   useEffect(() => {
     if (eventToEdit) {
@@ -73,7 +77,7 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
         satisfactionRate: eventToEdit.satisfactionRate,
         narrativeExcerpt: eventToEdit.narrativeExcerpt,
         coverImage: eventToEdit.coverImage,
-        tagsInput: eventToEdit.tags.join(', '),
+        tagsInput: eventToEdit.tags ? eventToEdit.tags.join(', ') : '',
       });
     } else {
       reset({
@@ -86,19 +90,16 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
         totalRevenueGMV: 'Rs. 38M+',
         satisfactionRate: '97%',
         narrativeExcerpt: '',
-        coverImage: '/images/Exhibition Agency BG.png',
+        coverImage: '/images/1.jpg',
         tagsInput: 'Artisan Craft, Festive Edition',
       });
     }
-  }, [eventToEdit, reset]);
-
-  if (!isOpen) return null;
+  }, [eventToEdit, reset, isOpen]);
 
   const onSubmit = (data: PastEventFormData) => {
     const parsedTags = data.tagsInput
-      .split(',')
-      .map(t => t.trim())
-      .filter(Boolean);
+      ? data.tagsInput.split(',').map(t => t.trim()).filter(Boolean)
+      : [];
 
     if (eventToEdit) {
       updatePastEvent(eventToEdit.id, {
@@ -106,8 +107,8 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
         edition: data.edition,
         city: data.city,
         dateRange: data.dateRange,
-        footfallNumber: data.footfallNumber,
-        vendorCount: data.vendorCount,
+        footfallNumber: Number(data.footfallNumber),
+        vendorCount: Number(data.vendorCount),
         totalRevenueGMV: data.totalRevenueGMV,
         satisfactionRate: data.satisfactionRate,
         narrativeExcerpt: data.narrativeExcerpt,
@@ -120,13 +121,13 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
         edition: data.edition,
         city: data.city,
         dateRange: data.dateRange,
-        footfallNumber: data.footfallNumber,
-        vendorCount: data.vendorCount,
+        footfallNumber: Number(data.footfallNumber),
+        vendorCount: Number(data.vendorCount),
         totalRevenueGMV: data.totalRevenueGMV,
         satisfactionRate: data.satisfactionRate,
         narrativeExcerpt: data.narrativeExcerpt,
         coverImage: data.coverImage,
-        photos: [data.coverImage, '/images/More Stalls Added.png'],
+        photos: [data.coverImage, '/images/2.jpg'],
         tags: parsedTags,
       });
     }
@@ -141,32 +142,26 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
   ];
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
-      {/* Full-Screen Frosted Glass Backdrop */}
-      <div 
-        className="fixed inset-0 bg-black/65 backdrop-blur-xl transition-opacity"
-        onClick={onClose}
-      />
-
-      <div className="relative z-10 modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-soft-2xl animate-scaleUp">
+    <ModalPortal isOpen={isOpen} onClose={onClose} maxWidthClass="max-w-2xl">
+      <div className="modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-soft-2xl">
         
         <div className="flex items-center justify-between pb-4 border-b border-sage-100 dark:border-white/10 mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-sage-100 text-sage-800 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-sage-100 dark:bg-sage-900/60 text-sage-800 dark:text-sage-300 flex items-center justify-center">
               <History className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block">
-                Portfolio Showcase
+              <span className="eyebrow-label">
+                PORTFOLIO SHOWCASE
               </span>
               <h3 className="font-sans text-2xl font-extrabold text-charcoal tracking-tight">
-                {eventToEdit ? 'Edit Past Event Record' : 'Add Past Exhibition Edition'}
+                {eventToEdit ? 'Edit Archive Story' : 'Add Past Exhibition Edition'}
               </h3>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-cream-200 text-charcoal-muted hover:text-charcoal"
+            className="p-2 rounded-full hover:bg-cream-200 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -177,26 +172,26 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
-                Edition Title *
+                Exhibition Name *
               </label>
               <input
                 type="text"
                 {...register('title')}
                 placeholder="e.g. Winter Artisan Gala 2025"
-                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 text-xs text-charcoal outline-none focus:border-sage-500"
+                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
               />
               {errors.title && <p className="text-rose-600 text-xs mt-1">{errors.title.message}</p>}
             </div>
 
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
-                Edition Code / Label *
+                Edition Label *
               </label>
               <input
                 type="text"
                 {...register('edition')}
-                placeholder="e.g. Edition 14"
-                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 text-xs text-charcoal outline-none focus:border-sage-500"
+                placeholder="e.g. Edition 12 / Spring"
+                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
               />
             </div>
           </div>
@@ -204,49 +199,51 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
-                Host City *
+                City / Region *
               </label>
               <input
                 type="text"
                 {...register('city')}
-                placeholder="e.g. Lahore"
-                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 text-xs text-charcoal outline-none focus:border-sage-500"
+                placeholder="Lahore / Islamabad / Karachi"
+                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
               />
             </div>
 
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
-                Date Range *
+                Held Dates *
               </label>
               <input
                 type="text"
                 {...register('dateRange')}
-                placeholder="e.g. December 12 – 14, 2025"
-                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 text-xs text-charcoal outline-none focus:border-sage-500"
+                placeholder="e.g. November 20 – 22, 2025"
+                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
-                Footfall Count *
+                Footfall *
               </label>
               <input
                 type="number"
                 {...register('footfallNumber', { valueAsNumber: true })}
-                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 text-xs text-charcoal outline-none focus:border-sage-500"
+                placeholder="15000"
+                className="w-full px-3 py-2 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
               />
             </div>
 
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
-                Vendor Count *
+                Vendors *
               </label>
               <input
                 type="number"
                 {...register('vendorCount', { valueAsNumber: true })}
-                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 text-xs text-charcoal outline-none focus:border-sage-500"
+                placeholder="75"
+                className="w-full px-3 py-2 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
               />
             </div>
 
@@ -257,75 +254,76 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
               <input
                 type="text"
                 {...register('totalRevenueGMV')}
-                placeholder="Rs. 42M+"
-                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 text-xs text-charcoal outline-none focus:border-sage-500"
+                placeholder="Rs. 35M+"
+                className="w-full px-3 py-2 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
               />
             </div>
 
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
-                Satisfaction Rate
+                Satisfaction *
               </label>
               <input
                 type="text"
                 {...register('satisfactionRate')}
-                placeholder="96%"
-                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 text-xs text-charcoal outline-none focus:border-sage-500"
+                placeholder="98%"
+                className="w-full px-3 py-2 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
               />
             </div>
           </div>
 
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
-              Short Narrative / Impact Summary *
+              Narrative & Highlights Excerpt *
             </label>
             <textarea
               rows={3}
               {...register('narrativeExcerpt')}
-              placeholder="A 3-day showcase of artisan studios and culinary craft with record urban footfall..."
-              className="w-full px-4 py-2.5 rounded-xl border border-sage-200 text-xs text-charcoal outline-none focus:border-sage-500 font-sans"
+              placeholder="Describe the atmosphere, attendee engagement, and vendor feedback..."
+              className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 font-sans bg-white/80 dark:bg-white/5"
             />
           </div>
 
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
-              Tags (Comma-separated)
+              Cover Image Selection
             </label>
-            <input
-              type="text"
-              {...register('tagsInput')}
-              placeholder="e.g. Artisan Craft, Winter Edition, Record Sales"
-              className="w-full px-4 py-2.5 rounded-xl border border-sage-200 text-xs text-charcoal outline-none focus:border-sage-500"
-            />
-          </div>
-
-          {/* Cover Image */}
-          <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-2">
-              Select Cover Image
-            </label>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
               {sampleImages.map((img) => (
                 <button
-                  type="button"
                   key={img.path}
+                  type="button"
                   onClick={() => setValue('coverImage', img.path)}
-                  className="group relative rounded-2xl overflow-hidden border-2 transition-all text-left h-20"
+                  className={`p-2 rounded-2xl border text-left text-xs transition-all relative overflow-hidden group ${
+                    selectedCover === img.path
+                      ? 'border-sage-800 dark:border-sage-400 bg-sage-50 dark:bg-white/10 ring-2 ring-sage-400'
+                      : 'border-sage-200 dark:border-white/10 bg-cream-50 dark:bg-white/[0.04] hover:bg-cream-100 dark:hover:bg-white/[0.08]'
+                  }`}
                 >
-                  <img src={img.path} alt={img.label} className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-charcoal/40 group-hover:bg-charcoal/20 transition-colors flex items-end p-1.5">
-                    <span className="text-[9px] text-white font-medium truncate">{img.label}</span>
-                  </div>
+                  <img src={img.path} alt={img.label} className="w-full h-14 object-cover rounded-lg mb-1.5" />
+                  <span className="block text-[11px] font-bold text-charcoal truncate">{img.label}</span>
                 </button>
               ))}
             </div>
           </div>
 
-          <div className="pt-4 border-t border-sage-100 flex items-center justify-end gap-3">
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
+              Categories & Tags (Comma-separated)
+            </label>
+            <input
+              type="text"
+              {...register('tagsInput')}
+              placeholder="e.g. Couture, Handcrafted, Festive"
+              className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
+            />
+          </div>
+
+          <div className="pt-4 border-t border-sage-100 dark:border-white/10 flex items-center justify-end gap-3">
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 rounded-full border border-sage-300 text-charcoal hover:bg-cream-100 text-xs font-semibold uppercase tracking-wider"
+              className="px-5 py-2.5 rounded-full border border-sage-300 text-charcoal hover:bg-cream-100 dark:hover:bg-white/10 text-xs font-semibold uppercase tracking-wider"
             >
               Cancel
             </button>
@@ -341,6 +339,6 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
         </form>
 
       </div>
-    </div>
+    </ModalPortal>
   );
 };

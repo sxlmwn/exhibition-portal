@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { MarketingCampaign } from '../../types';
 import { useAdmin } from '../../context/AdminContext';
+import { ModalPortal } from '../common/ModalPortal';
 
 interface CampaignDetailModalProps {
   campaign: MarketingCampaign | null;
@@ -57,15 +58,9 @@ export const CampaignDetailModal: React.FC<CampaignDetailModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
-      {/* Full-Screen Frosted Glass Backdrop */}
-      <div 
-        className="fixed inset-0 bg-black/65 backdrop-blur-xl transition-opacity"
-        onClick={onClose}
-      />
-
+    <ModalPortal isOpen={!!campaign} onClose={onClose} maxWidthClass="max-w-2xl">
       {/* Elevated Modal Card */}
-      <div className="relative z-10 modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-soft-2xl animate-scaleUp">
+      <div className="modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-soft-2xl">
         
         {/* Header */}
         <div className="flex items-start justify-between pb-5 border-b border-sage-100 dark:border-white/10 mb-6">
@@ -182,10 +177,8 @@ export const CampaignDetailModal: React.FC<CampaignDetailModalProps> = ({
               </button>
             )}
           </div>
-
         </div>
-
       </div>
-    </div>
+    </ModalPortal>
   );
 };

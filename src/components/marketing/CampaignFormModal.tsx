@@ -24,6 +24,8 @@ const campaignSchema = z.z.object({
 
 type CampaignFormData = z.infer<typeof campaignSchema>;
 
+import { ModalPortal } from '../common/ModalPortal';
+
 interface CampaignFormModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -33,7 +35,7 @@ export const CampaignFormModal: React.FC<CampaignFormModalProps> = ({
   isOpen,
   onClose
 }) => {
-  const { addCampaign, exhibitions } = useAdmin();
+  const { exhibitions, addCampaign } = useAdmin();
 
   const {
     register,
@@ -45,19 +47,17 @@ export const CampaignFormModal: React.FC<CampaignFormModalProps> = ({
     defaultValues: {
       title: '',
       platform: 'Instagram',
-      amountSpent: 75000,
+      amountSpent: 25000,
       runDuration: '14 Days',
-      startDate: '2026-03-01',
-      endDate: '2026-03-14',
+      startDate: new Date().toISOString().split('T')[0],
+      endDate: new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0],
       linkedExhibitionId: exhibitions[0]?.id || 'exh-1',
-      leadsGenerated: 12,
-      reachImpressions: '150,000 reach',
+      leadsGenerated: 15,
+      reachImpressions: '45000',
       notes: '',
       status: 'active',
     }
   });
-
-  if (!isOpen) return null;
 
   const onSubmit = (data: CampaignFormData) => {
     const exh = exhibitions.find(e => e.id === data.linkedExhibitionId);
@@ -82,23 +82,17 @@ export const CampaignFormModal: React.FC<CampaignFormModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
-      {/* Full-Screen Frosted Glass Backdrop */}
-      <div 
-        className="fixed inset-0 bg-black/65 backdrop-blur-xl transition-opacity"
-        onClick={onClose}
-      />
-
-      <div className="relative z-10 modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-soft-2xl animate-scaleUp">
+    <ModalPortal isOpen={isOpen} onClose={onClose} maxWidthClass="max-w-xl">
+      <div className="modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-soft-2xl">
         
         <div className="flex items-center justify-between pb-4 border-b border-sage-100 dark:border-white/10 mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-sage-100 text-sage-800 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-sage-100 dark:bg-sage-900/60 text-sage-800 dark:text-sage-300 flex items-center justify-center">
               <Megaphone className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block">
-                Growth Log
+              <span className="eyebrow-label">
+                GROWTH LOG
               </span>
               <h3 className="font-sans text-2xl font-extrabold text-charcoal tracking-tight">
                 Log Ad Campaign / Outreach
@@ -242,10 +236,8 @@ export const CampaignFormModal: React.FC<CampaignFormModalProps> = ({
               Log Campaign
             </button>
           </div>
-
         </form>
-
       </div>
-    </div>
+    </ModalPortal>
   );
 };

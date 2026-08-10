@@ -126,12 +126,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
     >
       {/* Top Section: Wordmark & Logo */}
       <div>
-        <div className="h-20 flex items-center justify-between px-4 border-b border-sage-200/40 dark:border-white/10">
-          <div className="flex items-center min-w-0 overflow-hidden">
+        <div className={`h-20 flex items-center border-b border-sage-200/40 dark:border-white/10 transition-all duration-300 ${
+          collapsed ? 'justify-center px-2 relative' : 'justify-between px-4'
+        }`}>
+          <div className={`flex items-center ${collapsed ? 'justify-center w-full' : 'min-w-0'}`}>
             <Link href="/" className="flex items-center group focus:outline-none py-1">
               <div className="shrink-0 flex items-center justify-center">
                 <BrandLogo 
-                  size={34} 
+                  size={32} 
                   showText={false}
                 />
               </div>
@@ -152,10 +154,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
 
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="p-1.5 rounded-xl hover:bg-sage-100 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal transition-colors hidden lg:block shrink-0 ml-1"
+            className={`p-1.5 rounded-xl hover:bg-sage-100 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal transition-all hidden lg:flex items-center justify-center shrink-0 ${
+              collapsed 
+                ? 'absolute -right-2.5 top-7 bg-white dark:bg-[#1A1E26] shadow-md border border-sage-200 dark:border-white/15 rounded-full p-1 z-30 hover:scale-110' 
+                : 'ml-1'
+            }`}
             title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
-            {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+            {collapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-4 h-4" />}
           </button>
         </div>
 

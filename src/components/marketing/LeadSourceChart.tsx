@@ -70,11 +70,11 @@ export const LeadSourceChart: React.FC<LeadSourceChartProps> = ({ campaigns }) =
               content={({ active, payload, label }) => {
                 if (active && payload && payload.length) {
                   return (
-                    <div className="bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-soft-lg border border-sage-200 text-xs">
-                      <p className="font-sans font-bold text-charcoal mb-1">{label}</p>
-                      <div className="flex items-center justify-between gap-4 text-sage-800 font-semibold">
+                    <div className="bg-white/98 dark:bg-[#14171E] backdrop-blur-2xl p-4 rounded-2xl shadow-2xl border border-sage-200 dark:border-white/15 text-xs">
+                      <p className="font-sans font-extrabold text-charcoal dark:text-white mb-1.5">{label}</p>
+                      <div className="flex items-center justify-between gap-4 text-sage-800 dark:text-sage-300 font-bold">
                         <span>Leads Acquired:</span>
-                        <span>{payload[0].value} brands</span>
+                        <span className="font-extrabold">{payload[0].value} brands</span>
                       </div>
                     </div>
                   );

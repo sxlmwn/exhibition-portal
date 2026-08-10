@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { X, Mail, Send, CheckCircle2 } from 'lucide-react';
 import { CRMContact } from '../../types';
 
+import { ModalPortal } from '../common/ModalPortal';
+
 interface BulkEmailModalProps {
   contacts: CRMContact[];
   onClose: () => void;
@@ -28,23 +30,17 @@ export const BulkEmailModal: React.FC<BulkEmailModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
-      {/* Full-Screen Frosted Glass Backdrop */}
-      <div 
-        className="fixed inset-0 bg-black/65 backdrop-blur-xl transition-opacity"
-        onClick={onClose}
-      />
-
-      <div className="relative z-10 modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full max-w-2xl p-6 sm:p-8 shadow-soft-2xl animate-scaleUp">
+    <ModalPortal isOpen={contacts.length > 0} onClose={onClose} maxWidthClass="max-w-2xl">
+      <div className="modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full p-6 sm:p-8 shadow-soft-2xl">
         
         <div className="flex items-center justify-between mb-6 pb-4 border-b border-sage-100 dark:border-white/10">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-sage-100 text-sage-800 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-sage-100 dark:bg-sage-900/60 text-sage-800 dark:text-sage-300 flex items-center justify-center">
               <Mail className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block">
-                Broadcast Email
+              <span className="eyebrow-label">
+                BROADCAST EMAIL
               </span>
               <h3 className="font-sans text-2xl font-extrabold text-charcoal tracking-tight">
                 Compose Blast to {contacts.length} Contact(s)
@@ -133,6 +129,6 @@ export const BulkEmailModal: React.FC<BulkEmailModalProps> = ({
         )}
 
       </div>
-    </div>
+    </ModalPortal>
   );
 };

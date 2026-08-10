@@ -20,32 +20,37 @@ import {
 } from 'lucide-react';
 import { VendorRequest, RequestStatus } from '../../types';
 import { useAdmin } from '../../context/AdminContext';
+import { ModalPortal } from '../common/ModalPortal';
 
 interface RequestDetailModalProps {
   request: VendorRequest | null;
   onClose: () => void;
   onOpenAction?: (status: RequestStatus) => void;
+  onAllocateStallClick?: (request: VendorRequest) => void;
 }
 
 export const RequestDetailModal: React.FC<RequestDetailModalProps> = ({
   request,
   onClose,
-  onOpenAction
+  onOpenAction,
+  onAllocateStallClick
 }) => {
-  const { updateRequestStatus, currentRole } = useAdmin();
+  const { updateRequestStatus, exhibitions } = useAdmin();
 
   if (!request) return null;
+
+  const targetExhibition = exhibitions.find(e => e.id === request.exhibitionId);
 
   const handleStatusChange = (status: RequestStatus) => {
     updateRequestStatus(request.id, status);
   };
 
-  const getStatusBadge = (status: RequestStatus) => {
+  const getStatusBadge = (status: VendorRequest['status']) => {
     switch (status) {
       case 'approved':
         return {
           bg: 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700',
-          label: request.allocatedStallCode ? `Approved (Stall ${request.allocatedStallCode})` : 'Approved'
+          label: 'Approved'
         };
       case 'rejected':
         return {
@@ -68,15 +73,9 @@ export const RequestDetailModal: React.FC<RequestDetailModalProps> = ({
   const statusBadge = getStatusBadge(request.status);
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
-      {/* Full-Screen Frosted Glass Backdrop */}
-      <div 
-        className="fixed inset-0 bg-black/65 backdrop-blur-xl transition-opacity"
-        onClick={onClose}
-      />
-
+    <ModalPortal isOpen={!!request} onClose={onClose} maxWidthClass="max-w-2xl">
       {/* Elevated Modal Card */}
-      <div className="relative z-10 modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-soft-2xl animate-scaleUp">
+      <div className="modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-soft-2xl">
         
         {/* Header */}
         <div className="flex items-start justify-between pb-5 border-b border-sage-100 dark:border-white/10 mb-6">
@@ -269,8 +268,7 @@ export const RequestDetailModal: React.FC<RequestDetailModalProps> = ({
           </div>
 
         </div>
-
       </div>
-    </div>
+    </ModalPortal>
   );
 };

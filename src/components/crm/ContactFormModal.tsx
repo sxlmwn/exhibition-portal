@@ -7,17 +7,18 @@ import * as z from 'zod';
 import { X, User, Building2, Phone, Mail, Tag } from 'lucide-react';
 import { CRMContact } from '../../types';
 import { useAdmin } from '../../context/AdminContext';
+import { ModalPortal } from '../common/ModalPortal';
 
-const contactSchema = z.z.object({
-  name: z.string().min(2, 'Name is required'),
+const contactSchema = z.object({
+  name: z.string().min(2, 'Contact person name is required'),
   businessName: z.string().min(2, 'Brand/Business name is required'),
   phone: z.string().min(8, 'Valid phone/WhatsApp is required'),
   email: z.string().email('Valid email is required'),
   category: z.string().min(2, 'Category is required'),
   status: z.enum(['booked', 'enquired', 'waitlisted', 'past-client', 'referral']),
-  totalSpend: z.number().min(0),
-  tagsInput: z.string(),
-  notes: z.string(),
+  totalSpend: z.number().min(0).optional(),
+  tagsInput: z.string().optional(),
+  notes: z.string().optional(),
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
@@ -65,8 +66,8 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
         category: contactToEdit.category,
         status: contactToEdit.status,
         totalSpend: contactToEdit.totalSpend,
-        tagsInput: contactToEdit.tags.join(', '),
-        notes: contactToEdit.notes,
+        tagsInput: contactToEdit.tags ? contactToEdit.tags.join(', ') : '',
+        notes: contactToEdit.notes || '',
       });
     } else {
       reset({
@@ -81,16 +82,13 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
         notes: '',
       });
     }
-  }, [contactToEdit, reset]);
-
-  if (!isOpen) return null;
+  }, [contactToEdit, reset, isOpen]);
 
   const onSubmit = (data: ContactFormData) => {
     const parsedTags = data.tagsInput
-      .split(',')
-      .map(t => t.trim())
-      .filter(Boolean);
-
+      ? data.tagsInput.split(',').map(t => t.trim()).filter(Boolean)
+      : [];
+    
     if (contactToEdit) {
       updateContact(contactToEdit.id, {
         name: data.name,
@@ -99,9 +97,9 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
         email: data.email,
         category: data.category,
         status: data.status,
-        totalSpend: data.totalSpend,
+        totalSpend: Number(data.totalSpend || 0),
         tags: parsedTags,
-        notes: data.notes,
+        notes: data.notes || '',
       });
     } else {
       addContact({
@@ -111,29 +109,23 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
         email: data.email,
         category: data.category,
         status: data.status,
-        totalSpend: data.totalSpend,
+        totalSpend: Number(data.totalSpend || 0),
         tags: parsedTags,
         exhibitionIds: [exhibitions[0]?.id || 'exh-1'],
-        notes: data.notes,
+        notes: data.notes || '',
       });
     }
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
-      {/* Full-Screen Frosted Glass Backdrop */}
-      <div 
-        className="fixed inset-0 bg-black/65 backdrop-blur-xl transition-opacity"
-        onClick={onClose}
-      />
-
-      <div className="relative z-10 modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-soft-2xl animate-scaleUp">
+    <ModalPortal isOpen={isOpen} onClose={onClose} maxWidthClass="max-w-xl">
+      <div className="modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full max-h-[90vh] overflow-y-auto p-6 sm:p-8 shadow-soft-2xl">
         
         <div className="flex items-center justify-between pb-4 border-b border-sage-100 dark:border-white/10 mb-6">
           <div>
-            <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
-              CRM Record
+            <span className="eyebrow-label">
+              CRM RECORD
             </span>
             <h3 className="font-sans text-2xl font-extrabold text-charcoal tracking-tight">
               {contactToEdit ? 'Edit Exhibitor Contact' : 'Add New Exhibitor'}
@@ -141,7 +133,7 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-cream-200 text-charcoal-muted hover:text-charcoal"
+            className="p-2 rounded-full hover:bg-cream-200 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -158,7 +150,7 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
                 type="text"
                 {...register('businessName')}
                 placeholder="e.g. Terra Clayworks"
-                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 text-xs text-charcoal outline-none focus:border-sage-500"
+                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
               />
               {errors.businessName && <p className="text-rose-600 text-xs mt-1">{errors.businessName.message}</p>}
             </div>
@@ -171,7 +163,7 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
                 type="text"
                 {...register('name')}
                 placeholder="e.g. Ayla Siddiqui"
-                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 text-xs text-charcoal outline-none focus:border-sage-500"
+                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
               />
               {errors.name && <p className="text-rose-600 text-xs mt-1">{errors.name.message}</p>}
             </div>
@@ -186,7 +178,7 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
                 type="text"
                 {...register('phone')}
                 placeholder="+92 300 1234567"
-                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 text-xs text-charcoal outline-none focus:border-sage-500"
+                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
               />
               {errors.phone && <p className="text-rose-600 text-xs mt-1">{errors.phone.message}</p>}
             </div>
@@ -199,7 +191,7 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
                 type="email"
                 {...register('email')}
                 placeholder="ayla@terraclay.com"
-                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 text-xs text-charcoal outline-none focus:border-sage-500"
+                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
               />
               {errors.email && <p className="text-rose-600 text-xs mt-1">{errors.email.message}</p>}
             </div>
@@ -214,7 +206,7 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
                 type="text"
                 {...register('category')}
                 placeholder="e.g. Studio Ceramics"
-                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 text-xs text-charcoal outline-none focus:border-sage-500"
+                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
               />
             </div>
 
@@ -224,7 +216,7 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
               </label>
               <select
                 {...register('status')}
-                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 text-xs text-charcoal outline-none bg-white"
+                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none bg-white dark:bg-[#1A1D24]"
               >
                 <option value="enquired">Enquiry / Lead</option>
                 <option value="booked">Confirmed Booked</option>
@@ -243,7 +235,7 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
               type="text"
               {...register('tagsInput')}
               placeholder="e.g. Lahore 2026, Corner Slot, High Demand"
-              className="w-full px-4 py-2.5 rounded-xl border border-sage-200 text-xs text-charcoal outline-none focus:border-sage-500"
+              className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
             />
           </div>
 
@@ -255,15 +247,15 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
               rows={3}
               {...register('notes')}
               placeholder="Add history, past sales performance, or display requirements..."
-              className="w-full px-4 py-2.5 rounded-xl border border-sage-200 text-xs text-charcoal outline-none focus:border-sage-500 font-sans"
+              className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 font-sans bg-white/80 dark:bg-white/5"
             />
           </div>
 
-          <div className="pt-4 border-t border-sage-100 flex items-center justify-end gap-3">
+          <div className="pt-4 border-t border-sage-100 dark:border-white/10 flex items-center justify-end gap-3">
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 rounded-full border border-sage-300 text-charcoal hover:bg-cream-100 text-xs font-semibold uppercase tracking-wider"
+              className="px-5 py-2.5 rounded-full border border-sage-300 text-charcoal hover:bg-cream-100 dark:hover:bg-white/10 text-xs font-semibold uppercase tracking-wider"
             >
               Cancel
             </button>
@@ -275,10 +267,8 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
               {contactToEdit ? 'Save Changes' : 'Create Contact'}
             </button>
           </div>
-
         </form>
-
       </div>
-    </div>
+    </ModalPortal>
   );
 };

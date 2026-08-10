@@ -4,6 +4,8 @@ import React, { useState } from 'react';
 import { X, MessageSquare, ExternalLink, Check, Sparkles, Send } from 'lucide-react';
 import { CRMContact } from '../../types';
 
+import { ModalPortal } from '../common/ModalPortal';
+
 interface BulkWhatsAppModalProps {
   contacts: CRMContact[];
   onClose: () => void;
@@ -34,24 +36,18 @@ export const BulkWhatsAppModal: React.FC<BulkWhatsAppModalProps> = ({
   const openedCount = Object.keys(openedContacts).length;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
-      {/* Full-Screen Frosted Glass Backdrop */}
-      <div 
-        className="fixed inset-0 bg-black/65 backdrop-blur-xl transition-opacity"
-        onClick={onClose}
-      />
-
-      <div className="relative z-10 modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-soft-2xl animate-scaleUp">
+    <ModalPortal isOpen={contacts.length > 0} onClose={onClose} maxWidthClass="max-w-2xl">
+      <div className="modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full max-h-[90vh] overflow-y-auto shadow-soft-2xl">
         
         {/* Header */}
         <div className="p-6 sm:p-8 border-b border-sage-100 dark:border-white/10 flex items-center justify-between sticky top-0 bg-white/95 dark:bg-[#121418]/95 backdrop-blur-md z-10">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 flex items-center justify-center">
               <MessageSquare className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-xs uppercase tracking-wider font-semibold text-emerald-800 block">
-                Zero-Cost WhatsApp Dispatch
+              <span className="eyebrow-label">
+                ZERO-COST WHATSAPP DISPATCH
               </span>
               <h3 className="font-sans text-2xl font-extrabold text-charcoal tracking-tight">
                 Sequential WhatsApp Queue ({contacts.length})
@@ -161,8 +157,7 @@ export const BulkWhatsAppModal: React.FC<BulkWhatsAppModalProps> = ({
           </div>
 
         </div>
-
       </div>
-    </div>
+    </ModalPortal>
   );
 };

@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { BrandLogo } from '../../components/BrandLogo';
+import { ModalPortal } from '../../components/common/ModalPortal';
 import { useAdmin } from '../../context/AdminContext';
 import { UserRole } from '../../types';
 import { 
@@ -447,60 +448,57 @@ export default function LoginPage() {
       </main>
 
       {/* Access Request / Password Reset Modal */}
-      {showAccessModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 animate-fadeIn">
-          <div 
-            className="fixed inset-0 bg-black/65 backdrop-blur-xl transition-opacity"
-            onClick={() => setShowAccessModal(false)}
-          />
-          <div className="relative z-10 modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full max-w-md p-6 sm:p-8 shadow-soft-2xl animate-scaleUp">
-            <h3 className="font-sans text-xl font-extrabold text-charcoal mb-2">
-              Request Curator Credentials
-            </h3>
-            <p className="text-xs text-charcoal-muted mb-6 leading-relaxed">
-              Curator and organizer credentials are restricted to verified team leads. Submit your email to receive an onboarding verification link.
-            </p>
+      <ModalPortal isOpen={showAccessModal} onClose={() => setShowAccessModal(false)} maxWidthClass="max-w-md">
+        <div className="modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full p-6 sm:p-8 shadow-soft-2xl">
+          <span className="eyebrow-label">
+            VERIFIED ONBOARDING
+          </span>
+          <h3 className="font-sans text-xl font-extrabold text-charcoal mb-2">
+            Request Curator Credentials
+          </h3>
+          <p className="text-xs text-charcoal-muted mb-6 leading-relaxed">
+            Curator and organizer credentials are restricted to verified team leads. Submit your email to receive an onboarding verification link.
+          </p>
 
-            {accessRequestSuccess ? (
-              <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-300 text-emerald-800 dark:text-emerald-300 text-xs font-bold flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 shrink-0" />
-                <span>Verification request dispatched! Check your mailbox.</span>
+          {accessRequestSuccess ? (
+            <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-300 text-emerald-800 dark:text-emerald-300 text-xs font-bold flex items-center gap-2">
+              <CheckCircle2 className="w-5 h-5 shrink-0" />
+              <span>Verification request dispatched! Check your mailbox.</span>
+            </div>
+          ) : (
+            <form onSubmit={handleAccessRequest} className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-charcoal-muted uppercase tracking-wider mb-1.5">
+                  Official Work Email
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={accessEmail}
+                  onChange={(e) => setAccessEmail(e.target.value)}
+                  placeholder="organizer@exhibitionagency.pk"
+                  className="w-full px-4 py-3 bg-cream-50 dark:bg-white/[0.05] rounded-2xl text-xs font-semibold text-charcoal border border-sage-200 dark:border-white/10 outline-none focus:ring-2 focus:ring-sage-400"
+                />
               </div>
-            ) : (
-              <form onSubmit={handleAccessRequest} className="space-y-4">
-                <div>
-                  <label className="block text-xs font-bold text-charcoal-muted uppercase tracking-wider mb-1.5">
-                    Official Work Email
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    value={accessEmail}
-                    onChange={(e) => setAccessEmail(e.target.value)}
-                    placeholder="organizer@exhibitionagency.pk"
-                    className="w-full px-4 py-3 bg-cream-50 dark:bg-white/[0.05] rounded-2xl text-xs font-semibold text-charcoal border border-sage-200 dark:border-white/10 outline-none focus:ring-2 focus:ring-sage-400"
-                  />
-                </div>
-                <div className="flex items-center gap-2 pt-2">
-                  <button
-                    type="button"
-                    onClick={() => setShowAccessModal(false)}
-                    className="flex-1 py-3 btn-secondary rounded-2xl text-xs font-bold"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="flex-1 py-3 btn-primary rounded-2xl text-xs font-bold uppercase tracking-wider"
-                  >
-                    Submit Request
-                  </button>
-                </div>
-              </form>
-            )}
-          </div>
+              <div className="flex items-center gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowAccessModal(false)}
+                  className="flex-1 py-3 btn-secondary rounded-2xl text-xs font-bold"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-3 btn-primary rounded-2xl text-xs font-bold uppercase tracking-wider"
+                >
+                  Submit Request
+                </button>
+              </div>
+            </form>
+          )}
         </div>
-      )}
+      </ModalPortal>
 
     </div>
   );
