@@ -92,8 +92,8 @@ export default function FinancePage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
-            Financial Health & P&L
+          <span className="eyebrow-label">
+            FINANCIAL HEALTH & AUDIT
           </span>
           <h2 className="font-sans text-3xl sm:text-4xl font-bold text-charcoal tracking-tight">
             Exhibition Finance & Ledgers
@@ -126,8 +126,8 @@ export default function FinancePage() {
         
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-sage-100">
           <div>
-            <span className="text-[11px] uppercase tracking-wider font-bold text-sage-800 block mb-1">
-              Select Exhibition Scope
+            <span className="eyebrow-label">
+              SELECT EXHIBITION SCOPE
             </span>
             <div className="relative inline-block">
               <select

@@ -43,8 +43,8 @@ export default function MarketingPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
-            Growth & Campaigns
+          <span className="eyebrow-label">
+            GROWTH & CAMPAIGNS
           </span>
           <h2 className="font-sans text-3xl sm:text-4xl font-bold text-charcoal tracking-tight">
             Marketing & Lead Acquisition
@@ -66,8 +66,8 @@ export default function MarketingPage() {
         {/* Left: Summary cards (4 Cols) */}
         <div className="lg:col-span-4 space-y-4">
           <div className="kpi-card p-6 rounded-3xl bg-white/80 border border-sage-200 shadow-soft cursor-pointer">
-            <span className="text-xs font-bold uppercase tracking-wider text-sage-800 block mb-1">
-              Total Marketing Investment
+            <span className="eyebrow-label">
+              TOTAL MARKETING INVESTMENT
             </span>
             <span className="font-sans text-3xl font-bold text-charcoal tracking-tight">
               Rs. {(totalMarketingSpend / 100000).toFixed(1)}L
@@ -78,8 +78,8 @@ export default function MarketingPage() {
           </div>
 
           <div className="kpi-card p-6 rounded-3xl bg-white/80 border border-sage-200 shadow-soft cursor-pointer">
-            <span className="text-xs font-bold uppercase tracking-wider text-sage-800 block mb-1">
-              Direct Vendor Leads
+            <span className="eyebrow-label">
+              DIRECT VENDOR LEADS
             </span>
             <span className="font-sans text-3xl font-bold text-sage-deep tracking-tight">
               {totalLeads} Applicants

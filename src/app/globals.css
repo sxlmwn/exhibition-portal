@@ -6,7 +6,7 @@
   html {
     scroll-behavior: smooth;
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", system-ui, -apple-system, sans-serif;
-    color: #1D211D;
+    color: #111411;
     background-color: #F7F5F0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -14,12 +14,18 @@
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", system-ui, -apple-system, sans-serif;
+    color: #111411;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", system-ui, -apple-system, sans-serif;
-    font-weight: 700;
+    font-weight: 800;
     letter-spacing: -0.025em;
+    color: #111411;
+  }
+
+  .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+    color: #FFFFFF !important;
   }
 
   .font-serif {
@@ -29,16 +35,58 @@
 
 @layer utilities {
   /* =========================================================================
+     HIGH-CONTRAST TYPOGRAPHY SYSTEM (Light & Dark)
+     ========================================================================= */
+  .eyebrow-label {
+    font-size: 0.6875rem;
+    line-height: 1rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #243524;
+    display: block;
+    margin-bottom: 0.25rem;
+  }
+
+  .dark .eyebrow-label {
+    color: #A4C2A3 !important;
+  }
+
+  .text-charcoal {
+    color: #111411;
+  }
+
+  .text-charcoal-muted {
+    color: #4A544A;
+  }
+
+  .text-charcoal-light {
+    color: #2C352C;
+  }
+
+  .text-sage-800 {
+    color: #243524;
+  }
+
+  .text-sage-900 {
+    color: #142014;
+  }
+
+  .text-sage-deep {
+    color: #243524;
+  }
+
+  /* =========================================================================
      UNIVERSAL GLASSY RISE ON HOVER SYSTEM (Light & Dark)
      ========================================================================= */
 
   /* Glass Card Base & Hover Elevation */
   .glass-card {
-    background: rgba(255, 255, 255, 0.88);
+    background: rgba(255, 255, 255, 0.92);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(143, 166, 142, 0.22);
-    box-shadow: 0 4px 24px -2px rgba(74, 93, 74, 0.05), 0 2px 6px -1px rgba(74, 93, 74, 0.03);
+    border: 1px solid rgba(143, 166, 142, 0.26);
+    box-shadow: 0 4px 24px -2px rgba(74, 93, 74, 0.06), 0 2px 6px -1px rgba(74, 93, 74, 0.03);
     transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.22s ease;
   }
 
@@ -53,7 +101,7 @@
     transform: translateY(-3px) !important;
     background-color: rgba(255, 255, 255, 0.98) !important;
     box-shadow: 0 16px 36px -6px rgba(74, 93, 74, 0.16), 0 6px 14px -2px rgba(74, 93, 74, 0.08) !important;
-    border-color: rgba(143, 166, 142, 0.48) !important;
+    border-color: rgba(143, 166, 142, 0.52) !important;
     position: relative;
     z-index: 5;
   }
@@ -70,29 +118,29 @@
     transform: translateY(-3px) !important;
     background-color: #FFFFFF !important;
     box-shadow: 0 12px 28px -4px rgba(74, 93, 74, 0.15), 0 4px 10px -2px rgba(74, 93, 74, 0.08) !important;
-    border-color: rgba(143, 166, 142, 0.5) !important;
+    border-color: rgba(143, 166, 142, 0.55) !important;
     position: relative;
     z-index: 10;
   }
 
   /* Frosted Sidebar & Navigation */
   .glass-sidebar {
-    background: rgba(247, 245, 240, 0.94);
+    background: rgba(247, 245, 240, 0.96);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border-right: 1px solid rgba(143, 166, 142, 0.25);
+    border-right: 1px solid rgba(143, 166, 142, 0.28);
   }
 
   .glass-topbar {
-    background: rgba(247, 245, 240, 0.88);
+    background: rgba(247, 245, 240, 0.9);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(143, 166, 142, 0.2);
+    border-bottom: 1px solid rgba(143, 166, 142, 0.22);
   }
 
   /* Universal Buttons Rise on Hover */
   .btn-primary {
-    background-color: #4A5D4A;
+    background-color: #243524;
     color: #F7F5F0;
     font-weight: 800;
     letter-spacing: -0.01em;
@@ -102,9 +150,9 @@
   }
 
   .btn-primary:hover {
-    background-color: #344234;
+    background-color: #172417;
     transform: translateY(-2px);
-    box-shadow: 0 10px 24px -2px rgba(74, 93, 74, 0.35), 0 4px 8px -2px rgba(74, 93, 74, 0.15);
+    box-shadow: 0 10px 24px -2px rgba(36, 53, 36, 0.4), 0 4px 8px -2px rgba(36, 53, 36, 0.2);
   }
 
   .btn-primary:active {
@@ -112,19 +160,19 @@
   }
 
   .btn-secondary {
-    background-color: rgba(255, 255, 255, 0.92);
-    color: #1D211D;
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #111411;
     font-weight: 800;
     letter-spacing: -0.01em;
     border-radius: 9999px;
-    border: 1px solid rgba(143, 166, 142, 0.35);
+    border: 1px solid rgba(143, 166, 142, 0.4);
     transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease;
     will-change: transform, box-shadow;
   }
 
   .btn-secondary:hover {
     background-color: #FFFFFF;
-    border-color: #8FA68E;
+    border-color: #5C755B;
     transform: translateY(-2px);
     box-shadow: 0 10px 24px -2px rgba(74, 93, 74, 0.16), 0 4px 8px -2px rgba(74, 93, 74, 0.08);
   }
@@ -173,12 +221,12 @@
   select:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px -3px rgba(74, 93, 74, 0.16);
-    border-color: #7A9579 !important;
+    border-color: #5C755B !important;
   }
 
   .glass-select:focus,
   select:focus {
-    border-color: #4A5D4A !important;
+    border-color: #243524 !important;
     box-shadow: 0 0 0 3px rgba(143, 166, 142, 0.25) !important;
   }
 
@@ -188,6 +236,7 @@
   input[type="email"],
   input[type="number"],
   input[type="date"],
+  input[type="password"],
   textarea {
     transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
   }
@@ -197,8 +246,9 @@
   input[type="email"]:hover,
   input[type="number"]:hover,
   input[type="date"]:hover,
+  input[type="password"]:hover,
   textarea:hover {
-    border-color: #7A9579;
+    border-color: #5C755B;
     box-shadow: 0 4px 12px -2px rgba(74, 93, 74, 0.1);
   }
 
@@ -207,8 +257,9 @@
   input[type="email"]:focus,
   input[type="number"]:focus,
   input[type="date"]:focus,
+  input[type="password"]:focus,
   textarea:focus {
-    border-color: #4A5D4A;
+    border-color: #243524;
     box-shadow: 0 0 0 3px rgba(143, 166, 142, 0.25);
   }
 
@@ -335,13 +386,13 @@
 
   /* Dark Buttons - Green Accent & Neutral Secondary */
   .dark .btn-primary {
-    background-color: #4A5D4A;
+    background-color: #2E482E;
     color: #F7F5F0;
   }
 
   .dark .btn-primary:hover {
-    background-color: #5C725C;
-    box-shadow: 0 10px 24px -2px rgba(74, 93, 74, 0.5), 0 0 20px rgba(143, 166, 142, 0.3);
+    background-color: #3D603D;
+    box-shadow: 0 10px 24px -2px rgba(46, 72, 46, 0.5), 0 0 20px rgba(143, 166, 142, 0.3);
   }
 
   .dark .btn-secondary {

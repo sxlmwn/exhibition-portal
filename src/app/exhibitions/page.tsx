@@ -58,8 +58,8 @@ export default function ExhibitionsPage() {
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
-            Portfolio Management
+          <span className="eyebrow-label">
+            PORTFOLIO MANAGEMENT
           </span>
           <h2 className="font-sans text-3xl sm:text-4xl font-bold text-charcoal tracking-tight">
             Exhibitions & Schedule

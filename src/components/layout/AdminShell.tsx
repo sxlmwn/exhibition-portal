@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
 import { AdminProvider, useAdmin } from '../../context/AdminContext';
@@ -9,6 +10,19 @@ const AdminShellContent: React.FC<{ children: React.ReactNode }> = ({ children }
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const { theme } = useAdmin();
+  const pathname = usePathname();
+  const isLoginPage = pathname === '/login';
+
+  // Standalone Login Page without Shell chrome
+  if (isLoginPage) {
+    return (
+      <div className={`min-h-screen transition-colors duration-500 ${
+        theme === 'dark' ? 'dark bg-[#0B0C0E] text-[#F3F4F6]' : 'bg-[#F7F5F0] text-charcoal'
+      }`}>
+        {children}
+      </div>
+    );
+  }
 
   return (
     <div className={`min-h-screen transition-colors duration-300 flex relative overflow-x-hidden ${

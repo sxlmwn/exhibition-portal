@@ -291,10 +291,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
               >
                 <div className="flex items-center gap-2">
                   <ExternalLink className="w-3.5 h-3.5 text-sage-700 dark:text-sage-400" />
-                  <span>Public Landing Page</span>
+                  <span>Public Showcase</span>
                 </div>
                 <span className="text-[10px] text-sage-800 dark:text-sage-300 font-bold">:5173</span>
               </a>
+              <Link
+                href="/login"
+                onClick={() => setShowProfileMenu(false)}
+                className="flex items-center gap-2 px-2.5 py-2 rounded-xl text-xs text-charcoal hover:bg-cream-50 dark:hover:bg-white/10 transition-colors font-medium"
+              >
+                <LogOut className="w-3.5 h-3.5 text-sage-700 dark:text-sage-400" />
+                <span>Switch / Sign In Page</span>
+              </Link>
             </div>
 
             {/* Reset / Sign Out */}

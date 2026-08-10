@@ -115,8 +115,8 @@ export default function CRMPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
-            Vendor Directory
+          <span className="eyebrow-label">
+            VENDOR RELATIONSHIPS
           </span>
           <h2 className="font-sans text-3xl sm:text-4xl font-bold text-charcoal tracking-tight">
             Vendor Directory & CRM
