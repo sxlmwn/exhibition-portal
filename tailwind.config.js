@@ -36,14 +36,22 @@ module.exports = {
           dark: '#DDD5C4',
         },
         charcoal: {
-          DEFAULT: '#2E332E',
-          light: '#4A534A',
-          muted: '#687368',
+          DEFAULT: '#1D211D',
+          light: '#3A423A',
+          muted: '#5A635A',
         }
       },
       fontFamily: {
-        serif: ['"Playfair Display"', '"Cormorant Garamond"', 'Georgia', 'serif'],
-        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+        sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', 'Inter', 'system-ui', 'sans-serif'],
+        serif: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', 'Inter', 'system-ui', 'sans-serif'],
+      },
+      letterSpacing: {
+        tighter: '-0.04em',
+        tight: '-0.025em',
+        normal: '0',
+        wide: '0.025em',
+        wider: '0.05em',
+        widest: '0.1em',
       },
       boxShadow: {
         'soft': '0 4px 20px -2px rgba(74, 93, 74, 0.05), 0 2px 6px -1px rgba(74, 93, 74, 0.03)',

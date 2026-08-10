@@ -86,10 +86,10 @@ export const RequestActionModal: React.FC<RequestActionModalProps> = ({
           </button>
         </div>
 
-        <h3 className="font-serif text-2xl font-bold text-charcoal mb-2">
+        <h3 className="font-sans text-2xl font-extrabold text-charcoal mb-2 tracking-tight">
           {config.title}
         </h3>
-        <p className="text-xs sm:text-sm text-charcoal-muted font-light leading-relaxed mb-6">
+        <p className="text-xs sm:text-sm text-charcoal-muted font-normal leading-relaxed mb-6">
           {config.description}
         </p>
 

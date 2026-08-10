@@ -47,7 +47,7 @@ export const BulkWhatsAppModal: React.FC<BulkWhatsAppModalProps> = ({
               <span className="text-xs uppercase tracking-wider font-semibold text-emerald-800 block">
                 Zero-Cost WhatsApp Dispatch
               </span>
-              <h3 className="font-serif text-2xl font-bold text-charcoal">
+              <h3 className="font-sans text-2xl font-extrabold text-charcoal tracking-tight">
                 Sequential WhatsApp Queue ({contacts.length})
               </h3>
             </div>

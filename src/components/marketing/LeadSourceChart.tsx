@@ -40,7 +40,7 @@ export const LeadSourceChart: React.FC<LeadSourceChartProps> = ({ campaigns }) =
           <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
             Attribution Analytics
           </span>
-          <h3 className="font-serif text-2xl font-bold text-charcoal">
+          <h3 className="font-sans text-2xl font-extrabold text-charcoal tracking-tight">
             Lead Source by Platform
           </h3>
         </div>
@@ -71,7 +71,7 @@ export const LeadSourceChart: React.FC<LeadSourceChartProps> = ({ campaigns }) =
                 if (active && payload && payload.length) {
                   return (
                     <div className="bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-soft-lg border border-sage-200 text-xs">
-                      <p className="font-serif font-bold text-charcoal mb-1">{label}</p>
+                      <p className="font-sans font-bold text-charcoal mb-1">{label}</p>
                       <div className="flex items-center justify-between gap-4 text-sage-800 font-semibold">
                         <span>Leads Acquired:</span>
                         <span>{payload[0].value} brands</span>

@@ -45,10 +45,10 @@ export default function DashboardPage() {
             <Sparkles className="w-3.5 h-3.5 text-sage-700" />
             <span>Season 2026 Live Dashboard</span>
           </div>
-          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-semibold text-charcoal leading-tight">
+          <h2 className="font-sans text-2xl sm:text-3xl lg:text-4xl font-extrabold text-charcoal leading-tight tracking-tight">
             Curating high-yield exhibition spaces across Pakistan.
           </h2>
-          <p className="text-sm text-charcoal-muted mt-2 font-light leading-relaxed">
+          <p className="text-sm text-charcoal-muted mt-2 font-normal leading-relaxed">
             Manage live vendor allocations, inspect venue floor plans, and track expenditures with complete financial transparency.
           </p>
         </div>

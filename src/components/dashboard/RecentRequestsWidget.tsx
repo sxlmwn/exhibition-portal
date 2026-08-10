@@ -33,7 +33,7 @@ export const RecentRequestsWidget: React.FC<RecentRequestsWidgetProps> = ({ requ
             <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
               Applications
             </span>
-            <h3 className="font-serif text-xl font-semibold text-charcoal">
+            <h3 className="font-sans text-xl font-bold text-charcoal tracking-tight">
               Recent Vendor Requests
             </h3>
           </div>
@@ -61,7 +61,7 @@ export const RecentRequestsWidget: React.FC<RecentRequestsWidgetProps> = ({ requ
                     {req.status}
                   </span>
                 </div>
-                <div className="flex items-center gap-2 text-[11px] text-charcoal-muted mt-1 font-light truncate">
+                <div className="flex items-center gap-2 text-[11px] text-charcoal-muted mt-1 font-normal truncate">
                   <span className="truncate">{req.vendorName}</span>
                   <span>&bull;</span>
                   <span className="truncate">{req.productCategory}</span>
@@ -69,7 +69,7 @@ export const RecentRequestsWidget: React.FC<RecentRequestsWidgetProps> = ({ requ
               </div>
 
               <div className="text-right shrink-0">
-                <span className="block text-xs font-serif font-bold text-sage-deep">
+                <span className="block text-xs font-sans font-extrabold text-sage-deep">
                   {req.allocatedStallCode ? `Stall ${req.allocatedStallCode}` : `${req.stallsWanted} Stall(s)`}
                 </span>
                 <span className="text-[10px] text-charcoal-muted font-light flex items-center gap-0.5 justify-end">

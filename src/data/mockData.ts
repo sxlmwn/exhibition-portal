@@ -569,5 +569,5 @@ export const INITIAL_AGENCY_SETTINGS: AgencySettings = {
   coordinatorWhatsApp: '+92 300 123 4567',
   headquartersAddress: 'Plaza 14, Main Boulevard, Gulberg III, Lahore',
   currency: 'PKR (Rs.)',
-  logoUrl: '/images/Landing Hero _ Wide Group_ No Slate.png'
+  logoUrl: '/images/Booth Logo Only_ Enlarged.png'
 };

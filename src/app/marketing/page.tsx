@@ -44,7 +44,7 @@ export default function MarketingPage() {
           <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
             Growth & Outreach
           </span>
-          <h2 className="font-serif text-3xl font-bold text-charcoal">
+          <h2 className="font-sans text-3xl font-extrabold text-charcoal tracking-tight">
             Marketing Logs & Lead Attribution
           </h2>
         </div>
@@ -64,25 +64,25 @@ export default function MarketingPage() {
         {/* Left: Summary cards (4 Cols) */}
         <div className="lg:col-span-4 space-y-4">
           <div className="glass-card p-6 rounded-3xl">
-            <span className="text-xs font-semibold uppercase tracking-wider text-sage-800 block mb-1">
+            <span className="text-xs font-bold uppercase tracking-wider text-sage-800 block mb-1">
               Total Marketing Investment
             </span>
-            <span className="font-serif text-3xl font-bold text-charcoal">
+            <span className="font-sans text-3xl font-extrabold text-charcoal tracking-tight">
               Rs. {(totalMarketingSpend / 100000).toFixed(1)}L
             </span>
-            <p className="text-xs text-charcoal-muted mt-1 font-light">
+            <p className="text-xs text-charcoal-muted mt-1 font-normal">
               Across Instagram Reels, TikTok, Meta Ads & Outdoor
             </p>
           </div>
 
           <div className="glass-card p-6 rounded-3xl">
-            <span className="text-xs font-semibold uppercase tracking-wider text-sage-800 block mb-1">
+            <span className="text-xs font-bold uppercase tracking-wider text-sage-800 block mb-1">
               Direct Vendor Leads
             </span>
-            <span className="font-serif text-3xl font-bold text-sage-deep">
+            <span className="font-sans text-3xl font-extrabold text-sage-deep tracking-tight">
               {totalLeads} Applicants
             </span>
-            <p className="text-xs text-charcoal-muted mt-1 font-light">
+            <p className="text-xs text-charcoal-muted mt-1 font-normal">
               Avg Acquisition Cost: Rs. {totalLeads > 0 ? Math.round(totalMarketingSpend / totalLeads).toLocaleString() : 0} / Lead
             </p>
           </div>
@@ -160,7 +160,7 @@ export default function MarketingPage() {
                   </td>
 
                   {/* Amount */}
-                  <td className="py-4 px-4 font-serif text-sm font-bold text-sage-deep">
+                  <td className="py-4 px-4 font-sans text-sm font-extrabold text-sage-deep">
                     Rs. {cmp.amountSpent.toLocaleString()}
                   </td>
 

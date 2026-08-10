@@ -102,7 +102,7 @@ export const ExpenseFormModal: React.FC<ExpenseFormModalProps> = ({
               <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block">
                 Accounting
               </span>
-              <h3 className="font-serif text-2xl font-bold text-charcoal">
+              <h3 className="font-sans text-2xl font-extrabold text-charcoal tracking-tight">
                 Log New Expense
               </h3>
             </div>

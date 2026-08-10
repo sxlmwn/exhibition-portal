@@ -108,7 +108,7 @@ export default function CRMPage() {
           <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
             Vendor Directory
           </span>
-          <h2 className="font-serif text-3xl font-bold text-charcoal">
+          <h2 className="font-sans text-3xl font-extrabold text-charcoal tracking-tight">
             Contacts & Exhibitor CRM
           </h2>
         </div>
@@ -260,10 +260,10 @@ export default function CRMPage() {
 
                     {/* Brand & Name */}
                     <td className="py-4 px-4">
-                      <span className="font-serif font-bold text-sm text-charcoal block">
+                      <span className="font-sans font-bold text-sm text-charcoal block tracking-tight">
                         {contact.businessName}
                       </span>
-                      <span className="text-charcoal-muted text-[11px] font-light">
+                      <span className="text-charcoal-muted text-[11px] font-normal">
                         {contact.name}
                       </span>
                     </td>
@@ -279,12 +279,12 @@ export default function CRMPage() {
                         href={`https://wa.me/${contact.phone.replace(/[^0-9]/g, '')}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 font-medium text-emerald-800 hover:underline"
+                        className="flex items-center gap-1.5 font-semibold text-emerald-800 hover:underline"
                       >
                         <MessageSquare className="w-3.5 h-3.5" />
                         <span>{contact.phone}</span>
                       </a>
-                      <span className="text-[10px] text-charcoal-muted font-light block mt-0.5 truncate max-w-[130px]">
+                      <span className="text-[10px] text-charcoal-muted font-normal block mt-0.5 truncate max-w-[130px]">
                         {contact.email}
                       </span>
                     </td>
@@ -295,13 +295,13 @@ export default function CRMPage() {
                         {contact.tags.slice(0, 2).map((tag, idx) => (
                           <span
                             key={idx}
-                            className="text-[10px] bg-sage-50 text-sage-900 px-2 py-0.5 rounded border border-sage-200"
+                            className="text-[10px] bg-sage-50 text-sage-900 px-2 py-0.5 rounded border border-sage-200 font-medium"
                           >
                             {tag}
                           </span>
                         ))}
                         {contact.tags.length > 2 && (
-                          <span className="text-[10px] text-charcoal-muted font-medium">
+                          <span className="text-[10px] text-charcoal-muted font-semibold">
                             +{contact.tags.length - 2}
                           </span>
                         )}
@@ -316,7 +316,7 @@ export default function CRMPage() {
                     </td>
 
                     {/* Total spend */}
-                    <td className="py-4 px-4 font-serif font-bold text-sage-deep">
+                    <td className="py-4 px-4 font-sans font-extrabold text-sage-deep">
                       Rs. {contact.totalSpend.toLocaleString()}
                     </td>
 

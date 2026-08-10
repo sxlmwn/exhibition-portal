@@ -152,8 +152,8 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
               <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block">
                 Portfolio Showcase
               </span>
-              <h3 className="font-serif text-2xl font-bold text-charcoal">
-                {eventToEdit ? 'Edit Past Edition Story' : 'Add Past Edition Story'}
+              <h3 className="font-sans text-2xl font-extrabold text-charcoal tracking-tight">
+                {eventToEdit ? 'Edit Past Event Record' : 'Add Past Exhibition Edition'}
               </h3>
             </div>
           </div>

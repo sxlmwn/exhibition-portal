@@ -80,7 +80,7 @@ export const ExhibitionCard: React.FC<ExhibitionCardProps> = ({
             <span className="text-[10px] uppercase tracking-wider text-sage-200 font-medium block">
               {exhibition.category}
             </span>
-            <h3 className="font-serif text-xl font-bold leading-tight truncate">
+            <h3 className="font-sans text-xl font-extrabold leading-tight truncate tracking-tight">
               {exhibition.title}
             </h3>
           </div>
@@ -89,7 +89,7 @@ export const ExhibitionCard: React.FC<ExhibitionCardProps> = ({
         {/* Card Body */}
         <div className="p-6">
           {/* Venue & Date */}
-          <div className="space-y-1.5 mb-4 text-xs text-charcoal-muted font-light">
+          <div className="space-y-1.5 mb-4 text-xs text-charcoal-muted font-normal">
             <div className="flex items-center gap-2">
               <MapPin className="w-3.5 h-3.5 text-sage-600 shrink-0" />
               <span className="truncate">{exhibition.venue}</span>
@@ -107,7 +107,7 @@ export const ExhibitionCard: React.FC<ExhibitionCardProps> = ({
                 <Store className="w-3.5 h-3.5 text-sage-700" />
                 Stall Capacity
               </span>
-              <span className="font-bold text-sage-deep">
+              <span className="font-extrabold text-sage-deep">
                 {exhibition.bookedStallsCount} / {exhibition.totalStallCapacity} ({fillPct}%)
               </span>
             </div>
@@ -124,14 +124,14 @@ export const ExhibitionCard: React.FC<ExhibitionCardProps> = ({
           {/* Financial Snapshot */}
           <div className="grid grid-cols-2 gap-3 text-xs pt-1">
             <div className="p-2.5 rounded-xl bg-white/70 border border-sage-100">
-              <span className="text-[10px] text-charcoal-muted uppercase tracking-wider block">Stall Revenue</span>
-              <span className="font-serif text-sm font-bold text-sage-deep">
+              <span className="text-[10px] text-charcoal-muted uppercase tracking-wider block font-bold">Stall Revenue</span>
+              <span className="font-sans text-sm font-extrabold text-sage-deep">
                 Rs. {(exhibition.stallRevenueBooked / 100000).toFixed(1)}L
               </span>
             </div>
             <div className="p-2.5 rounded-xl bg-white/70 border border-sage-100">
-              <span className="text-[10px] text-charcoal-muted uppercase tracking-wider block">Funding/Budget</span>
-              <span className="font-serif text-sm font-bold text-charcoal">
+              <span className="text-[10px] text-charcoal-muted uppercase tracking-wider block font-bold">Funding/Budget</span>
+              <span className="font-sans text-sm font-extrabold text-charcoal">
                 Rs. {(exhibition.budgetAllocated / 100000).toFixed(1)}L
               </span>
             </div>

@@ -59,14 +59,14 @@ export const ContactDrawer: React.FC<ContactDrawerProps> = ({
           {/* Header */}
           <div className="flex items-center justify-between pb-4 border-b border-sage-100 mb-6">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-sage-800 text-cream font-serif font-bold text-xl flex items-center justify-center">
+              <div className="w-12 h-12 rounded-2xl bg-sage-800 text-cream font-sans font-extrabold text-xl flex items-center justify-center">
                 {contact.businessName.substring(0, 2).toUpperCase()}
               </div>
               <div>
-                <h3 className="font-serif text-2xl font-bold text-charcoal leading-tight">
+                <h3 className="font-sans text-2xl font-extrabold text-charcoal leading-tight tracking-tight">
                   {contact.businessName}
                 </h3>
-                <span className="text-xs text-charcoal-muted font-light">
+                <span className="text-xs text-charcoal-muted font-normal">
                   {contact.name}
                 </span>
               </div>
@@ -84,12 +84,12 @@ export const ContactDrawer: React.FC<ContactDrawerProps> = ({
             <div className="flex items-center gap-3 p-3 rounded-2xl bg-cream-50 border border-sage-200 text-xs">
               <Phone className="w-4 h-4 text-sage-700" />
               <div className="flex-1">
-                <span className="text-charcoal-muted text-[10px] block uppercase tracking-wider">Phone / WhatsApp</span>
+                <span className="text-charcoal-muted text-[10px] block uppercase tracking-wider font-semibold">Phone / WhatsApp</span>
                 <a
                   href={`https://wa.me/${contact.phone.replace(/[^0-9]/g, '')}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-semibold text-emerald-800 hover:underline"
+                  className="font-bold text-emerald-800 hover:underline"
                 >
                   {contact.phone}
                 </a>
@@ -99,15 +99,15 @@ export const ContactDrawer: React.FC<ContactDrawerProps> = ({
             <div className="flex items-center gap-3 p-3 rounded-2xl bg-cream-50 border border-sage-200 text-xs">
               <Mail className="w-4 h-4 text-sage-700" />
               <div className="flex-1">
-                <span className="text-charcoal-muted text-[10px] block uppercase tracking-wider">Email</span>
+                <span className="text-charcoal-muted text-[10px] block uppercase tracking-wider font-semibold">Email</span>
                 <span className="font-medium text-charcoal">{contact.email}</span>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3 text-xs">
               <div className="p-3 rounded-2xl bg-cream-50 border border-sage-200">
-                <span className="text-charcoal-muted text-[10px] block uppercase tracking-wider">Total Spend</span>
-                <span className="font-serif text-lg font-bold text-sage-deep">
+                <span className="text-charcoal-muted text-[10px] block uppercase tracking-wider font-semibold">Total Spend</span>
+                <span className="font-sans text-lg font-extrabold text-sage-deep">
                   Rs. {contact.totalSpend.toLocaleString()}
                 </span>
               </div>

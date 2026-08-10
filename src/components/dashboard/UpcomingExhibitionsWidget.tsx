@@ -20,7 +20,7 @@ export const UpcomingExhibitionsWidget: React.FC<UpcomingExhibitionsWidgetProps>
             <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
               Active Editions
             </span>
-            <h3 className="font-serif text-xl font-semibold text-charcoal">
+            <h3 className="font-sans text-xl font-bold text-charcoal tracking-tight">
               Upcoming Schedule
             </h3>
           </div>
@@ -44,7 +44,7 @@ export const UpcomingExhibitionsWidget: React.FC<UpcomingExhibitionsWidgetProps>
               >
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div>
-                    <h4 className="font-serif text-base font-semibold text-charcoal leading-snug">
+                    <h4 className="font-sans text-base font-bold text-charcoal leading-snug tracking-tight">
                       {exh.title}
                     </h4>
                     <div className="flex items-center gap-2 text-xs text-charcoal-muted mt-1 font-light">

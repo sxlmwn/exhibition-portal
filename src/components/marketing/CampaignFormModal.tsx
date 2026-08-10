@@ -94,8 +94,8 @@ export const CampaignFormModal: React.FC<CampaignFormModalProps> = ({
               <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block">
                 Growth Log
               </span>
-              <h3 className="font-serif text-2xl font-bold text-charcoal">
-                Add Campaign Entry
+              <h3 className="font-sans text-2xl font-extrabold text-charcoal tracking-tight">
+                Log Ad Campaign / Outreach
               </h3>
             </div>
           </div>

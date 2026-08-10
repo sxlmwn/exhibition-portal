@@ -36,7 +36,7 @@ export const RevenueChart: React.FC = () => {
           <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
             Financial & Stall Traction
           </span>
-          <h3 className="font-serif text-2xl font-semibold text-charcoal">
+          <h3 className="font-sans text-2xl font-bold text-charcoal tracking-tight">
             Revenue & Booking Trajectory
           </h3>
         </div>
@@ -100,7 +100,7 @@ export const RevenueChart: React.FC = () => {
                 if (active && payload && payload.length) {
                   return (
                     <div className="bg-white/95 backdrop-blur-md p-3.5 rounded-2xl shadow-soft-lg border border-sage-200 text-xs">
-                      <p className="font-serif font-bold text-charcoal mb-1.5">{label}</p>
+                      <p className="font-sans font-bold text-charcoal mb-1.5">{label}</p>
                       {metric === 'revenue' ? (
                         <>
                           <div className="flex items-center justify-between gap-4 text-sage-800 font-semibold">
@@ -161,12 +161,12 @@ export const RevenueChart: React.FC = () => {
       {/* Chart Footer Stats */}
       <div className="mt-6 pt-4 border-t border-sage-100 grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs">
         <div>
-          <span className="text-charcoal-muted font-light block">Average Stall Rate</span>
-          <span className="font-serif text-base font-bold text-sage-deep">Rs. 82,500</span>
+          <span className="text-charcoal-muted font-normal block">Average Stall Rate</span>
+          <span className="font-sans text-base font-extrabold text-sage-deep">Rs. 82,500</span>
         </div>
         <div>
-          <span className="text-charcoal-muted font-light block">Net Margin Ratio</span>
-          <span className="font-serif text-base font-bold text-emerald-800">+34.8%</span>
+          <span className="text-charcoal-muted font-normal block">Net Margin Ratio</span>
+          <span className="font-sans text-base font-extrabold text-emerald-800">+34.8%</span>
         </div>
         <div className="col-span-2 sm:col-span-1 flex items-center justify-start sm:justify-end">
           <div className="flex items-center gap-1.5 text-[11px] text-sage-800 font-medium bg-sage-50 px-3 py-1.5 rounded-full border border-sage-200/60">

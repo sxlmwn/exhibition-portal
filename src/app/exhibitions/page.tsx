@@ -61,7 +61,7 @@ export default function ExhibitionsPage() {
           <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
             Portfolio Management
           </span>
-          <h2 className="font-serif text-3xl font-bold text-charcoal">
+          <h2 className="font-sans text-3xl font-extrabold text-charcoal tracking-tight">
             Exhibitions Directory
           </h2>
         </div>
@@ -140,7 +140,7 @@ export default function ExhibitionsPage() {
       ) : (
         <div className="glass-card p-12 rounded-4xl text-center">
           <CalendarDays className="w-12 h-12 text-sage-400 mx-auto mb-3" />
-          <h3 className="font-serif text-xl font-semibold text-charcoal mb-1">
+          <h3 className="font-sans text-xl font-bold text-charcoal mb-1 tracking-tight">
             No Exhibitions Found
           </h3>
           <p className="text-xs text-charcoal-muted max-w-sm mx-auto mb-5 font-light">

@@ -83,7 +83,7 @@ export const StaffInviteModal: React.FC<StaffInviteModalProps> = ({
               <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block">
                 Access Control
               </span>
-              <h3 className="font-serif text-2xl font-bold text-charcoal">
+              <h3 className="font-sans text-2xl font-extrabold text-charcoal tracking-tight">
                 Invite Staff Member
               </h3>
             </div>

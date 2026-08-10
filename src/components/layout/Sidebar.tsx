@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { BrandLogo } from '../BrandLogo';
 import { 
   LayoutDashboard, 
   CalendarDays, 
@@ -95,22 +96,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
       <div>
         <div className="h-20 flex items-center justify-between px-5 border-b border-sage-200/40">
           {!collapsed ? (
-            <Link href="/" className="flex items-center gap-3 group focus:outline-none">
-              <div className="w-10 h-10 rounded-2xl bg-sage-800 text-cream flex items-center justify-center font-serif font-bold text-lg shadow-sm">
-                EA
-              </div>
-              <div className="overflow-hidden">
-                <span className="block font-serif text-lg font-semibold text-charcoal tracking-tight leading-tight truncate">
-                  Exhibition Agency
-                </span>
-                <span className="block text-[10px] tracking-widest uppercase text-sage-800 font-medium">
-                  Admin Portal
-                </span>
-              </div>
+            <Link href="/" className="flex items-center group focus:outline-none py-1">
+              <BrandLogo size={36} textColor="text-charcoal" subtextColor="text-sage-800" />
             </Link>
           ) : (
-            <div className="mx-auto w-10 h-10 rounded-2xl bg-sage-800 text-cream flex items-center justify-center font-serif font-bold text-lg shadow-sm">
-              EA
+            <div className="mx-auto flex items-center justify-center py-1">
+              <BrandLogo size={32} showText={false} />
             </div>
           )}
 

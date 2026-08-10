@@ -129,7 +129,7 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
             <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
               CRM Record
             </span>
-            <h3 className="font-serif text-2xl font-bold text-charcoal">
+            <h3 className="font-sans text-2xl font-extrabold text-charcoal tracking-tight">
               {contactToEdit ? 'Edit Exhibitor Contact' : 'Add New Exhibitor'}
             </h3>
           </div>

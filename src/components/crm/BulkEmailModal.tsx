@@ -40,7 +40,7 @@ export const BulkEmailModal: React.FC<BulkEmailModalProps> = ({
               <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block">
                 Broadcast Email
               </span>
-              <h3 className="font-serif text-2xl font-bold text-charcoal">
+              <h3 className="font-sans text-2xl font-extrabold text-charcoal tracking-tight">
                 Compose Blast to {contacts.length} Contact(s)
               </h3>
             </div>
@@ -117,7 +117,7 @@ export const BulkEmailModal: React.FC<BulkEmailModalProps> = ({
             <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto">
               <CheckCircle2 className="w-8 h-8" />
             </div>
-            <h3 className="font-serif text-2xl font-bold text-charcoal">
+            <h3 className="font-sans text-2xl font-extrabold text-charcoal tracking-tight">
               Email Blast Dispatched
             </h3>
             <p className="text-xs text-charcoal-muted max-w-sm mx-auto font-light">

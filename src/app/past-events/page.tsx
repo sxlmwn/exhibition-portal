@@ -42,7 +42,7 @@ export default function PastEventsPage() {
           <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
             Track Record & Case Studies
           </span>
-          <h2 className="font-serif text-3xl font-bold text-charcoal">
+          <h2 className="font-sans text-3xl font-extrabold text-charcoal tracking-tight">
             Past Events & Portfolio Editor
           </h2>
         </div>
@@ -83,10 +83,10 @@ export default function PastEventsPage() {
                 </div>
 
                 <div className="absolute bottom-3 left-4 right-4 text-white">
-                  <h3 className="font-serif text-xl font-bold leading-tight">
+                  <h3 className="font-sans text-xl font-extrabold leading-tight tracking-tight">
                     {event.title}
                   </h3>
-                  <span className="text-xs text-cream-200 font-light flex items-center gap-1 mt-0.5">
+                  <span className="text-xs text-cream-200 font-normal flex items-center gap-1 mt-0.5">
                     <CalendarDays className="w-3.5 h-3.5 text-sage-300" />
                     {event.dateRange}
                   </span>
@@ -99,20 +99,20 @@ export default function PastEventsPage() {
                 {/* Stats Counters */}
                 <div className="grid grid-cols-3 gap-2 p-3.5 rounded-2xl bg-cream-50 border border-sage-200/70 text-center">
                   <div>
-                    <span className="text-[10px] text-charcoal-muted uppercase block">Footfall</span>
-                    <span className="font-serif text-sm font-bold text-charcoal">
+                    <span className="text-[10px] text-charcoal-muted uppercase block font-semibold">Footfall</span>
+                    <span className="font-sans text-sm font-extrabold text-charcoal">
                       {(event.footfallNumber / 1000).toFixed(1)}k
                     </span>
                   </div>
                   <div className="border-x border-sage-200">
-                    <span className="text-[10px] text-charcoal-muted uppercase block">Vendors</span>
-                    <span className="font-serif text-sm font-bold text-charcoal">
+                    <span className="text-[10px] text-charcoal-muted uppercase block font-semibold">Vendors</span>
+                    <span className="font-sans text-sm font-extrabold text-charcoal">
                       {event.vendorCount}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-charcoal-muted uppercase block">GMV Sales</span>
-                    <span className="font-serif text-sm font-bold text-sage-deep">
+                    <span className="text-[10px] text-charcoal-muted uppercase block font-semibold">GMV Sales</span>
+                    <span className="font-sans text-sm font-extrabold text-sage-deep">
                       {event.totalRevenueGMV}
                     </span>
                   </div>

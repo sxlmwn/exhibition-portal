@@ -60,10 +60,10 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
         </button>
 
         <div>
-          <h1 className="font-serif text-xl sm:text-2xl font-semibold text-charcoal tracking-tight">
+          <h1 className="font-sans text-xl sm:text-2xl font-bold text-charcoal tracking-tight">
             {pageInfo.title}
           </h1>
-          <p className="text-xs text-charcoal-muted hidden sm:block font-light">
+          <p className="text-xs text-charcoal-muted hidden sm:block font-normal">
             {pageInfo.subtitle}
           </p>
         </div>

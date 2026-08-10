@@ -25,7 +25,7 @@ export const ReceiptViewerModal: React.FC<ReceiptViewerModalProps> = ({
             <span className="text-[10px] uppercase font-bold tracking-wider text-sage-800 block">
               Receipt Voucher
             </span>
-            <h3 className="font-serif text-lg font-bold text-charcoal">
+            <h3 className="font-sans text-lg font-bold text-charcoal tracking-tight">
               {expense.category} &bull; Rs. {expense.amount.toLocaleString()}
             </h3>
           </div>

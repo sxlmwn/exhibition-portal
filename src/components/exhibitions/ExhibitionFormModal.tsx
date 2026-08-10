@@ -123,7 +123,7 @@ export const ExhibitionFormModal: React.FC<ExhibitionFormModalProps> = ({
             <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
               {exhibitionToEdit ? 'Edit Edition' : 'New Exhibition'}
             </span>
-            <h3 className="font-serif text-2xl font-bold text-charcoal">
+            <h3 className="font-sans text-2xl font-extrabold text-charcoal tracking-tight">
               {exhibitionToEdit ? 'Update Exhibition Details' : 'Create Exhibition Edition'}
             </h3>
           </div>

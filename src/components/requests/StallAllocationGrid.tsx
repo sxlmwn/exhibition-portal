@@ -83,7 +83,7 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
             <select
               value={currentExhibition.id}
               onChange={(e) => onSelectExhibition(e.target.value)}
-              className="font-serif text-xl sm:text-2xl font-bold text-charcoal bg-transparent border-b-2 border-sage-300 focus:border-sage-700 outline-none pb-0.5 cursor-pointer"
+              className="font-sans text-xl sm:text-2xl font-extrabold text-charcoal bg-transparent border-b-2 border-sage-300 focus:border-sage-700 outline-none pb-0.5 cursor-pointer tracking-tight"
             >
               {exhibitions.map((exh) => (
                 <option key={exh.id} value={exh.id} className="text-sm font-sans">
@@ -151,7 +151,7 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
                         : `${getTierColor(stall.tier)} hover:border-sage-600 hover:scale-[1.02]`
                     }`}
                   >
-                    <span className={`text-xs font-bold font-serif ${isSelected ? 'text-white' : 'text-charcoal'}`}>
+                    <span className={`text-xs font-extrabold font-sans ${isSelected ? 'text-white' : 'text-charcoal'}`}>
                       {stall.code}
                     </span>
                     <span className={`text-[9px] uppercase tracking-tighter mt-1 ${isSelected ? 'text-cream-100' : 'text-charcoal-muted'}`}>
@@ -203,7 +203,7 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
                         : `${getTierColor(stall.tier)} hover:border-sage-600 hover:scale-[1.02]`
                     }`}
                   >
-                    <span className={`text-xs font-bold font-serif ${isSelected ? 'text-white' : 'text-charcoal'}`}>
+                    <span className={`text-xs font-extrabold font-sans ${isSelected ? 'text-white' : 'text-charcoal'}`}>
                       {stall.code}
                     </span>
                     <span className={`text-[9px] uppercase tracking-tighter mt-1 ${isSelected ? 'text-cream-100' : 'text-charcoal-muted'}`}>
@@ -248,7 +248,7 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
                         : `${getTierColor(stall.tier)} hover:border-sage-600 hover:scale-[1.02]`
                     }`}
                   >
-                    <span className={`text-xs font-bold font-serif ${isSelected ? 'text-white' : 'text-charcoal'}`}>
+                    <span className={`text-xs font-extrabold font-sans ${isSelected ? 'text-white' : 'text-charcoal'}`}>
                       {stall.code}
                     </span>
                     <span className={`text-[9px] uppercase tracking-tighter mt-1 ${isSelected ? 'text-cream-100' : 'text-charcoal-muted'}`}>
@@ -291,7 +291,7 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
                   <span className="text-[11px] uppercase tracking-wider font-semibold text-sage-800 block">
                     Slot Inspector
                   </span>
-                  <h3 className="font-serif text-3xl font-bold text-charcoal">
+                  <h3 className="font-sans text-3xl font-extrabold text-charcoal tracking-tight">
                     Stall {selectedStall.code}
                   </h3>
                 </div>
@@ -308,7 +308,7 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
                 </div>
                 <div className="flex justify-between py-1.5 border-b border-sage-100">
                   <span className="text-charcoal-muted">Standard Tariff:</span>
-                  <span className="font-serif text-base font-bold text-sage-deep">
+                  <span className="font-sans text-base font-extrabold text-sage-deep">
                     Rs. {selectedStall.price.toLocaleString()}
                   </span>
                 </div>
@@ -326,7 +326,7 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
                   <span className="text-[10px] uppercase tracking-wider font-bold text-sage-800 block mb-1">
                     Allocated Brand
                   </span>
-                  <h4 className="font-serif text-lg font-bold text-charcoal">
+                  <h4 className="font-sans text-lg font-bold text-charcoal tracking-tight">
                     {selectedStall.assignedBrandName}
                   </h4>
                   <p className="text-xs text-charcoal-muted font-light mt-0.5">
@@ -382,7 +382,7 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
           ) : (
             <div className="py-12 text-center text-charcoal-muted">
               <Store className="w-10 h-10 text-sage-400 mx-auto mb-3" />
-              <h4 className="font-serif text-lg font-semibold text-charcoal mb-1">
+              <h4 className="font-sans text-lg font-bold text-charcoal mb-1 tracking-tight">
                 Select a Stall
               </h4>
               <p className="text-xs font-light max-w-xs mx-auto">

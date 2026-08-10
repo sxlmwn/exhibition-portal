@@ -69,10 +69,10 @@ export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
                 {exhibition.city}
               </span>
             </div>
-            <h2 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight">
+            <h2 className="font-sans text-2xl sm:text-3xl font-extrabold tracking-tight">
               {exhibition.title}
             </h2>
-            <p className="text-xs sm:text-sm text-cream-100 font-light mt-1 max-w-2xl">
+            <p className="text-xs sm:text-sm text-cream-100 font-normal mt-1 max-w-2xl">
               {exhibition.tagline}
             </p>
           </div>
@@ -89,7 +89,7 @@ export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
                 <Store className="w-4 h-4 text-sage-700" />
                 <span>Stall Fill Rate</span>
               </div>
-              <span className="font-serif text-3xl font-bold text-charcoal">
+              <span className="font-sans text-3xl font-extrabold text-charcoal tracking-tight">
                 {exhibition.bookedStallsCount} / {exhibition.totalStallCapacity}
               </span>
               <div className="w-full h-2 bg-cream-200 rounded-full overflow-hidden mt-3">
@@ -108,7 +108,7 @@ export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
                 <TrendingUp className="w-4 h-4 text-sage-700" />
                 <span>Stall Revenue</span>
               </div>
-              <span className="font-serif text-3xl font-bold text-sage-deep">
+              <span className="font-sans text-3xl font-extrabold text-sage-deep tracking-tight">
                 Rs. {(exhibition.stallRevenueBooked / 100000).toFixed(1)}L
               </span>
               <span className="text-[11px] text-charcoal-muted mt-3 block">
@@ -121,7 +121,7 @@ export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
                 <Receipt className="w-4 h-4 text-sage-700" />
                 <span>Net Financial Snapshot</span>
               </div>
-              <span className={`font-serif text-3xl font-bold ${netMargin >= 0 ? 'text-emerald-800' : 'text-rose-800'}`}>
+              <span className={`font-sans text-3xl font-extrabold tracking-tight ${netMargin >= 0 ? 'text-emerald-800' : 'text-rose-800'}`}>
                 Rs. {(netMargin / 100000).toFixed(1)}L
               </span>
               <span className="text-[11px] text-charcoal-muted mt-3 block">
@@ -133,10 +133,10 @@ export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
 
           {/* Description & Logistics */}
           <div>
-            <h4 className="font-serif text-lg font-semibold text-charcoal mb-2">
+            <h4 className="font-sans text-lg font-bold text-charcoal mb-2 tracking-tight">
               Logistics & Event Brief
             </h4>
-            <p className="text-xs sm:text-sm text-charcoal-muted font-light leading-relaxed p-4 rounded-2xl bg-white border border-sage-100">
+            <p className="text-xs sm:text-sm text-charcoal-muted font-normal leading-relaxed p-4 rounded-2xl bg-white border border-sage-100">
               {exhibition.description}
             </p>
           </div>
@@ -144,7 +144,7 @@ export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
           {/* Linked Vendor Requests */}
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h4 className="font-serif text-lg font-semibold text-charcoal flex items-center gap-2">
+              <h4 className="font-sans text-lg font-bold text-charcoal flex items-center gap-2 tracking-tight">
                 <Users className="w-4 h-4 text-sage-700" />
                 <span>Linked Vendor Requests ({linkedRequests.length})</span>
               </h4>
@@ -179,7 +179,7 @@ export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
                         {req.status}
                       </span>
                       {req.allocatedStallCode && (
-                        <span className="block text-[11px] font-serif font-bold text-sage-deep mt-1">
+                        <span className="block text-[11px] font-sans font-extrabold text-sage-deep mt-1">
                           Slot {req.allocatedStallCode}
                         </span>
                       )}

@@ -93,7 +93,7 @@ export default function FinancePage() {
           <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
             Financial Ledger
           </span>
-          <h2 className="font-serif text-3xl font-bold text-charcoal">
+          <h2 className="font-sans text-3xl font-extrabold text-charcoal tracking-tight">
             Finance & Cost Management
           </h2>
         </div>
@@ -129,11 +129,11 @@ export default function FinancePage() {
             <select
               value={selectedExhibitionId}
               onChange={(e) => setSelectedExhibitionId(e.target.value)}
-              className="font-serif text-xl sm:text-2xl font-bold text-charcoal bg-transparent border-b-2 border-sage-300 focus:border-sage-700 outline-none pb-0.5 cursor-pointer"
+              className="font-sans text-xl sm:text-2xl font-extrabold text-charcoal bg-transparent border-b-2 border-sage-300 focus:border-sage-700 outline-none pb-0.5 cursor-pointer tracking-tight"
             >
               <option value="All">All Editions Consolidated</option>
               {exhibitions.map((exh) => (
-                <option key={exh.id} value={exh.id} className="text-sm font-sans">
+                <option key={exh.id} value={exh.id} className="text-sm font-sans font-bold">
                   {exh.title} ({exh.city})
                 </option>
               ))}
@@ -141,7 +141,7 @@ export default function FinancePage() {
           </div>
 
           {currentRole === 'staff' && (
-            <div className="flex items-center gap-2 text-xs bg-amber-50 text-amber-900 border border-amber-200 px-3.5 py-1.5 rounded-full">
+            <div className="flex items-center gap-2 text-xs bg-amber-50 text-amber-900 border border-amber-200 px-3.5 py-1.5 rounded-full font-semibold">
               <AlertCircle className="w-4 h-4 text-amber-600" />
               <span>Staff Mode: Logged expenses require Owner/Admin approval.</span>
             </div>
@@ -152,52 +152,52 @@ export default function FinancePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-6">
           
           <div className="p-4 rounded-2xl bg-white/70 border border-sage-100">
-            <span className="text-[11px] text-charcoal-muted uppercase tracking-wider block mb-1">
+            <span className="text-[11px] text-charcoal-muted uppercase tracking-wider block mb-1 font-bold">
               Allocated Budget / Funding
             </span>
-            <span className="font-serif text-2xl sm:text-3xl font-bold text-charcoal">
+            <span className="font-sans text-2xl sm:text-3xl font-extrabold text-charcoal tracking-tight">
               Rs. {(totalAllocated / 100000).toFixed(1)}L
             </span>
-            <span className="text-[11px] text-charcoal-muted block mt-1 font-light">
+            <span className="text-[11px] text-charcoal-muted block mt-1 font-normal">
               Approved sponsor/organizer capital
             </span>
           </div>
 
           <div className="p-4 rounded-2xl bg-white/70 border border-sage-100">
-            <span className="text-[11px] text-charcoal-muted uppercase tracking-wider block mb-1">
+            <span className="text-[11px] text-charcoal-muted uppercase tracking-wider block mb-1 font-bold">
               Total Approved Spent
             </span>
-            <span className="font-serif text-2xl sm:text-3xl font-bold text-rose-900">
+            <span className="font-sans text-2xl sm:text-3xl font-extrabold text-rose-900 tracking-tight">
               Rs. {(totalSpent / 100000).toFixed(1)}L
             </span>
             <div className="w-full h-1.5 bg-cream-200 rounded-full overflow-hidden mt-2">
               <div className="h-full bg-rose-600 rounded-full" style={{ width: `${Math.min(100, spendPct)}%` }} />
             </div>
-            <span className="text-[10px] text-charcoal-muted block mt-1">
+            <span className="text-[10px] text-charcoal-muted block mt-1 font-semibold">
               {spendPct}% of allocated budget utilized
             </span>
           </div>
 
           <div className="p-4 rounded-2xl bg-white/70 border border-sage-100">
-            <span className="text-[11px] text-charcoal-muted uppercase tracking-wider block mb-1">
+            <span className="text-[11px] text-charcoal-muted uppercase tracking-wider block mb-1 font-bold">
               Remaining Budget
             </span>
-            <span className={`font-serif text-2xl sm:text-3xl font-bold ${remainingBudget >= 0 ? 'text-emerald-800' : 'text-rose-700'}`}>
+            <span className={`font-sans text-2xl sm:text-3xl font-extrabold tracking-tight ${remainingBudget >= 0 ? 'text-emerald-800' : 'text-rose-700'}`}>
               Rs. {(remainingBudget / 100000).toFixed(1)}L
             </span>
-            <span className="text-[11px] text-charcoal-muted block mt-1 font-light">
+            <span className="text-[11px] text-charcoal-muted block mt-1 font-normal">
               Liquidity buffer remaining
             </span>
           </div>
 
           <div className="p-4 rounded-2xl bg-sage-50/80 border border-sage-200">
-            <span className="text-[11px] text-sage-900 uppercase tracking-wider font-semibold block mb-1">
+            <span className="text-[11px] text-sage-900 uppercase tracking-wider font-bold block mb-1">
               Stall Revenue Booked
             </span>
-            <span className="font-serif text-2xl sm:text-3xl font-bold text-sage-deep">
+            <span className="font-sans text-2xl sm:text-3xl font-extrabold text-sage-deep tracking-tight">
               Rs. {(stallRevenue / 100000).toFixed(1)}L
             </span>
-            <span className="text-[11px] text-sage-800 block mt-1 font-medium">
+            <span className="text-[11px] text-sage-800 block mt-1 font-semibold">
               Net Surplus: Rs. {((stallRevenue - totalSpent) / 100000).toFixed(1)}L
             </span>
           </div>
@@ -274,7 +274,7 @@ export default function FinancePage() {
                   </td>
 
                   {/* Amount */}
-                  <td className="py-4 px-4 font-serif text-sm font-bold text-charcoal">
+                  <td className="py-4 px-4 font-sans text-sm font-extrabold text-charcoal">
                     Rs. {exp.amount.toLocaleString()}
                   </td>
 

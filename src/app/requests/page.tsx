@@ -71,7 +71,7 @@ export default function VendorRequestsPage() {
           <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
             Exhibitor Onboarding
           </span>
-          <h2 className="font-serif text-3xl font-bold text-charcoal">
+          <h2 className="font-sans text-3xl font-extrabold text-charcoal tracking-tight">
             Vendor Requests & Floor Plan Allocation
           </h2>
         </div>
@@ -176,10 +176,10 @@ export default function VendorRequestsPage() {
                       
                       {/* Brand & Vendor */}
                       <td className="py-4 px-5">
-                        <span className="font-serif font-bold text-sm text-charcoal block">
+                        <span className="font-sans font-bold text-sm text-charcoal block tracking-tight">
                           {req.brandName}
                         </span>
-                        <span className="text-charcoal-muted text-[11px] font-light">
+                        <span className="text-charcoal-muted text-[11px] font-normal">
                           {req.vendorName}
                         </span>
                         {req.notes && (

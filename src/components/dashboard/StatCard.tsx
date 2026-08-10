@@ -32,11 +32,11 @@ export const StatCard: React.FC<StatCardProps> = ({
           <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
             {title}
           </span>
-          <h3 className="font-serif text-3xl sm:text-4xl font-bold text-charcoal tracking-tight">
+          <h3 className="font-sans text-3xl sm:text-4xl font-extrabold text-charcoal tracking-tight">
             {value}
           </h3>
           {subvalue && (
-            <p className="text-xs text-charcoal-muted mt-1 font-light">
+            <p className="text-xs text-charcoal-muted mt-1 font-normal">
               {subvalue}
             </p>
           )}
