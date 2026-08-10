@@ -1,0 +1,225 @@
+'use client';
+
+import React from 'react';
+import Link from 'next/link';
+import { 
+  X, 
+  CalendarDays, 
+  MapPin, 
+  Store, 
+  Receipt, 
+  TrendingUp, 
+  Users, 
+  ArrowRight,
+  Sparkles,
+  CheckCircle2,
+  Clock
+} from 'lucide-react';
+import { Exhibition } from '../../types';
+import { useAdmin } from '../../context/AdminContext';
+
+interface ExhibitionDetailModalProps {
+  exhibition: Exhibition | null;
+  onClose: () => void;
+}
+
+export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
+  exhibition,
+  onClose
+}) => {
+  const { vendorRequests, stalls } = useAdmin();
+
+  if (!exhibition) return null;
+
+  const linkedRequests = vendorRequests.filter(r => r.exhibitionId === exhibition.id);
+  const exhibitionStalls = stalls.filter(s => s.exhibitionId === exhibition.id);
+  const availableStalls = exhibitionStalls.filter(s => s.status === 'available');
+
+  const fillPct = Math.round((exhibition.bookedStallsCount / exhibition.totalStallCapacity) * 100);
+  const netMargin = exhibition.stallRevenueBooked - exhibition.totalExpensesLogged;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal/50 backdrop-blur-sm animate-fadeIn">
+      <div className="bg-white rounded-4xl shadow-soft-2xl border border-sage-200 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+        
+        {/* Visual Cover Banner */}
+        <div className="relative h-64 overflow-hidden bg-sage-900 rounded-t-4xl">
+          <img
+            src={exhibition.coverImage}
+            alt={exhibition.title}
+            className="w-full h-full object-cover opacity-75"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-charcoal/95 via-sage-950/60 to-charcoal/30" />
+
+          {/* Close button */}
+          <button
+            onClick={onClose}
+            className="absolute top-5 right-5 p-2.5 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md text-white transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+
+          {/* Overlaid Title & Meta */}
+          <div className="absolute bottom-6 left-6 right-6 text-white">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="bg-cream-50/90 text-sage-900 text-[11px] font-bold uppercase tracking-wider px-3.5 py-1 rounded-full shadow-xs">
+                {exhibition.category}
+              </span>
+              <span className="bg-white/20 backdrop-blur-md text-white text-[11px] font-medium tracking-wider px-3 py-1 rounded-full">
+                {exhibition.city}
+              </span>
+            </div>
+            <h2 className="font-serif text-2xl sm:text-3xl font-bold tracking-tight">
+              {exhibition.title}
+            </h2>
+            <p className="text-xs sm:text-sm text-cream-100 font-light mt-1 max-w-2xl">
+              {exhibition.tagline}
+            </p>
+          </div>
+        </div>
+
+        {/* Modal Content */}
+        <div className="p-6 sm:p-8 space-y-8">
+          
+          {/* Key Metrics Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            
+            <div className="p-5 rounded-3xl bg-cream-50 border border-sage-200/70">
+              <div className="flex items-center gap-2 text-xs font-semibold text-sage-800 uppercase tracking-wider mb-2">
+                <Store className="w-4 h-4 text-sage-700" />
+                <span>Stall Fill Rate</span>
+              </div>
+              <span className="font-serif text-3xl font-bold text-charcoal">
+                {exhibition.bookedStallsCount} / {exhibition.totalStallCapacity}
+              </span>
+              <div className="w-full h-2 bg-cream-200 rounded-full overflow-hidden mt-3">
+                <div
+                  className="h-full bg-sage-600 rounded-full"
+                  style={{ width: `${fillPct}%` }}
+                />
+              </div>
+              <span className="text-[11px] text-charcoal-muted mt-1.5 block">
+                {availableStalls.length > 0 ? `${availableStalls.length} stalls open for allocation` : 'All allocated'}
+              </span>
+            </div>
+
+            <div className="p-5 rounded-3xl bg-cream-50 border border-sage-200/70">
+              <div className="flex items-center gap-2 text-xs font-semibold text-sage-800 uppercase tracking-wider mb-2">
+                <TrendingUp className="w-4 h-4 text-sage-700" />
+                <span>Stall Revenue</span>
+              </div>
+              <span className="font-serif text-3xl font-bold text-sage-deep">
+                Rs. {(exhibition.stallRevenueBooked / 100000).toFixed(1)}L
+              </span>
+              <span className="text-[11px] text-charcoal-muted mt-3 block">
+                Targeted: Rs. {((exhibition.totalStallCapacity * 85000) / 100000).toFixed(1)}L
+              </span>
+            </div>
+
+            <div className="p-5 rounded-3xl bg-cream-50 border border-sage-200/70">
+              <div className="flex items-center gap-2 text-xs font-semibold text-sage-800 uppercase tracking-wider mb-2">
+                <Receipt className="w-4 h-4 text-sage-700" />
+                <span>Net Financial Snapshot</span>
+              </div>
+              <span className={`font-serif text-3xl font-bold ${netMargin >= 0 ? 'text-emerald-800' : 'text-rose-800'}`}>
+                Rs. {(netMargin / 100000).toFixed(1)}L
+              </span>
+              <span className="text-[11px] text-charcoal-muted mt-3 block">
+                Logged Costs: Rs. {(exhibition.totalExpensesLogged / 100000).toFixed(1)}L
+              </span>
+            </div>
+
+          </div>
+
+          {/* Description & Logistics */}
+          <div>
+            <h4 className="font-serif text-lg font-semibold text-charcoal mb-2">
+              Logistics & Event Brief
+            </h4>
+            <p className="text-xs sm:text-sm text-charcoal-muted font-light leading-relaxed p-4 rounded-2xl bg-white border border-sage-100">
+              {exhibition.description}
+            </p>
+          </div>
+
+          {/* Linked Vendor Requests */}
+          <div>
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="font-serif text-lg font-semibold text-charcoal flex items-center gap-2">
+                <Users className="w-4 h-4 text-sage-700" />
+                <span>Linked Vendor Requests ({linkedRequests.length})</span>
+              </h4>
+              <Link
+                href="/requests"
+                onClick={onClose}
+                className="text-xs font-semibold text-sage-800 hover:underline flex items-center gap-1"
+              >
+                <span>Interactive Floor Plan</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
+            {linkedRequests.length > 0 ? (
+              <div className="space-y-2.5">
+                {linkedRequests.map((req) => (
+                  <div
+                    key={req.id}
+                    className="p-3.5 rounded-2xl bg-cream-50/70 border border-sage-200/60 flex items-center justify-between text-xs"
+                  >
+                    <div>
+                      <span className="font-bold text-charcoal">{req.brandName}</span>
+                      <span className="text-charcoal-muted ml-2">({req.vendorName} &bull; {req.phone})</span>
+                      <span className="block text-[11px] text-sage-800 mt-0.5">{req.productCategory}</span>
+                    </div>
+                    <div className="text-right">
+                      <span className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${
+                        req.status === 'approved' 
+                          ? 'bg-emerald-100 text-emerald-900 border-emerald-300' 
+                          : 'bg-amber-100 text-amber-900 border-amber-300'
+                      }`}>
+                        {req.status}
+                      </span>
+                      {req.allocatedStallCode && (
+                        <span className="block text-[11px] font-serif font-bold text-sage-deep mt-1">
+                          Slot {req.allocatedStallCode}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-6 rounded-2xl bg-cream-50 text-center text-xs text-charcoal-muted">
+                No vendor requests logged specifically for this edition yet.
+              </div>
+            )}
+          </div>
+
+          {/* Bottom Action Footer */}
+          <div className="pt-4 border-t border-sage-100 flex items-center justify-between">
+            <span className="text-xs text-charcoal-muted">
+              Venue: <strong>{exhibition.venue}</strong>
+            </span>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={onClose}
+                className="px-6 py-3 rounded-full border border-sage-300 text-charcoal hover:bg-cream-100 text-xs font-semibold uppercase tracking-wider"
+              >
+                Close
+              </button>
+              <Link
+                href="/requests"
+                onClick={onClose}
+                className="btn-primary px-7 py-3 text-xs font-semibold uppercase tracking-wider flex items-center gap-2"
+              >
+                <span>Allocate Stalls Now</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  );
+};

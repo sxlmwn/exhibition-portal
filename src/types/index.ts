@@ -1,0 +1,171 @@
+export type UserRole = 'owner' | 'admin' | 'staff';
+
+export interface StaffUser {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  avatar: string;
+  phone: string;
+  status: 'active' | 'inactive';
+  joinedDate: string;
+  lastActive: string;
+  permissions: {
+    canManageExhibitions: boolean;
+    canApproveRequests: boolean;
+    canAllocateStalls: boolean;
+    canApproveExpenses: boolean;
+    canDeleteRecords: boolean;
+    canSendBulkMessages: boolean;
+  };
+}
+
+export type ExhibitionStatus = 'upcoming' | 'ongoing' | 'completed';
+
+export interface Exhibition {
+  id: string;
+  title: string;
+  tagline: string;
+  city: string;
+  venue: string;
+  startDate: string;
+  endDate: string;
+  status: ExhibitionStatus;
+  category: string;
+  coverImage: string;
+  totalStallCapacity: number;
+  bookedStallsCount: number;
+  budgetAllocated: number; // Funding received / Allocated budget in PKR
+  stallRevenueBooked: number;
+  totalExpensesLogged: number;
+  description: string;
+  daysLeft?: number;
+}
+
+export type StallTier = 'small' | 'medium' | 'premium' | 'corner';
+
+export interface StallSlot {
+  id: string;
+  code: string;
+  exhibitionId: string;
+  tier: StallTier;
+  tierName: string;
+  dimensions: string;
+  price: number;
+  status: 'available' | 'booked' | 'reserved';
+  assignedVendorId?: string;
+  assignedVendorName?: string;
+  assignedBrandName?: string;
+  assignedAt?: string;
+  row: string;
+}
+
+export type RequestStatus = 'pending' | 'approved' | 'rejected' | 'waitlisted';
+
+export interface VendorRequest {
+  id: string;
+  vendorName: string;
+  brandName: string;
+  email: string;
+  phone: string;
+  exhibitionId: string;
+  exhibitionName: string;
+  stallsWanted: number;
+  stallTierPreference: StallTier;
+  preferredStallCode?: string;
+  allocatedStallCode?: string;
+  productCategory: string;
+  budgetRange: string;
+  notes: string;
+  submittedDate: string;
+  status: RequestStatus;
+  reviewedBy?: string;
+  reviewedAt?: string;
+}
+
+export interface CRMContact {
+  id: string;
+  name: string;
+  businessName: string;
+  phone: string;
+  email: string;
+  category: string;
+  tags: string[]; // e.g. ['Lahore 2026', 'Booked', 'Apparel', 'High Value', 'Referral']
+  exhibitionIds: string[];
+  status: 'booked' | 'enquired' | 'waitlisted' | 'past-client' | 'referral';
+  totalSpend: number;
+  lastActivityDate: string;
+  notes: string;
+  assignedStallCodes?: string[];
+}
+
+export type ExpenseCategory = 
+  | 'Venue Rent' 
+  | 'Marketing & Ads' 
+  | 'Staff & Labour' 
+  | 'Logistics & Freight' 
+  | 'Setup, Decor & Lighting' 
+  | 'Security & Protocol' 
+  | 'Refreshments' 
+  | 'Miscellaneous';
+
+export type ExpenseStatus = 'pending_approval' | 'approved' | 'rejected';
+
+export interface ExpenseItem {
+  id: string;
+  exhibitionId: string;
+  exhibitionName: string;
+  category: ExpenseCategory;
+  amount: number;
+  date: string;
+  description: string;
+  receiptUrl?: string;
+  enteredById: string;
+  enteredByName: string;
+  enteredByRole: UserRole;
+  status: ExpenseStatus;
+  approvedBy?: string;
+  paymentMethod: 'Cash' | 'Bank Transfer' | 'Cheque' | 'Card';
+}
+
+export interface MarketingCampaign {
+  id: string;
+  title: string;
+  platform: 'Instagram' | 'TikTok' | 'Meta Ads' | 'Google Search' | 'Influencer PR' | 'Outdoor Billboard';
+  amountSpent: number;
+  runDuration: string;
+  startDate: string;
+  endDate: string;
+  linkedExhibitionId: string;
+  linkedExhibitionName: string;
+  leadsGenerated: number;
+  reachImpressions: string;
+  notes: string;
+  status: 'active' | 'completed' | 'scheduled';
+}
+
+export interface PastEventStory {
+  id: string;
+  title: string;
+  edition: string;
+  city: string;
+  dateRange: string;
+  footfallNumber: number;
+  vendorCount: number;
+  totalRevenueGMV: string;
+  satisfactionRate: string;
+  narrativeExcerpt: string;
+  coverImage: string;
+  photos: string[];
+  tags: string[];
+}
+
+export interface AgencySettings {
+  agencyName: string;
+  tagline: string;
+  supportEmail: string;
+  coordinatorWhatsApp: string;
+  headquartersAddress: string;
+  currency: string;
+  logoUrl?: string;
+}

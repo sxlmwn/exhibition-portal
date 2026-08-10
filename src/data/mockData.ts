@@ -1,0 +1,573 @@
+import { 
+  StaffUser, 
+  Exhibition, 
+  StallSlot, 
+  VendorRequest, 
+  CRMContact, 
+  ExpenseItem, 
+  MarketingCampaign, 
+  PastEventStory, 
+  AgencySettings 
+} from '../types';
+
+export const INITIAL_STAFF_USERS: StaffUser[] = [
+  {
+    id: 'usr-1',
+    name: 'Salman Younus',
+    email: 'salman@exhibitionagency.com',
+    role: 'owner',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200',
+    phone: '+92 300 123 4567',
+    status: 'active',
+    joinedDate: 'Jan 2019',
+    lastActive: 'Just now',
+    permissions: {
+      canManageExhibitions: true,
+      canApproveRequests: true,
+      canAllocateStalls: true,
+      canApproveExpenses: true,
+      canDeleteRecords: true,
+      canSendBulkMessages: true,
+    }
+  },
+  {
+    id: 'usr-2',
+    name: 'Ayla Siddiqui',
+    email: 'ayla.curation@exhibitionagency.com',
+    role: 'admin',
+    avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=200',
+    phone: '+92 321 987 6543',
+    status: 'active',
+    joinedDate: 'Mar 2021',
+    lastActive: '20 mins ago',
+    permissions: {
+      canManageExhibitions: true,
+      canApproveRequests: true,
+      canAllocateStalls: true,
+      canApproveExpenses: true,
+      canDeleteRecords: false,
+      canSendBulkMessages: true,
+    }
+  },
+  {
+    id: 'usr-3',
+    name: 'Hamza Tariq',
+    email: 'hamza.ops@exhibitionagency.com',
+    role: 'staff',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200',
+    phone: '+92 333 456 7890',
+    status: 'active',
+    joinedDate: 'Feb 2023',
+    lastActive: '2 hours ago',
+    permissions: {
+      canManageExhibitions: false,
+      canApproveRequests: false,
+      canAllocateStalls: true,
+      canApproveExpenses: false,
+      canDeleteRecords: false,
+      canSendBulkMessages: false,
+    }
+  }
+];
+
+export const INITIAL_EXHIBITIONS: Exhibition[] = [
+  {
+    id: 'exh-1',
+    title: 'Spring Artisan Showcase 2026',
+    tagline: 'Premier collective of studio pottery, sustainable apparel, and indie jewelry.',
+    city: 'Lahore',
+    venue: 'Grand Expo Center, Hall 1',
+    startDate: '2026-03-28',
+    endDate: '2026-03-30',
+    status: 'upcoming',
+    category: 'Lifestyle & Artisan Craft',
+    coverImage: '/images/More Stalls Added.png',
+    totalStallCapacity: 50,
+    bookedStallsCount: 38,
+    budgetAllocated: 3200000, // PKR 3.2M
+    stallRevenueBooked: 3450000,
+    totalExpensesLogged: 2180000,
+    description: 'Our flagship 3-day spring edition gathering Pakistan\'s leading independent design houses and studio pottery masters. Central air-conditioned grand pavilion with live acoustic lounge.',
+    daysLeft: 18
+  },
+  {
+    id: 'exh-2',
+    title: 'Summer Living & Design Conclave',
+    tagline: 'Showcasing contemporary home accents, organic apothecary, and bespoke furnishings.',
+    city: 'Islamabad',
+    venue: 'Pak-China Friendship Centre',
+    startDate: '2026-05-15',
+    endDate: '2026-05-17',
+    status: 'upcoming',
+    category: 'Home, Decor & Wellness',
+    coverImage: '/images/Exhibition Agency BG.png',
+    totalStallCapacity: 40,
+    bookedStallsCount: 22,
+    budgetAllocated: 2800000,
+    stallRevenueBooked: 1890000,
+    totalExpensesLogged: 1250000,
+    description: 'High-intent diplomatic and architectural audience in the federal capital. Emphasizing eco-conscious craftsmanship, organic skincare, and lighting design.',
+    daysLeft: 65
+  },
+  {
+    id: 'exh-3',
+    title: 'Autumn Couture & Heritage Fair',
+    tagline: 'High-end festive jewelry, pret-a-porter, and heritage bridal textiles.',
+    city: 'Karachi',
+    venue: 'Karachi Expo Convention Hall 4',
+    startDate: '2026-08-22',
+    endDate: '2026-08-24',
+    status: 'upcoming',
+    category: 'Haute Couture & Fine Jewelry',
+    coverImage: '/images/More Stalls Added.png',
+    totalStallCapacity: 35,
+    bookedStallsCount: 35,
+    budgetAllocated: 4500000,
+    stallRevenueBooked: 4620000,
+    totalExpensesLogged: 2900000,
+    description: 'Fully booked festive edition capturing prime bridal season shopping in Karachi. Features on-site vault security, VIP preview hours, and red-carpet staging.',
+    daysLeft: 164
+  },
+  {
+    id: 'exh-4',
+    title: 'Winter Artisan Gala 2025',
+    tagline: 'Celebrated winter edition with record-breaking urban visitor turnout.',
+    city: 'Lahore',
+    venue: 'Royal Palm Convention Marquee',
+    startDate: '2025-12-12',
+    endDate: '2025-12-14',
+    status: 'completed',
+    category: 'Artisan Craft & Fashion',
+    coverImage: '/images/Exhibition Agency BG.png',
+    totalStallCapacity: 60,
+    bookedStallsCount: 60,
+    budgetAllocated: 3800000,
+    stallRevenueBooked: 4950000,
+    totalExpensesLogged: 3410000,
+    description: 'Highly successful winter showcase with over 19,200 verified footfall visitors and Rs. 42M+ in direct vendor GMV transactions.',
+  }
+];
+
+export const INITIAL_STALLS: StallSlot[] = [
+  // Row A - Front Entrance Boulevard
+  { id: 'stl-1', code: 'A-01', exhibitionId: 'exh-1', tier: 'corner', tierName: 'Corner Boulevard', dimensions: '12x12 ft', price: 145000, status: 'booked', assignedVendorId: 'req-1', assignedVendorName: 'Zainab Chottani Pret', assignedBrandName: 'Zainab Studio', row: 'Row A' },
+  { id: 'stl-2', code: 'A-02', exhibitionId: 'exh-1', tier: 'medium', tierName: 'Medium Stall', dimensions: '9x9 ft', price: 78000, status: 'booked', assignedVendorId: 'req-2', assignedVendorName: 'Hamza Khan', assignedBrandName: 'Botanical Botanics', row: 'Row A' },
+  { id: 'stl-3', code: 'A-03', exhibitionId: 'exh-1', tier: 'medium', tierName: 'Medium Stall', dimensions: '9x9 ft', price: 78000, status: 'available', row: 'Row A' },
+  { id: 'stl-4', code: 'A-04', exhibitionId: 'exh-1', tier: 'small', tierName: 'Small Stall', dimensions: '6x6 ft', price: 45000, status: 'booked', assignedVendorId: 'req-3', assignedVendorName: 'Sana Malik', assignedBrandName: 'Amber Glow Skincare', row: 'Row A' },
+  { id: 'stl-5', code: 'A-05', exhibitionId: 'exh-1', tier: 'small', tierName: 'Small Stall', dimensions: '6x6 ft', price: 45000, status: 'available', row: 'Row A' },
+  { id: 'stl-6', code: 'A-06', exhibitionId: 'exh-1', tier: 'corner', tierName: 'Corner Boulevard', dimensions: '12x12 ft', price: 145000, status: 'available', row: 'Row A' },
+
+  // Row B - Central Promenade
+  { id: 'stl-7', code: 'B-01', exhibitionId: 'exh-1', tier: 'premium', tierName: 'Premium Stall', dimensions: '12x10 ft', price: 120000, status: 'booked', assignedVendorId: 'req-4', assignedVendorName: 'Bilal Ahmed', assignedBrandName: 'Heritage Weaves', row: 'Row B' },
+  { id: 'stl-8', code: 'B-02', exhibitionId: 'exh-1', tier: 'medium', tierName: 'Medium Stall', dimensions: '9x9 ft', price: 78000, status: 'available', row: 'Row B' },
+  { id: 'stl-9', code: 'B-03', exhibitionId: 'exh-1', tier: 'medium', tierName: 'Medium Stall', dimensions: '9x9 ft', price: 78000, status: 'booked', assignedVendorId: 'req-5', assignedVendorName: 'Ayla Siddiqui', assignedBrandName: 'Terra Clayworks', row: 'Row B' },
+  { id: 'stl-10', code: 'B-04', exhibitionId: 'exh-1', tier: 'small', tierName: 'Small Stall', dimensions: '6x6 ft', price: 45000, status: 'available', row: 'Row B' },
+  { id: 'stl-11', code: 'B-05', exhibitionId: 'exh-1', tier: 'medium', tierName: 'Medium Stall', dimensions: '9x9 ft', price: 78000, status: 'available', row: 'Row B' },
+  { id: 'stl-12', code: 'B-06', exhibitionId: 'exh-1', tier: 'premium', tierName: 'Premium Stall', dimensions: '12x10 ft', price: 120000, status: 'available', row: 'Row B' },
+
+  // Row C - South Lounge Adjacent
+  { id: 'stl-13', code: 'C-01', exhibitionId: 'exh-1', tier: 'corner', tierName: 'Corner Boulevard', dimensions: '12x12 ft', price: 145000, status: 'booked', assignedVendorId: 'req-6', assignedVendorName: 'Mariam Ali', assignedBrandName: 'Velvet Flora Decor', row: 'Row C' },
+  { id: 'stl-14', code: 'C-02', exhibitionId: 'exh-1', tier: 'small', tierName: 'Small Stall', dimensions: '6x6 ft', price: 45000, status: 'available', row: 'Row C' },
+  { id: 'stl-15', code: 'C-03', exhibitionId: 'exh-1', tier: 'small', tierName: 'Small Stall', dimensions: '6x6 ft', price: 45000, status: 'available', row: 'Row C' },
+  { id: 'stl-16', code: 'C-04', exhibitionId: 'exh-1', tier: 'medium', tierName: 'Medium Stall', dimensions: '9x9 ft', price: 78000, status: 'booked', assignedVendorId: 'req-7', assignedVendorName: 'Taimoor Shah', assignedBrandName: 'Pure Origins Honey', row: 'Row C' },
+  { id: 'stl-17', code: 'C-05', exhibitionId: 'exh-1', tier: 'medium', tierName: 'Medium Stall', dimensions: '9x9 ft', price: 78000, status: 'available', row: 'Row C' },
+  { id: 'stl-18', code: 'C-06', exhibitionId: 'exh-1', tier: 'corner', tierName: 'Corner Boulevard', dimensions: '12x12 ft', price: 145000, status: 'booked', assignedVendorId: 'req-8', assignedVendorName: 'Khurram Jamil', assignedBrandName: 'Artisan Goldsmiths', row: 'Row C' }
+];
+
+export const INITIAL_VENDOR_REQUESTS: VendorRequest[] = [
+  {
+    id: 'req-1',
+    vendorName: 'Zainab Chottani',
+    brandName: 'Zainab Studio',
+    email: 'zainab@chottanipret.com',
+    phone: '+92 300 827 4110',
+    exhibitionId: 'exh-1',
+    exhibitionName: 'Spring Artisan Showcase 2026',
+    stallsWanted: 1,
+    stallTierPreference: 'corner',
+    preferredStallCode: 'A-01',
+    allocatedStallCode: 'A-01',
+    productCategory: 'Haute Couture & Pret',
+    budgetRange: 'Rs. 120,000 – 160,000',
+    notes: 'Require additional 15A power socket for garment steamer and mannequin spotlights.',
+    submittedDate: '2026-03-01',
+    status: 'approved',
+    reviewedBy: 'Salman Younus',
+    reviewedAt: '2026-03-02'
+  },
+  {
+    id: 'req-2',
+    vendorName: 'Hamza Khan',
+    brandName: 'Botanical Botanics',
+    email: 'hamza@botanicals.pk',
+    phone: '+92 321 445 6789',
+    exhibitionId: 'exh-1',
+    exhibitionName: 'Spring Artisan Showcase 2026',
+    stallsWanted: 1,
+    stallTierPreference: 'medium',
+    preferredStallCode: 'A-02',
+    allocatedStallCode: 'A-02',
+    productCategory: 'Organic Skincare & Oils',
+    budgetRange: 'Rs. 75,000 – 100,000',
+    notes: 'Past exhibitor. Need draped shelving tables.',
+    submittedDate: '2026-03-03',
+    status: 'approved',
+    reviewedBy: 'Ayla Siddiqui',
+    reviewedAt: '2026-03-03'
+  },
+  {
+    id: 'req-9',
+    vendorName: 'Farhan Qureshi',
+    brandName: 'Cuir Leather Goods',
+    email: 'farhan@cuirgoods.com',
+    phone: '+92 333 555 1234',
+    exhibitionId: 'exh-1',
+    exhibitionName: 'Spring Artisan Showcase 2026',
+    stallsWanted: 1,
+    stallTierPreference: 'medium',
+    preferredStallCode: 'B-02',
+    productCategory: 'Footwear & Leather Goods',
+    budgetRange: 'Rs. 75,000 – 100,000',
+    notes: 'Handmade full-grain leather bags and boots. Portfolio at @cuirgoods.',
+    submittedDate: '2026-03-08',
+    status: 'pending'
+  },
+  {
+    id: 'req-10',
+    vendorName: 'Zoya Naveed',
+    brandName: 'Loom & Thread Studio',
+    email: 'zoya@loomthread.com',
+    phone: '+92 315 789 4321',
+    exhibitionId: 'exh-1',
+    exhibitionName: 'Spring Artisan Showcase 2026',
+    stallsWanted: 2,
+    stallTierPreference: 'premium',
+    preferredStallCode: 'B-06',
+    productCategory: 'Handwoven Shawls & Home Decor',
+    budgetRange: 'Rs. 200,000+',
+    notes: 'Requesting 2 adjoining stalls if possible for handloom demonstration.',
+    submittedDate: '2026-03-09',
+    status: 'pending'
+  },
+  {
+    id: 'req-11',
+    vendorName: 'Danyal Aslam',
+    brandName: 'Urban Resin & Wood',
+    email: 'danyal@resinwood.pk',
+    phone: '+92 345 678 9012',
+    exhibitionId: 'exh-1',
+    exhibitionName: 'Spring Artisan Showcase 2026',
+    stallsWanted: 1,
+    stallTierPreference: 'small',
+    preferredStallCode: 'A-05',
+    productCategory: 'Handmade Furniture Accents',
+    budgetRange: 'Rs. 45,000 – 60,000',
+    notes: 'Live epoxy coaster crafting.',
+    submittedDate: '2026-03-09',
+    status: 'waitlisted'
+  },
+  {
+    id: 'req-12',
+    vendorName: 'Mehak Baig',
+    brandName: 'Glow Drops Botanica',
+    email: 'mehak@glowdrops.com',
+    phone: '+92 301 234 5678',
+    exhibitionId: 'exh-2',
+    exhibitionName: 'Summer Living & Design Conclave',
+    stallsWanted: 1,
+    stallTierPreference: 'medium',
+    productCategory: 'Organic Beauty & Apothecary',
+    budgetRange: 'Rs. 75,000 – 100,000',
+    notes: 'Applying for Islamabad edition.',
+    submittedDate: '2026-03-07',
+    status: 'pending'
+  }
+];
+
+export const INITIAL_CRM_CONTACTS: CRMContact[] = [
+  {
+    id: 'cnt-1',
+    name: 'Zainab Chottani',
+    businessName: 'Zainab Studio',
+    phone: '+92 300 827 4110',
+    email: 'zainab@chottanipret.com',
+    category: 'Haute Couture',
+    tags: ['Lahore 2026', 'Booked', 'VIP Brand', 'Corner Slot'],
+    exhibitionIds: ['exh-1', 'exh-4'],
+    status: 'booked',
+    totalSpend: 290000,
+    lastActivityDate: '2026-03-02',
+    notes: 'Key anchor exhibitor. Preferred corner slot with prominent frontage.',
+    assignedStallCodes: ['A-01']
+  },
+  {
+    id: 'cnt-2',
+    name: 'Hamza Khan',
+    businessName: 'Botanical Botanics',
+    phone: '+92 321 445 6789',
+    email: 'hamza@botanicals.pk',
+    category: 'Organic Beauty',
+    tags: ['Lahore 2026', 'Islamabad 2026', 'Booked', 'Loyal Vendor'],
+    exhibitionIds: ['exh-1', 'exh-2', 'exh-4'],
+    status: 'booked',
+    totalSpend: 234000,
+    lastActivityDate: '2026-03-03',
+    notes: 'Attended past 4 editions consecutively. Always books Medium tier.',
+    assignedStallCodes: ['A-02']
+  },
+  {
+    id: 'cnt-3',
+    name: 'Ayla Siddiqui',
+    businessName: 'Terra Clayworks',
+    phone: '+92 302 112 3344',
+    email: 'ayla@terraclay.com',
+    category: 'Studio Ceramics',
+    tags: ['Lahore 2026', 'Booked', 'High Demand'],
+    exhibitionIds: ['exh-1', 'exh-4'],
+    status: 'booked',
+    totalSpend: 156000,
+    lastActivityDate: '2026-03-04',
+    notes: 'Studio ceramics from Lahore. Requires spotlighting.',
+    assignedStallCodes: ['B-03']
+  },
+  {
+    id: 'cnt-4',
+    name: 'Farhan Qureshi',
+    businessName: 'Cuir Leather Goods',
+    phone: '+92 333 555 1234',
+    email: 'farhan@cuirgoods.com',
+    category: 'Leather Goods',
+    tags: ['Lahore 2026', 'Enquiry', 'New Lead', 'Follow Up'],
+    exhibitionIds: ['exh-1'],
+    status: 'enquired',
+    totalSpend: 0,
+    lastActivityDate: '2026-03-08',
+    notes: 'Follow up on stall B-02 confirmation via WhatsApp.'
+  },
+  {
+    id: 'cnt-5',
+    name: 'Zoya Naveed',
+    businessName: 'Loom & Thread Studio',
+    phone: '+92 315 789 4321',
+    email: 'zoya@loomthread.com',
+    category: 'Textiles & Decor',
+    tags: ['Lahore 2026', 'High Value', 'Pending Approval'],
+    exhibitionIds: ['exh-1'],
+    status: 'enquired',
+    totalSpend: 0,
+    lastActivityDate: '2026-03-09',
+    notes: 'Interested in dual adjoining stalls.'
+  },
+  {
+    id: 'cnt-6',
+    name: 'Sana & Zoya',
+    businessName: 'Mira Pret & Luxury',
+    phone: '+92 300 999 8877',
+    email: 'info@mirapret.com',
+    category: 'Resort Wear',
+    tags: ['Karachi 2026', 'Past Client', 'Referral Source'],
+    exhibitionIds: ['exh-3', 'exh-4'],
+    status: 'past-client',
+    totalSpend: 310000,
+    lastActivityDate: '2026-02-20',
+    notes: 'Referred Cuir Leather Goods. Eligible for 10% credit discount.'
+  }
+];
+
+export const INITIAL_EXPENSES: ExpenseItem[] = [
+  {
+    id: 'exp-1',
+    exhibitionId: 'exh-1',
+    exhibitionName: 'Spring Artisan Showcase 2026',
+    category: 'Venue Rent',
+    amount: 1200000,
+    date: '2026-02-15',
+    description: 'Hall 1 50% advance venue booking deposit paid to Expo Centre management.',
+    receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400',
+    enteredById: 'usr-1',
+    enteredByName: 'Salman Younus',
+    enteredByRole: 'owner',
+    status: 'approved',
+    approvedBy: 'Salman Younus',
+    paymentMethod: 'Bank Transfer'
+  },
+  {
+    id: 'exp-2',
+    exhibitionId: 'exh-1',
+    exhibitionName: 'Spring Artisan Showcase 2026',
+    category: 'Marketing & Ads',
+    amount: 350000,
+    date: '2026-02-28',
+    description: 'Meta Ads & Instagram influencer preview reels campaign spend.',
+    receiptUrl: 'https://images.unsplash.com/photo-1554224154-26032ffc0d07?auto=format&fit=crop&q=80&w=400',
+    enteredById: 'usr-2',
+    enteredByName: 'Ayla Siddiqui',
+    enteredByRole: 'admin',
+    status: 'approved',
+    approvedBy: 'Salman Younus',
+    paymentMethod: 'Card'
+  },
+  {
+    id: 'exp-3',
+    exhibitionId: 'exh-1',
+    exhibitionName: 'Spring Artisan Showcase 2026',
+    category: 'Setup, Decor & Lighting',
+    amount: 480000,
+    date: '2026-03-05',
+    description: 'Custom wooden fascia board fabrication, track lights, and backdrop draping contractor invoice.',
+    receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400',
+    enteredById: 'usr-3',
+    enteredByName: 'Hamza Tariq',
+    enteredByRole: 'staff',
+    status: 'approved',
+    approvedBy: 'Salman Younus',
+    paymentMethod: 'Cheque'
+  },
+  {
+    id: 'exp-4',
+    exhibitionId: 'exh-1',
+    exhibitionName: 'Spring Artisan Showcase 2026',
+    category: 'Security & Protocol',
+    amount: 150000,
+    date: '2026-03-08',
+    description: 'On-site uniformed guards, walk-through metal detectors, and night patrol contract.',
+    receiptUrl: 'https://images.unsplash.com/photo-1554224154-26032ffc0d07?auto=format&fit=crop&q=80&w=400',
+    enteredById: 'usr-3',
+    enteredByName: 'Hamza Tariq',
+    enteredByRole: 'staff',
+    status: 'pending_approval',
+    paymentMethod: 'Cash'
+  },
+  {
+    id: 'exp-5',
+    exhibitionId: 'exh-2',
+    exhibitionName: 'Summer Living & Design Conclave',
+    category: 'Venue Rent',
+    amount: 850000,
+    date: '2026-03-01',
+    description: 'Pak-China Friendship Centre initial booking reservation fee.',
+    receiptUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&q=80&w=400',
+    enteredById: 'usr-1',
+    enteredByName: 'Salman Younus',
+    enteredByRole: 'owner',
+    status: 'approved',
+    approvedBy: 'Salman Younus',
+    paymentMethod: 'Bank Transfer'
+  }
+];
+
+export const INITIAL_CAMPAIGNS: MarketingCampaign[] = [
+  {
+    id: 'cmp-1',
+    title: 'Spring Showcase — Instagram Artisan Reels',
+    platform: 'Instagram',
+    amountSpent: 180000,
+    runDuration: '14 Days (Feb 20 – Mar 06)',
+    startDate: '2026-02-20',
+    endDate: '2026-03-06',
+    linkedExhibitionId: 'exh-1',
+    linkedExhibitionName: 'Spring Artisan Showcase 2026',
+    leadsGenerated: 34,
+    reachImpressions: '240,000 impressions',
+    notes: 'Short-form pottery & fashion aesthetic reels targeted at Lahore high-income zip codes.',
+    status: 'completed'
+  },
+  {
+    id: 'cmp-2',
+    title: 'TikTok Studio Creators Push',
+    platform: 'TikTok',
+    amountSpent: 95000,
+    runDuration: '10 Days (Mar 01 – Mar 10)',
+    startDate: '2026-03-01',
+    endDate: '2026-03-10',
+    linkedExhibitionId: 'exh-1',
+    linkedExhibitionName: 'Spring Artisan Showcase 2026',
+    leadsGenerated: 19,
+    reachImpressions: '380,000 video views',
+    notes: 'Engaged 6 micro-influencers for unboxing craft vendor previews.',
+    status: 'active'
+  },
+  {
+    id: 'cmp-3',
+    title: 'Islamabad Diplomatic & Architect Outreach',
+    platform: 'Meta Ads',
+    amountSpent: 120000,
+    runDuration: '21 Days (Mar 05 – Mar 26)',
+    startDate: '2026-03-05',
+    endDate: '2026-03-26',
+    linkedExhibitionId: 'exh-2',
+    linkedExhibitionName: 'Summer Living & Design Conclave',
+    leadsGenerated: 14,
+    reachImpressions: '110,000 reach',
+    notes: 'Lead capture forms for home decor studios and contemporary furniture brands.',
+    status: 'active'
+  }
+];
+
+export const INITIAL_PAST_EVENTS: PastEventStory[] = [
+  {
+    id: 'pst-1',
+    title: 'Winter Artisan Gala 2025',
+    edition: 'Edition 14',
+    city: 'Lahore',
+    dateRange: 'December 12 – 14, 2025',
+    footfallNumber: 19200,
+    vendorCount: 84,
+    totalRevenueGMV: 'Rs. 42M+',
+    satisfactionRate: '96%',
+    narrativeExcerpt: 'A 3-day showcase of artisan studios and culinary craft with record urban footfall.',
+    coverImage: '/images/Exhibition Agency BG.png',
+    photos: [
+      '/images/Exhibition Agency BG.png',
+      '/images/More Stalls Added.png',
+      '/images/Landing Hero _ Wide Group_ No Slate.png'
+    ],
+    tags: ['Artisan Craft', 'Winter Edition', 'Record Sales']
+  },
+  {
+    id: 'pst-2',
+    title: 'Sustainable Living Fair 2025',
+    edition: 'Edition 13',
+    city: 'Islamabad',
+    dateRange: 'October 18 – 20, 2025',
+    footfallNumber: 14800,
+    vendorCount: 65,
+    totalRevenueGMV: 'Rs. 28M+',
+    satisfactionRate: '98%',
+    narrativeExcerpt: 'Eco-conscious personal care, organic foods, and slow fashion in the capital.',
+    coverImage: '/images/More Stalls Added.png',
+    photos: [
+      '/images/More Stalls Added.png',
+      '/images/Exhibition Agency BG.png'
+    ],
+    tags: ['Eco-Living', 'Organic', 'Diplomatic Footfall']
+  },
+  {
+    id: 'pst-3',
+    title: 'Summer Solstice Lifestyle Conclave',
+    edition: 'Edition 12',
+    city: 'Karachi',
+    dateRange: 'June 06 – 08, 2025',
+    footfallNumber: 22400,
+    vendorCount: 90,
+    totalRevenueGMV: 'Rs. 51M+',
+    satisfactionRate: '94%',
+    narrativeExcerpt: 'Resort wear, contemporary decor, fine jewelry, and gourmet dining.',
+    coverImage: '/images/Landing Hero _ Wide Group_ No Slate.png',
+    photos: [
+      '/images/Landing Hero _ Wide Group_ No Slate.png',
+      '/images/Exhibition Agency BG.png'
+    ],
+    tags: ['Lifestyle', 'Resort Pret', 'Gourmet']
+  }
+];
+
+export const INITIAL_AGENCY_SETTINGS: AgencySettings = {
+  agencyName: 'Exhibition Management Agency',
+  tagline: 'Curated Spaces & Stall Booking Management',
+  supportEmail: 'curation@exhibitionagency.com',
+  coordinatorWhatsApp: '+92 300 123 4567',
+  headquartersAddress: 'Plaza 14, Main Boulevard, Gulberg III, Lahore',
+  currency: 'PKR (Rs.)',
+  logoUrl: '/images/Landing Hero _ Wide Group_ No Slate.png'
+};
