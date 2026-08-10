@@ -298,13 +298,13 @@ export default function CRMPage() {
                         {contact.tags.slice(0, 2).map((tag, idx) => (
                           <span
                             key={idx}
-                            className="text-[10px] bg-sage-50 text-sage-900 px-2 py-0.5 rounded border border-sage-200 font-medium"
+                            className="text-[10px] bg-sage-50 dark:bg-sage-800/30 text-sage-900 dark:text-sage-200 px-2 py-0.5 rounded border border-sage-200 dark:border-sage-700/50 font-medium"
                           >
                             {tag}
                           </span>
                         ))}
                         {contact.tags.length > 2 && (
-                          <span className="text-[10px] text-charcoal-muted font-semibold">
+                          <span className="text-[10px] text-charcoal-muted dark:text-white/50 font-semibold">
                             +{contact.tags.length - 2}
                           </span>
                         )}

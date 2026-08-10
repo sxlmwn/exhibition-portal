@@ -371,12 +371,26 @@
     border-bottom-color: rgba(255, 255, 255, 0.08) !important;
   }
 
-  /* Dark Modals - Neutral Black Container with Crisp Accents */
+  /* Dark Modals - Soft Glass Surface (not harsh black) */
   .dark .modal-glass-container {
-    background: rgba(15, 17, 21, 0.98) !important;
-    border-color: rgba(255, 255, 255, 0.12) !important;
-    box-shadow: 0 32px 80px -12px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 0, 0, 0.5) !important;
-    color: #F3F4F6 !important;
+    background: rgba(20, 23, 30, 0.97) !important;
+    border-color: rgba(255, 255, 255, 0.10) !important;
+    box-shadow: 0 32px 80px -12px rgba(0, 0, 0, 0.85), 0 0 30px rgba(0, 0, 0, 0.4) !important;
+    color: #E8EAE8 !important;
+  }
+
+  /* Body & paragraph text inside dark glass panels — lift from grey to readable near-white */
+  .dark .modal-glass-container p,
+  .dark .modal-glass-container span,
+  .dark .modal-glass-container li,
+  .dark .glass-card p,
+  .dark .glass-card span {
+    color: inherit;
+  }
+
+  /* Ensure descriptive body text (text-charcoal-muted) is comfortably legible in dark mode */
+  .dark .text-charcoal-muted {
+    color: #B0B9B0 !important;
   }
 
   .dark .glass-rise-row:hover {
@@ -485,5 +499,46 @@
   .dark .divide-sage-100 > :not([hidden]) ~ :not([hidden]),
   .dark .divide-sage-200 > :not([hidden]) ~ :not([hidden]) {
     border-color: rgba(255, 255, 255, 0.06) !important;
+  }
+
+  /* =========================================================================
+     DARK MODE TAG & BADGE FIXES
+     ========================================================================= */
+
+  /* CRM tag badges (bg-sage-50 + text-sage-900) become unreadable white-on-white in dark */
+  .dark .bg-sage-50 {
+    background-color: rgba(143, 166, 142, 0.18) !important;
+  }
+
+  .dark .text-sage-900 {
+    color: #D6E8D5 !important;
+  }
+
+  /* sage-100 tinted chips */
+  .dark .bg-sage-100 {
+    background-color: rgba(143, 166, 142, 0.20) !important;
+  }
+
+  /* cream/white tinted tag backgrounds (bg-white used for past-event tags) */
+  .dark .bg-white,
+  .dark .bg-white\/40 {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+  }
+
+  /* Inset detail blocks inside modals (bg-cream-50, bg-white used for description boxes) */
+  .dark .modal-glass-container .bg-cream-50,
+  .dark .modal-glass-container .bg-white {
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  /* Body text inside description/detail blocks in dark mode */
+  .dark .modal-glass-container .text-charcoal-muted {
+    color: #B8C4B8 !important;
+  }
+
+  /* p text inside dark modals should be near-white, not washed grey */
+  .dark .modal-glass-container p {
+    color: #CBD5CB !important;
   }
 }

@@ -270,30 +270,6 @@ export default function SettingsPage() {
 
         <form onSubmit={handleSaveAgency} className="space-y-6">
           
-          {/* Logo Preview */}
-          <div className="p-4 rounded-2xl bg-cream-50/80 border border-sage-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
-              <div className="p-2 rounded-2xl bg-white border border-sage-300 shadow-xs">
-                <img
-                  src="/images/Booth Logo Only_ Enlarged.png"
-                  alt="Agency Brand Logo"
-                  className="h-12 w-auto max-w-[200px] object-contain"
-                />
-              </div>
-              <div>
-                <span className="font-bold text-xs text-charcoal block">
-                  Active Brand Logo (Booth Logo Only_ Enlarged.png)
-                </span>
-                <span className="text-[11px] text-charcoal-muted font-light">
-                  Displayed on the sidebar, header, and official PDF documents.
-                </span>
-              </div>
-            </div>
-            <span className="text-[11px] bg-emerald-100 text-emerald-800 px-3 py-1 rounded-full font-semibold border border-emerald-300">
-              Active Logo
-            </span>
-          </div>
-
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-charcoal mb-1.5">

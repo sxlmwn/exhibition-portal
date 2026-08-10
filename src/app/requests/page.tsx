@@ -79,13 +79,13 @@ export default function VendorRequestsPage() {
         </div>
 
         {/* View Switcher Tabs */}
-        <div className="flex items-center gap-2 bg-cream-200/90 p-1.5 rounded-full border border-sage-200/60 self-start sm:self-auto">
+        <div className="flex items-center gap-2 bg-white/80 dark:bg-white/[0.06] p-1.5 rounded-full border border-sage-200/60 dark:border-white/10 self-start sm:self-auto shadow-soft-xs backdrop-blur-sm">
           <button
             onClick={() => setActiveTab('table')}
             className={`flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all glass-rise-btn ${
               activeTab === 'table'
-                ? 'bg-sage-800 text-cream shadow-xs'
-                : 'text-charcoal-muted hover:text-charcoal'
+                ? 'bg-sage-800 dark:bg-sage-700 text-cream shadow-xs'
+                : 'text-charcoal dark:text-white/70 hover:text-charcoal dark:hover:text-white hover:bg-sage-50 dark:hover:bg-white/10'
             }`}
           >
             <List className="w-3.5 h-3.5" />
@@ -96,8 +96,8 @@ export default function VendorRequestsPage() {
             onClick={() => setActiveTab('floor-plan')}
             className={`flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all glass-rise-btn ${
               activeTab === 'floor-plan'
-                ? 'bg-sage-800 text-cream shadow-xs'
-                : 'text-charcoal-muted hover:text-charcoal'
+                ? 'bg-sage-800 dark:bg-sage-700 text-cream shadow-xs'
+                : 'text-charcoal dark:text-white/70 hover:text-charcoal dark:hover:text-white hover:bg-sage-50 dark:hover:bg-white/10'
             }`}
           >
             <Store className="w-3.5 h-3.5" />

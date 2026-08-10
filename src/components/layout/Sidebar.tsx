@@ -120,9 +120,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
 
   return (
     <aside
-      className={`fixed top-0 left-0 bottom-0 z-30 glass-sidebar flex flex-col justify-between transition-[width] duration-300 ease-in-out overflow-hidden ${
+      className={`fixed top-0 left-0 bottom-0 z-30 glass-sidebar flex flex-col justify-between transition-[width] duration-300 ease-in-out ${
         collapsed ? 'w-20' : 'w-64'
       }`}
+      style={{ overflow: 'visible' }}
     >
       {/* Top Section: Wordmark & Logo */}
       <div>
@@ -215,7 +216,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
         
         {/* Profile Popover / Dropdown Menu */}
         {showProfileMenu && (
-          <div className={`absolute bottom-full mb-3 ${collapsed ? 'left-2 w-72' : 'left-3 right-3'} bg-white/98 dark:bg-[#14171C]/98 backdrop-blur-2xl rounded-3xl shadow-soft-xl border border-sage-200/90 dark:border-white/10 p-4 z-50 animate-fadeIn`}>
+          <div className={`absolute z-[200] bg-white dark:bg-[#14171C] backdrop-blur-2xl rounded-3xl shadow-[0_16px_48px_-8px_rgba(0,0,0,0.3)] dark:shadow-[0_16px_48px_-8px_rgba(0,0,0,0.7)] border border-sage-200/80 dark:border-white/10 p-4 animate-fadeIn ${
+            collapsed 
+              ? 'bottom-2 left-[calc(100%+8px)] w-80' 
+              : 'bottom-full mb-3 left-3 right-3'
+          }`}>
             
             {/* User Identity */}
             <div className="flex items-center gap-3 pb-3 border-b border-sage-100 dark:border-white/10">

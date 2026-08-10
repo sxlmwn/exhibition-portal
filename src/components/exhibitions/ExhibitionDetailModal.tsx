@@ -86,7 +86,7 @@ export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
           {/* Key Metrics Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             
-            <div className="p-5 rounded-3xl bg-cream-50 border border-sage-200/70">
+            <div className="p-5 rounded-3xl bg-cream-50 dark:bg-white/[0.06] border border-sage-200/70 dark:border-white/10">
               <div className="flex items-center gap-2 text-xs font-semibold text-sage-800 uppercase tracking-wider mb-2">
                 <Store className="w-4 h-4 text-sage-700" />
                 <span>Stall Fill Rate</span>
@@ -105,7 +105,7 @@ export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
               </span>
             </div>
 
-            <div className="p-5 rounded-3xl bg-cream-50 border border-sage-200/70">
+            <div className="p-5 rounded-3xl bg-cream-50 dark:bg-white/[0.06] border border-sage-200/70 dark:border-white/10">
               <div className="flex items-center gap-2 text-xs font-semibold text-sage-800 uppercase tracking-wider mb-2">
                 <TrendingUp className="w-4 h-4 text-sage-700" />
                 <span>Stall Revenue</span>
@@ -118,7 +118,7 @@ export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
               </span>
             </div>
 
-            <div className="p-5 rounded-3xl bg-cream-50 border border-sage-200/70">
+            <div className="p-5 rounded-3xl bg-cream-50 dark:bg-white/[0.06] border border-sage-200/70 dark:border-white/10">
               <div className="flex items-center gap-2 text-xs font-semibold text-sage-800 uppercase tracking-wider mb-2">
                 <Receipt className="w-4 h-4 text-sage-700" />
                 <span>Net Financial Snapshot</span>
@@ -135,10 +135,10 @@ export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
 
           {/* Description & Logistics */}
           <div>
-            <h4 className="font-sans text-lg font-bold text-charcoal mb-2 tracking-tight">
+            <h4 className="font-sans text-lg font-bold text-charcoal dark:text-white mb-2 tracking-tight">
               Logistics & Event Brief
             </h4>
-            <p className="text-xs sm:text-sm text-charcoal-muted font-normal leading-relaxed p-4 rounded-2xl bg-white border border-sage-100">
+            <p className="text-xs sm:text-sm text-charcoal-muted dark:text-white/75 font-normal leading-relaxed p-4 rounded-2xl bg-white dark:bg-white/[0.06] border border-sage-100 dark:border-white/08">
               {exhibition.description}
             </p>
           </div>

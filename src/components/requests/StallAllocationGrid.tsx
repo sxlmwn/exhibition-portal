@@ -63,10 +63,10 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
 
   const getTierColor = (tier: StallSlot['tier']) => {
     switch (tier) {
-      case 'corner': return 'border-amber-400 bg-amber-50/70 text-amber-950';
-      case 'premium': return 'border-purple-400 bg-purple-50/70 text-purple-950';
-      case 'medium': return 'border-sage-400 bg-sage-50 text-sage-950';
-      case 'small': return 'border-slate-300 bg-slate-50 text-slate-900';
+      case 'corner': return 'border-amber-400 bg-amber-50/80 dark:bg-amber-950/30 text-amber-950 dark:text-amber-100';
+      case 'premium': return 'border-purple-400 bg-purple-50/80 dark:bg-purple-950/30 text-purple-950 dark:text-purple-100';
+      case 'medium': return 'border-sage-400 bg-sage-50/80 dark:bg-sage-950/30 text-sage-950 dark:text-sage-100';
+      case 'small': return 'border-sage-300 bg-cream-50 dark:bg-white/[0.04] text-charcoal dark:text-white/90';
     }
   };
 
@@ -145,9 +145,9 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
                     onClick={() => handleStallClick(stall)}
                     className={`relative p-3.5 rounded-2xl flex flex-col items-center justify-center transition-all duration-200 min-h-[105px] text-center border-2 glass-rise-btn ${
                       isBooked
-                        ? 'bg-charcoal/10 border-charcoal/20 text-charcoal hover:bg-charcoal/20 hover:shadow-soft'
+                        ? 'bg-sage-800/15 dark:bg-sage-800/30 border-sage-600/30 dark:border-sage-500/30 text-charcoal dark:text-sage-100 hover:bg-sage-800/25 hover:shadow-soft'
                         : isSelected
-                        ? 'bg-sage text-white shadow-soft-lg ring-4 ring-sage-300 scale-105 z-10'
+                        ? 'bg-sage-800 dark:bg-sage-700 text-white shadow-soft-lg ring-4 ring-sage-300 scale-105 z-10'
                         : `${getTierColor(stall.tier)} hover:border-sage-600 hover:shadow-soft`
                     }`}
                   >

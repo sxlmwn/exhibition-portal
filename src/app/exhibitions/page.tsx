@@ -94,15 +94,15 @@ export default function ExhibitionsPage() {
         <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-start lg:justify-end">
           
           {/* City Filter */}
-          <div className="flex items-center gap-1.5 bg-cream-200/80 p-1 rounded-full border border-sage-200/60">
+          <div className="flex items-center gap-1.5 bg-white/80 dark:bg-white/[0.06] p-1 rounded-full border border-sage-200/60 dark:border-white/10 shadow-soft-xs backdrop-blur-sm">
             {cities.map((city) => (
               <button
                 key={city}
                 onClick={() => setSelectedCity(city)}
                 className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all glass-rise-btn ${
                   selectedCity === city
-                    ? 'bg-sage-800 text-cream shadow-xs'
-                    : 'text-charcoal-muted hover:text-charcoal hover:bg-white/60'
+                    ? 'bg-sage-800 dark:bg-sage-700 text-cream shadow-xs'
+                    : 'text-charcoal dark:text-white/80 hover:text-charcoal dark:hover:text-white hover:bg-sage-50 dark:hover:bg-white/10'
                 }`}
               >
                 {city}
