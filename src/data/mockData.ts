@@ -34,7 +34,7 @@ export const INITIAL_STAFF_USERS: StaffUser[] = [
     id: 'usr-2',
     name: 'Ayla Siddiqui',
     email: 'ayla.curation@exhibitionagency.com',
-    role: 'admin',
+    role: 'staff',
     avatar: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=200',
     phone: '+92 321 987 6543',
     status: 'active',
@@ -402,7 +402,7 @@ export const INITIAL_EXPENSES: ExpenseItem[] = [
     receiptUrl: 'https://images.unsplash.com/photo-1554224154-26032ffc0d07?auto=format&fit=crop&q=80&w=400',
     enteredById: 'usr-2',
     enteredByName: 'Ayla Siddiqui',
-    enteredByRole: 'admin',
+    enteredByRole: 'staff',
     status: 'approved',
     approvedBy: 'Salman Younus',
     paymentMethod: 'Card'

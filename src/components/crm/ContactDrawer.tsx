@@ -20,8 +20,8 @@ import {
 } from 'lucide-react';
 import { CRMContact } from '../../types';
 import { useAdmin } from '../../context/AdminContext';
-
 import { ModalPortal } from '../common/ModalPortal';
+import { buildWhatsAppUrl } from '../../lib/whatsapp';
 
 interface ContactDrawerProps {
   contact: CRMContact | null;
@@ -49,11 +49,13 @@ export const ContactDrawer: React.FC<ContactDrawerProps> = ({
   };
 
   const handleDelete = () => {
-    if (confirm(`Delete contact "${contact.businessName}"?`)) {
+    if (confirm(`Delete contact "${contact.fullName || contact.businessName}"?`)) {
       deleteContact(contact.id);
       onClose();
     }
   };
+
+  const displayName = contact.fullName || contact.name || contact.businessName;
 
   return (
     <ModalPortal isOpen={!!contact} onClose={onClose} maxWidthClass="max-w-2xl">
@@ -63,8 +65,8 @@ export const ContactDrawer: React.FC<ContactDrawerProps> = ({
         {/* Header */}
         <div className="flex items-start justify-between pb-5 border-b border-sage-100 dark:border-white/10 mb-6">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-sage-800 text-cream font-sans font-bold text-xl flex items-center justify-center shadow-xs">
-              {contact.businessName.substring(0, 2).toUpperCase()}
+            <div className="w-12 h-12 rounded-2xl bg-sage-800 dark:bg-sage-700 text-cream font-sans font-bold text-xl flex items-center justify-center shadow-xs">
+              {displayName.substring(0, 2).toUpperCase()}
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1">
@@ -75,18 +77,18 @@ export const ContactDrawer: React.FC<ContactDrawerProps> = ({
                   {contact.status}
                 </span>
               </div>
-              <h2 className="font-sans text-2xl sm:text-3xl font-bold text-charcoal tracking-tight">
-                {contact.businessName}
+              <h2 className="font-sans text-2xl sm:text-3xl font-bold text-charcoal dark:text-white tracking-tight">
+                {displayName}
               </h2>
-              <span className="text-xs text-charcoal-muted font-medium">
-                POC: {contact.name}
+              <span className="text-xs text-charcoal-muted dark:text-white/60 font-medium">
+                Source: {contact.source || 'Direct Lead'}
               </span>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-cream-100 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal transition-colors"
+            className="p-2 rounded-full hover:bg-cream-100 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal dark:hover:text-white transition-colors"
             title="Close modal"
           >
             <X className="w-5 h-5" />
@@ -100,19 +102,19 @@ export const ContactDrawer: React.FC<ContactDrawerProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             
             <div className="p-4 rounded-2xl bg-cream-50 dark:bg-white/5 border border-sage-200/80 dark:border-white/10">
-              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted block mb-0.5">
-                Lifetime Stall Spend
+              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted dark:text-white/60 block mb-0.5">
+                Linked Exhibition Edition
               </span>
-              <span className="font-sans text-2xl font-bold text-sage-deep dark:text-sage-300">
-                Rs. {contact.totalSpend.toLocaleString()}
+              <span className="font-sans text-base font-bold text-charcoal dark:text-white">
+                {contact.exhibitionName || 'General / All Exhibitions'}
               </span>
             </div>
 
             <div className="p-4 rounded-2xl bg-cream-50 dark:bg-white/5 border border-sage-200/80 dark:border-white/10">
-              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted block mb-0.5">
-                Last Event Activity
+              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted dark:text-white/60 block mb-0.5">
+                Last Activity / Entry
               </span>
-              <span className="font-sans text-base font-bold text-charcoal">
+              <span className="font-sans text-base font-bold text-charcoal dark:text-white">
                 {contact.lastActivityDate || 'Season 2026'}
               </span>
             </div>
@@ -123,25 +125,25 @@ export const ContactDrawer: React.FC<ContactDrawerProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             
             <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-sage-200/70 dark:border-white/10 space-y-2">
-              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted block">
+              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted dark:text-white/60 block">
                 Direct Contact Channels
               </span>
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-sage-700 dark:text-sage-400" />
                 <a
                   href={`tel:${contact.phone}`}
-                  className="font-bold text-charcoal hover:underline"
+                  className="font-bold text-charcoal dark:text-white hover:underline"
                 >
-                  {contact.phone}
+                  {contact.phone || 'No phone'}
                 </a>
               </div>
-              <div className="flex items-center gap-2 text-charcoal-muted">
+              <div className="flex items-center gap-2 text-charcoal-muted dark:text-white/60">
                 <Mail className="w-4 h-4 text-sage-700 dark:text-sage-400" />
                 <a
                   href={`mailto:${contact.email}`}
-                  className="hover:underline font-medium text-charcoal truncate"
+                  className="hover:underline font-medium text-charcoal dark:text-white truncate"
                 >
-                  {contact.email}
+                  {contact.email || 'No email'}
                 </a>
               </div>
             </div>
@@ -156,7 +158,10 @@ export const ContactDrawer: React.FC<ContactDrawerProps> = ({
                 </span>
               </div>
               <a
-                href={`https://wa.me/${contact.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello ${contact.name}, regarding your exhibition stall reservation for "${contact.businessName}"...`)}`}
+                href={buildWhatsAppUrl(
+                  'Hello {Name}, regarding your exhibition stall reservation for {Exhibition}...',
+                  contact
+                ).url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-3 px-4 py-2 rounded-full bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold shadow-xs transition-all glass-rise-btn flex items-center justify-center gap-1.5 self-start"
@@ -168,31 +173,12 @@ export const ContactDrawer: React.FC<ContactDrawerProps> = ({
 
           </div>
 
-          {/* Assigned Tags */}
-          {contact.tags && contact.tags.length > 0 && (
-            <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-sage-200/70 dark:border-white/10">
-              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted block mb-2">
-                Assigned Segmentation Tags
-              </span>
-              <div className="flex flex-wrap gap-1.5">
-                {contact.tags.map((tag, idx) => (
-                  <span
-                    key={idx}
-                    className="text-xs bg-sage-100 dark:bg-sage-900/60 text-sage-900 dark:text-sage-200 px-3 py-1 rounded-full border border-sage-200 dark:border-white/10 font-bold"
-                  >
-                    #{tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
           {/* Notes & Activity Log */}
           <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-sage-200/70 dark:border-white/10">
-            <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted block mb-2">
+            <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted dark:text-white/60 block mb-2">
               Curator Notes & Activity Log
             </span>
-            <div className="p-3.5 rounded-xl bg-cream-50 dark:bg-white/5 border border-sage-200/60 dark:border-white/10 text-xs text-charcoal whitespace-pre-line leading-relaxed mb-3 max-h-36 overflow-y-auto font-medium">
+            <div className="p-3.5 rounded-xl bg-cream-50 dark:bg-white/5 border border-sage-200/60 dark:border-white/10 text-xs text-charcoal dark:text-white whitespace-pre-line leading-relaxed mb-3 max-h-36 overflow-y-auto font-medium">
               {contact.notes || 'No activity notes logged yet.'}
             </div>
 
@@ -202,7 +188,7 @@ export const ContactDrawer: React.FC<ContactDrawerProps> = ({
                 value={newNote}
                 onChange={(e) => setNewNote(e.target.value)}
                 placeholder="Append a CRM interaction note..."
-                className="flex-1 px-3.5 py-2 rounded-xl border border-sage-200 text-xs outline-none focus:border-sage-500 font-medium"
+                className="flex-1 px-3.5 py-2 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white bg-white dark:bg-white/5 outline-none focus:border-sage-500 font-medium"
               />
               <button
                 onClick={handleAddNote}
@@ -221,7 +207,7 @@ export const ContactDrawer: React.FC<ContactDrawerProps> = ({
                 onEdit(contact);
                 onClose();
               }}
-              className="flex-1 py-2.5 rounded-2xl border border-sage-300 dark:border-white/10 text-charcoal hover:bg-cream-100 dark:hover:bg-white/10 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 glass-rise-btn"
+              className="flex-1 py-2.5 rounded-2xl border border-sage-300 dark:border-white/20 text-charcoal dark:text-white hover:bg-cream-100 dark:hover:bg-white/10 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 glass-rise-btn"
             >
               <Edit3 className="w-3.5 h-3.5" />
               <span>Edit Contact</span>

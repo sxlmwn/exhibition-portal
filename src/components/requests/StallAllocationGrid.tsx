@@ -8,8 +8,10 @@ import {
   X, 
   Sparkles, 
   DoorOpen, 
-  ArrowRight,
-  ShieldCheck
+  ArrowRight, 
+  ShieldCheck,
+  Building2,
+  Tag
 } from 'lucide-react';
 import { StallSlot, VendorRequest, Exhibition } from '../../types';
 import { useAdmin } from '../../context/AdminContext';
@@ -23,17 +25,18 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
   selectedExhibitionId,
   onSelectExhibition
 }) => {
-  const { exhibitions, stalls, vendorRequests, allocateStall, releaseStall } = useAdmin();
+  const { exhibitions, stalls, vendorRequests, allocateStall, releaseStall, currentRole } = useAdmin();
+  const isOwner = currentRole === 'owner';
 
   const [selectedStall, setSelectedStall] = useState<StallSlot | null>(null);
   const [vendorToAssignId, setVendorToAssignId] = useState<string>('');
 
   const currentExhibition = exhibitions.find(e => e.id === selectedExhibitionId) || exhibitions[0];
-  const exhibitionStalls = stalls.filter(s => s.exhibitionId === currentExhibition.id);
+  const exhibitionStalls = stalls.filter(s => s.exhibitionId === (currentExhibition ? currentExhibition.id : selectedExhibitionId));
 
   // Eligible vendors for assignment
   const eligibleRequests = vendorRequests.filter(r => 
-    r.exhibitionId === currentExhibition.id && 
+    r.exhibitionId === (currentExhibition ? currentExhibition.id : selectedExhibitionId) && 
     (r.status === 'pending' || r.status === 'approved' || r.status === 'waitlisted') &&
     !r.allocatedStallCode
   );
@@ -47,6 +50,10 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
 
   const handleConfirmAllocation = () => {
     if (!selectedStall || !vendorToAssignId) return;
+    if (selectedStall.status === 'booked') {
+      alert('This stall is already booked.');
+      return;
+    }
     const req = vendorRequests.find(r => r.id === vendorToAssignId);
     if (!req) return;
 
@@ -63,10 +70,10 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
 
   const getTierColor = (tier: StallSlot['tier']) => {
     switch (tier) {
-      case 'corner': return 'border-amber-400 bg-amber-50/80 dark:bg-amber-950/30 text-amber-950 dark:text-amber-100';
-      case 'premium': return 'border-purple-400 bg-purple-50/80 dark:bg-purple-950/30 text-purple-950 dark:text-purple-100';
-      case 'medium': return 'border-sage-400 bg-sage-50/80 dark:bg-sage-950/30 text-sage-950 dark:text-sage-100';
-      case 'small': return 'border-sage-300 bg-cream-50 dark:bg-white/[0.04] text-charcoal dark:text-white/90';
+      case 'corner': return 'border-amber-400 dark:border-amber-500/50 bg-amber-50/80 dark:bg-amber-950/30 text-amber-950 dark:text-amber-100';
+      case 'premium': return 'border-purple-400 dark:border-purple-500/50 bg-purple-50/80 dark:bg-purple-950/30 text-purple-950 dark:text-purple-100';
+      case 'medium': return 'border-sage-400 dark:border-sage-500/50 bg-sage-50/80 dark:bg-sage-950/30 text-sage-950 dark:text-sage-100';
+      case 'small': return 'border-sage-300 dark:border-white/10 bg-cream-50 dark:bg-white/[0.04] text-charcoal dark:text-white/90';
     }
   };
 
@@ -76,14 +83,14 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
       {/* Top Selector & Legend */}
       <div className="glass-card p-6 rounded-3xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
-          <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 block mb-1">
+          <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 dark:text-sage-300 block mb-1">
             Visual Floor Plan Blueprint
           </span>
           <div className="flex items-center gap-3">
             <select
               value={selectedExhibitionId}
               onChange={(e) => onSelectExhibition(e.target.value)}
-              className="font-sans text-lg sm:text-xl font-bold text-charcoal bg-white/70 hover:bg-white border-2 border-sage-200 hover:border-sage-400 focus:border-sage-700 outline-none px-3.5 py-1.5 rounded-2xl cursor-pointer tracking-tight glass-select"
+              className="font-sans text-lg sm:text-xl font-bold text-charcoal dark:text-white bg-white/70 dark:bg-[#1A1D24] hover:bg-white border-2 border-sage-200 dark:border-white/10 hover:border-sage-400 focus:border-sage-700 outline-none px-3.5 py-1.5 rounded-2xl cursor-pointer tracking-tight glass-select"
             >
               {exhibitions.map((exh) => (
                 <option key={exh.id} value={exh.id}>
@@ -95,18 +102,18 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
         </div>
 
         {/* Legend */}
-        <div className="flex flex-wrap items-center gap-4 bg-white/80 px-5 py-2.5 rounded-2xl border border-sage-200 text-xs shadow-2xs">
+        <div className="flex flex-wrap items-center gap-4 bg-white/80 dark:bg-white/5 px-5 py-2.5 rounded-2xl border border-sage-200 dark:border-white/10 text-xs shadow-2xs">
           <div className="flex items-center gap-2">
-            <span className="w-3.5 h-3.5 rounded-md border-2 border-sage-500 bg-sage-50" />
-            <span className="text-charcoal-muted font-medium">Available</span>
+            <span className="w-3.5 h-3.5 rounded-md border-2 border-sage-500 bg-sage-50 dark:bg-sage-900" />
+            <span className="text-charcoal-muted dark:text-white/60 font-medium">Available</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-3.5 h-3.5 rounded-md bg-sage-800" />
-            <span className="text-charcoal font-bold">Booked / Allocated</span>
+            <span className="w-3.5 h-3.5 rounded-md bg-sage-800 dark:bg-sage-700" />
+            <span className="text-charcoal dark:text-white font-bold">Booked</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-3.5 h-3.5 rounded-md bg-amber-200 border border-amber-400" />
-            <span className="text-charcoal-muted font-medium">Corner Slot</span>
+            <span className="w-3.5 h-3.5 rounded-md bg-amber-200 dark:bg-amber-900 border border-amber-400" />
+            <span className="text-charcoal-muted dark:text-white/60 font-medium">Corner Slot</span>
           </div>
         </div>
       </div>
@@ -115,24 +122,24 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         
         {/* Blueprint Layout Area (8 Cols) */}
-        <div className="lg:col-span-8 glass-card p-6 sm:p-10 rounded-4xl border border-sage-200 relative overflow-hidden">
+        <div className="lg:col-span-8 glass-card p-6 sm:p-10 rounded-4xl border border-sage-200 dark:border-white/10 relative overflow-hidden">
           
           {/* Main Entrance Marker */}
-          <div className="w-full mb-8 pb-4 border-b border-dashed border-sage-200 flex items-center justify-between text-xs text-charcoal-muted">
+          <div className="w-full mb-8 pb-4 border-b border-dashed border-sage-200 dark:border-white/10 flex items-center justify-between text-xs text-charcoal-muted dark:text-white/60">
             <div className="flex items-center gap-2">
-              <DoorOpen className="w-4 h-4 text-sage-600" />
-              <span className="font-bold uppercase tracking-wider text-charcoal">Main Visitor Entrance & Registration</span>
+              <DoorOpen className="w-4 h-4 text-sage-600 dark:text-sage-400" />
+              <span className="font-bold uppercase tracking-wider text-charcoal dark:text-white">Main Visitor Entrance & Registration</span>
             </div>
-            <span className="text-[11px] bg-sage-100 text-sage-800 px-3 py-1 rounded-full font-semibold">
+            <span className="text-[11px] bg-sage-100 dark:bg-sage-900/60 text-sage-800 dark:text-sage-300 px-3 py-1 rounded-full font-semibold">
               Primary Footfall Gate
             </span>
           </div>
 
           {/* Row A */}
           <div className="mb-8">
-            <div className="flex items-center justify-between text-xs font-semibold text-charcoal-muted mb-3 uppercase tracking-wider">
+            <div className="flex items-center justify-between text-xs font-semibold text-charcoal-muted dark:text-white/60 mb-3 uppercase tracking-wider">
               <span>Row A &bull; Entrance Boulevard</span>
-              <span className="text-sage-700 font-medium">Corner & Medium</span>
+              <span className="text-sage-700 dark:text-sage-300 font-medium">Corner & Medium</span>
             </div>
             <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 sm:gap-4">
               {exhibitionStalls.slice(0, 6).map((stall) => {
@@ -147,23 +154,23 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
                       isBooked
                         ? 'bg-sage-800/15 dark:bg-sage-800/30 border-sage-600/30 dark:border-sage-500/30 text-charcoal dark:text-sage-100 hover:bg-sage-800/25 hover:shadow-soft'
                         : isSelected
-                        ? 'bg-sage-800 dark:bg-sage-700 text-white shadow-soft-lg ring-4 ring-sage-300 scale-105 z-10'
+                        ? 'bg-sage-800 dark:bg-sage-700 text-white shadow-soft-lg ring-4 ring-sage-300 dark:ring-sage-600 scale-105 z-10'
                         : `${getTierColor(stall.tier)} hover:border-sage-600 hover:shadow-soft`
                     }`}
                   >
-                    <span className={`text-xs font-extrabold font-sans ${isSelected ? 'text-white' : 'text-charcoal'}`}>
+                    <span className={`text-xs font-extrabold font-sans ${isSelected ? 'text-white' : 'text-charcoal dark:text-white'}`}>
                       {stall.code}
                     </span>
-                    <span className={`text-[9px] uppercase tracking-tighter mt-1 ${isSelected ? 'text-cream-100' : 'text-charcoal-muted'}`}>
+                    <span className={`text-[9px] uppercase tracking-tighter mt-1 ${isSelected ? 'text-cream-100' : 'text-charcoal-muted dark:text-white/60'}`}>
                       {stall.tier}
                     </span>
 
                     {isBooked ? (
-                      <span className="text-[9px] font-bold text-[#33422f] mt-1 truncate max-w-[90%] block bg-white/70 px-1.5 py-0.5 rounded">
+                      <span className="text-[9px] font-bold text-sage-900 dark:text-emerald-300 mt-1 truncate max-w-[90%] block bg-white/70 dark:bg-black/40 px-1.5 py-0.5 rounded">
                         {stall.assignedBrandName || 'Booked'}
                       </span>
                     ) : (
-                      <span className={`text-[9px] font-semibold mt-1 ${isSelected ? 'text-white' : 'text-sage-700'}`}>
+                      <span className={`text-[9px] font-semibold mt-1 ${isSelected ? 'text-white' : 'text-sage-700 dark:text-sage-300'}`}>
                         Rs. {(stall.price / 1000).toFixed(0)}k
                       </span>
                     )}
@@ -174,17 +181,17 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
           </div>
 
           {/* Central Promenade */}
-          <div className="my-6 py-2.5 bg-cream-200/80 rounded-xl border border-dashed border-sage-300 text-center">
-            <span className="text-[11px] font-semibold uppercase tracking-widest text-sage-800">
+          <div className="my-6 py-2.5 bg-cream-200/80 dark:bg-white/5 rounded-xl border border-dashed border-sage-300 dark:border-white/10 text-center">
+            <span className="text-[11px] font-semibold uppercase tracking-widest text-sage-800 dark:text-sage-300">
               &larr; Central Promenade Walkway &bull; Acoustic Lounge &rarr;
             </span>
           </div>
 
           {/* Row B */}
           <div className="mb-8">
-            <div className="flex items-center justify-between text-xs font-semibold text-charcoal-muted mb-3 uppercase tracking-wider">
+            <div className="flex items-center justify-between text-xs font-semibold text-charcoal-muted dark:text-white/60 mb-3 uppercase tracking-wider">
               <span>Row B &bull; Center Aisle</span>
-              <span className="text-sage-700 font-medium">Premium & Medium</span>
+              <span className="text-sage-700 dark:text-sage-300 font-medium">Premium & Medium</span>
             </div>
             <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 sm:gap-4">
               {exhibitionStalls.slice(6, 12).map((stall) => {
@@ -197,25 +204,25 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
                     onClick={() => handleStallClick(stall)}
                     className={`relative p-3.5 rounded-2xl flex flex-col items-center justify-center transition-all duration-200 min-h-[105px] text-center border-2 glass-rise-btn ${
                       isBooked
-                        ? 'bg-charcoal/10 border-charcoal/20 text-charcoal hover:bg-charcoal/20 hover:shadow-soft'
+                        ? 'bg-sage-800/15 dark:bg-sage-800/30 border-sage-600/30 dark:border-sage-500/30 text-charcoal dark:text-sage-100 hover:bg-sage-800/25 hover:shadow-soft'
                         : isSelected
-                        ? 'bg-sage text-white shadow-soft-lg ring-4 ring-sage-300 scale-105 z-10'
+                        ? 'bg-sage-800 dark:bg-sage-700 text-white shadow-soft-lg ring-4 ring-sage-300 dark:ring-sage-600 scale-105 z-10'
                         : `${getTierColor(stall.tier)} hover:border-sage-600 hover:shadow-soft`
                     }`}
                   >
-                    <span className={`text-xs font-extrabold font-sans ${isSelected ? 'text-white' : 'text-charcoal'}`}>
+                    <span className={`text-xs font-extrabold font-sans ${isSelected ? 'text-white' : 'text-charcoal dark:text-white'}`}>
                       {stall.code}
                     </span>
-                    <span className={`text-[9px] uppercase tracking-tighter mt-1 ${isSelected ? 'text-cream-100' : 'text-charcoal-muted'}`}>
+                    <span className={`text-[9px] uppercase tracking-tighter mt-1 ${isSelected ? 'text-cream-100' : 'text-charcoal-muted dark:text-white/60'}`}>
                       {stall.tier}
                     </span>
 
                     {isBooked ? (
-                      <span className="text-[9px] font-bold text-[#33422f] mt-1 truncate max-w-[90%] block bg-white/70 px-1.5 py-0.5 rounded">
+                      <span className="text-[9px] font-bold text-sage-900 dark:text-emerald-300 mt-1 truncate max-w-[90%] block bg-white/70 dark:bg-black/40 px-1.5 py-0.5 rounded">
                         {stall.assignedBrandName || 'Booked'}
                       </span>
                     ) : (
-                      <span className={`text-[9px] font-semibold mt-1 ${isSelected ? 'text-white' : 'text-sage-700'}`}>
+                      <span className={`text-[9px] font-semibold mt-1 ${isSelected ? 'text-white' : 'text-sage-700 dark:text-sage-300'}`}>
                         Rs. {(stall.price / 1000).toFixed(0)}k
                       </span>
                     )}
@@ -227,9 +234,9 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
 
           {/* Row C */}
           <div>
-            <div className="flex items-center justify-between text-xs font-semibold text-charcoal-muted mb-3 uppercase tracking-wider">
+            <div className="flex items-center justify-between text-xs font-semibold text-charcoal-muted dark:text-white/60 mb-3 uppercase tracking-wider">
               <span>Row C &bull; South Courtyard</span>
-              <span className="text-sage-700 font-medium">Artisan & Studio</span>
+              <span className="text-sage-700 dark:text-sage-300 font-medium">Artisan & Studio</span>
             </div>
             <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 sm:gap-4">
               {exhibitionStalls.slice(12, 18).map((stall) => {
@@ -242,25 +249,25 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
                     onClick={() => handleStallClick(stall)}
                     className={`relative p-3.5 rounded-2xl flex flex-col items-center justify-center transition-all duration-200 min-h-[105px] text-center border-2 glass-rise-btn ${
                       isBooked
-                        ? 'bg-charcoal/10 border-charcoal/20 text-charcoal hover:bg-charcoal/20 hover:shadow-soft'
+                        ? 'bg-sage-800/15 dark:bg-sage-800/30 border-sage-600/30 dark:border-sage-500/30 text-charcoal dark:text-sage-100 hover:bg-sage-800/25 hover:shadow-soft'
                         : isSelected
-                        ? 'bg-sage text-white shadow-soft-lg ring-4 ring-sage-300 scale-105 z-10'
+                        ? 'bg-sage-800 dark:bg-sage-700 text-white shadow-soft-lg ring-4 ring-sage-300 dark:ring-sage-600 scale-105 z-10'
                         : `${getTierColor(stall.tier)} hover:border-sage-600 hover:shadow-soft`
                     }`}
                   >
-                    <span className={`text-xs font-extrabold font-sans ${isSelected ? 'text-white' : 'text-charcoal'}`}>
+                    <span className={`text-xs font-extrabold font-sans ${isSelected ? 'text-white' : 'text-charcoal dark:text-white'}`}>
                       {stall.code}
                     </span>
-                    <span className={`text-[9px] uppercase tracking-tighter mt-1 ${isSelected ? 'text-cream-100' : 'text-charcoal-muted'}`}>
+                    <span className={`text-[9px] uppercase tracking-tighter mt-1 ${isSelected ? 'text-cream-100' : 'text-charcoal-muted dark:text-white/60'}`}>
                       {stall.tier}
                     </span>
 
                     {isBooked ? (
-                      <span className="text-[9px] font-bold text-[#33422f] mt-1 truncate max-w-[90%] block bg-white/70 px-1.5 py-0.5 rounded">
+                      <span className="text-[9px] font-bold text-sage-900 dark:text-emerald-300 mt-1 truncate max-w-[90%] block bg-white/70 dark:bg-black/40 px-1.5 py-0.5 rounded">
                         {stall.assignedBrandName || 'Booked'}
                       </span>
                     ) : (
-                      <span className={`text-[9px] font-semibold mt-1 ${isSelected ? 'text-white' : 'text-sage-700'}`}>
+                      <span className={`text-[9px] font-semibold mt-1 ${isSelected ? 'text-white' : 'text-sage-700 dark:text-sage-300'}`}>
                         Rs. {(stall.price / 1000).toFixed(0)}k
                       </span>
                     )}
@@ -271,9 +278,9 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
           </div>
 
           {/* Bottom Stage Marker */}
-          <div className="w-full mt-8 pt-4 border-t border-dashed border-sage-200 flex items-center justify-between text-xs text-charcoal-muted">
-            <span className="font-bold uppercase tracking-wider text-charcoal">South Exhibition Stage & VIP Lounge</span>
-            <span className="text-[11px] bg-cream-200 text-charcoal-muted px-3 py-1 rounded-full">
+          <div className="w-full mt-8 pt-4 border-t border-dashed border-sage-200 dark:border-white/10 flex items-center justify-between text-xs text-charcoal-muted dark:text-white/60">
+            <span className="font-bold uppercase tracking-wider text-charcoal dark:text-white">South Exhibition Stage & VIP Lounge</span>
+            <span className="text-[11px] bg-cream-200 dark:bg-white/10 text-charcoal-muted dark:text-white/60 px-3 py-1 rounded-full">
               Emergency Exit
             </span>
           </div>
@@ -286,12 +293,12 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
           {selectedStall ? (
             <div className="space-y-5 animate-fadeIn">
               
-              <div className="flex items-center justify-between pb-4 border-b border-sage-100">
+              <div className="flex items-center justify-between pb-4 border-b border-sage-100 dark:border-white/10">
                 <div>
-                  <span className="text-[11px] uppercase tracking-wider font-semibold text-sage-800 block">
+                  <span className="text-[11px] uppercase tracking-wider font-semibold text-sage-800 dark:text-sage-300 block">
                     Slot Inspector
                   </span>
-                  <h3 className="font-sans text-3xl font-extrabold text-charcoal tracking-tight">
+                  <h3 className="font-sans text-3xl font-extrabold text-charcoal dark:text-white tracking-tight">
                     Stall {selectedStall.code}
                   </h3>
                 </div>
@@ -302,19 +309,19 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
 
               {/* Specs Table */}
               <div className="space-y-2.5 text-xs">
-                <div className="flex justify-between py-1.5 border-b border-sage-100">
-                  <span className="text-charcoal-muted">Dimensions:</span>
-                  <span className="font-semibold text-charcoal">{selectedStall.dimensions}</span>
+                <div className="flex justify-between py-1.5 border-b border-sage-100 dark:border-white/10">
+                  <span className="text-charcoal-muted dark:text-white/60">Dimensions:</span>
+                  <span className="font-semibold text-charcoal dark:text-white">{selectedStall.dimensions}</span>
                 </div>
-                <div className="flex justify-between py-1.5 border-b border-sage-100">
-                  <span className="text-charcoal-muted">Standard Tariff:</span>
-                  <span className="font-sans text-base font-extrabold text-sage-deep">
+                <div className="flex justify-between py-1.5 border-b border-sage-100 dark:border-white/10">
+                  <span className="text-charcoal-muted dark:text-white/60">Standard Tariff:</span>
+                  <span className="font-sans text-base font-extrabold text-sage-deep dark:text-sage-300">
                     Rs. {selectedStall.price.toLocaleString()}
                   </span>
                 </div>
-                <div className="flex justify-between py-1.5 border-b border-sage-100">
-                  <span className="text-charcoal-muted">Current Status:</span>
-                  <span className={`font-bold capitalize ${selectedStall.status === 'booked' ? 'text-charcoal' : 'text-emerald-700'}`}>
+                <div className="flex justify-between py-1.5 border-b border-sage-100 dark:border-white/10">
+                  <span className="text-charcoal-muted dark:text-white/60">Current Status:</span>
+                  <span className={`font-bold capitalize ${selectedStall.status === 'booked' ? 'text-charcoal dark:text-white' : 'text-emerald-700 dark:text-emerald-400'}`}>
                     {selectedStall.status}
                   </span>
                 </div>
@@ -322,20 +329,22 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
 
               {/* If already booked: Show assigned vendor details & release option */}
               {selectedStall.status === 'booked' ? (
-                <div className="p-4 rounded-2xl bg-cream-100 border border-sage-200">
-                  <span className="text-[10px] uppercase tracking-wider font-bold text-sage-800 block mb-1">
+                <div className="p-4 rounded-2xl bg-cream-100 dark:bg-white/5 border border-sage-200 dark:border-white/10">
+                  <span className="text-[10px] uppercase tracking-wider font-bold text-sage-800 dark:text-sage-300 block mb-1">
                     Allocated Brand
                   </span>
-                  <h4 className="font-sans text-lg font-bold text-charcoal tracking-tight">
-                    {selectedStall.assignedBrandName}
+                  <h4 className="font-sans text-lg font-bold text-charcoal dark:text-white tracking-tight">
+                    {selectedStall.assignedBrandName || 'Booked Exhibitor'}
                   </h4>
-                  <p className="text-xs text-charcoal-muted font-light mt-0.5">
-                    Contact: {selectedStall.assignedVendorName}
-                  </p>
+                  {selectedStall.assignedVendorName && (
+                    <p className="text-xs text-charcoal-muted dark:text-white/60 font-light mt-0.5">
+                      Contact: {selectedStall.assignedVendorName}
+                    </p>
+                  )}
 
                   <button
                     onClick={() => handleRelease(selectedStall.id)}
-                    className="w-full mt-4 py-2.5 rounded-xl border border-rose-300 text-rose-700 hover:bg-rose-50 text-xs font-semibold uppercase tracking-wider transition-colors"
+                    className="w-full mt-4 py-2.5 rounded-xl border border-rose-300 dark:border-rose-800/60 text-rose-700 dark:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-xs font-semibold uppercase tracking-wider transition-colors"
                   >
                     Release Stall Back to Pool
                   </button>
@@ -344,7 +353,7 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
                 /* If available: Show dropdown to assign to an applicant */
                 <div className="space-y-4 pt-2">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal dark:text-white mb-1.5">
                       Assign to Vendor Applicant *
                     </label>
                     
@@ -352,7 +361,7 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
                       <select
                         value={vendorToAssignId}
                         onChange={(e) => setVendorToAssignId(e.target.value)}
-                        className="w-full px-4 py-3 rounded-2xl border border-sage-200 bg-white text-xs font-medium text-charcoal outline-none focus:border-sage-500 focus:ring-2 focus:ring-sage-200"
+                        className="w-full px-4 py-3 rounded-2xl border border-sage-200 dark:border-white/10 bg-white dark:bg-[#1A1D24] text-xs font-medium text-charcoal dark:text-white outline-none focus:border-sage-500 focus:ring-2 focus:ring-sage-200"
                       >
                         {eligibleRequests.map((req) => (
                           <option key={req.id} value={req.id}>
@@ -361,7 +370,7 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
                         ))}
                       </select>
                     ) : (
-                      <p className="text-xs text-charcoal-muted p-3 rounded-xl bg-cream-50 border border-sage-200">
+                      <p className="text-xs text-charcoal-muted dark:text-white/60 p-3 rounded-xl bg-cream-50 dark:bg-white/5 border border-sage-200 dark:border-white/10">
                         No unallocated vendor applications available for this edition.
                       </p>
                     )}
@@ -380,13 +389,13 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
 
             </div>
           ) : (
-            <div className="py-12 text-center text-charcoal-muted">
+            <div className="py-12 text-center text-charcoal-muted dark:text-white/50">
               <Store className="w-10 h-10 text-sage-400 mx-auto mb-3" />
-              <h4 className="font-sans text-lg font-bold text-charcoal mb-1 tracking-tight">
+              <h4 className="font-sans text-lg font-bold text-charcoal dark:text-white mb-1 tracking-tight">
                 Select a Stall
               </h4>
               <p className="text-xs font-light max-w-xs mx-auto">
-                Click any slot on the blueprint above to inspect dimensions, view current booking status, or assign to an approved vendor.
+                Click any slot on the blueprint to inspect dimensions, view current booking status, or assign to an approved vendor.
               </p>
             </div>
           )}

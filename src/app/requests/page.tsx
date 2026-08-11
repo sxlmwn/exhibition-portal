@@ -14,7 +14,10 @@ import {
   ArrowRight,
   Sparkles,
   LayoutGrid,
-  List
+  List,
+  ShieldAlert,
+  ShieldCheck,
+  Building2
 } from 'lucide-react';
 import { useAdmin } from '../../context/AdminContext';
 import { VendorRequest, RequestStatus } from '../../types';
@@ -23,10 +26,11 @@ import { RequestActionModal } from '../../components/requests/RequestActionModal
 import { RequestDetailModal } from '../../components/requests/RequestDetailModal';
 
 export default function VendorRequestsPage() {
-  const { vendorRequests, exhibitions } = useAdmin();
+  const { vendorRequests, exhibitions, currentRole } = useAdmin();
+  const isOwner = currentRole === 'owner';
 
   const [activeTab, setActiveTab] = useState<'table' | 'floor-plan'>('table');
-  const [selectedExhibitionId, setSelectedExhibitionId] = useState<string>(exhibitions[0]?.id || 'exh-1');
+  const [selectedExhibitionId, setSelectedExhibitionId] = useState<string>('All');
   const [selectedStatus, setSelectedStatus] = useState<string>('All');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -47,6 +51,7 @@ export default function VendorRequestsPage() {
   });
 
   const handleOpenAction = (req: VendorRequest, status: RequestStatus) => {
+    if (!isOwner) return;
     setSelectedRequest(req);
     setTargetStatus(status);
   };
@@ -73,7 +78,7 @@ export default function VendorRequestsPage() {
           <span className="eyebrow-label">
             EXHIBITOR ONBOARDING
           </span>
-          <h2 className="font-sans text-3xl sm:text-4xl font-bold text-charcoal tracking-tight">
+          <h2 className="font-sans text-3xl sm:text-4xl font-bold text-charcoal dark:text-white tracking-tight">
             Vendor Requests & Stalls
           </h2>
         </div>
@@ -115,13 +120,13 @@ export default function VendorRequestsPage() {
             
             {/* Search */}
             <div className="relative w-full lg:w-80">
-              <Search className="w-4 h-4 text-sage-600 absolute left-4 top-3.5" />
+              <Search className="w-4 h-4 text-sage-600 dark:text-sage-400 absolute left-4 top-3.5" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search brand, vendor, phone..."
-                className="w-full pl-11 pr-4 py-2.5 rounded-full border border-sage-200 text-xs text-charcoal bg-white/80 outline-none focus:border-sage-500 font-medium glass-input"
+                className="w-full pl-11 pr-4 py-2.5 rounded-full border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white bg-white/80 dark:bg-white/5 outline-none focus:border-sage-500 font-medium glass-input"
               />
             </div>
 
@@ -131,7 +136,7 @@ export default function VendorRequestsPage() {
               <select
                 value={selectedExhibitionId}
                 onChange={(e) => setSelectedExhibitionId(e.target.value)}
-                className="px-4 py-2.5 rounded-full border border-sage-200 bg-white/80 text-xs font-bold text-charcoal outline-none glass-select"
+                className="px-4 py-2.5 rounded-full border border-sage-200 dark:border-white/10 bg-white/80 dark:bg-[#1A1D24] text-xs font-bold text-charcoal dark:text-white outline-none glass-select"
               >
                 <option value="All">All Exhibitions</option>
                 {exhibitions.map((exh) => (
@@ -144,7 +149,7 @@ export default function VendorRequestsPage() {
               <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
-                className="px-4 py-2.5 rounded-full border border-sage-200 bg-white/80 text-xs font-bold text-charcoal outline-none glass-select"
+                className="px-4 py-2.5 rounded-full border border-sage-200 dark:border-white/10 bg-white/80 dark:bg-[#1A1D24] text-xs font-bold text-charcoal dark:text-white outline-none glass-select"
               >
                 <option value="All">All Statuses</option>
                 <option value="pending">Pending Review</option>
@@ -158,138 +163,154 @@ export default function VendorRequestsPage() {
           </div>
 
           {/* Applications Table */}
-          <div className="glass-card rounded-3xl overflow-hidden border border-sage-200/80 shadow-soft">
+          <div className="glass-card rounded-3xl overflow-hidden border border-sage-200/80 dark:border-white/10 shadow-soft">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-cream-100/90 border-b border-sage-200 text-[11px] font-semibold uppercase tracking-wider text-charcoal-muted">
+                <thead className="bg-cream-100/90 dark:bg-white/5 border-b border-sage-200 dark:border-white/10 text-[11px] font-semibold uppercase tracking-wider text-charcoal-muted dark:text-white/60">
                   <tr>
-                    <th className="py-4 px-5">Brand & Vendor</th>
+                    <th className="py-4 px-5">Brand & Business</th>
                     <th className="py-4 px-4">Category</th>
-                    <th className="py-4 px-4">Exhibition</th>
+                    <th className="py-4 px-4">Exhibition Edition</th>
                     <th className="py-4 px-4">Stalls / Budget</th>
-                    <th className="py-4 px-4">Contact Details</th>
+                    <th className="py-4 px-4">Contact Number</th>
                     <th className="py-4 px-4">Status</th>
                     <th className="py-4 px-5 text-right">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-sage-100">
-                  {filteredRequests.map((req) => (
-                    <tr 
-                      key={req.id} 
-                      onClick={() => setDetailRequest(req)}
-                      className="glass-rise-row hover:bg-white/90 transition-all cursor-pointer"
-                    >
-                      
-                      {/* Brand & Vendor */}
-                      <td className="py-4 px-5">
-                        <span className="font-sans font-bold text-sm text-charcoal block tracking-tight">
-                          {req.brandName}
-                        </span>
-                        <span className="text-charcoal-muted text-[11px] font-normal">
-                          {req.vendorName}
-                        </span>
-                        {req.notes && (
-                          <span className="text-[10px] text-sage-800 italic block mt-0.5 max-w-xs truncate">
-                            "{req.notes}"
-                          </span>
-                        )}
+                <tbody className="divide-y divide-sage-100 dark:divide-white/5">
+                  {filteredRequests.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="py-12 text-center text-charcoal-muted dark:text-white/50">
+                        <Store className="w-8 h-8 mx-auto mb-2 opacity-40" />
+                        <p className="font-semibold text-sm">No vendor requests found</p>
+                        <p className="text-xs">Try adjusting your filters or search terms.</p>
                       </td>
-
-                      {/* Category */}
-                      <td className="py-4 px-4 text-charcoal-light font-medium">
-                        {req.productCategory}
-                      </td>
-
-                      {/* Exhibition */}
-                      <td className="py-4 px-4">
-                        <span className="font-medium text-charcoal block">
-                          {req.exhibitionName}
-                        </span>
-                        <span className="text-[10px] text-charcoal-muted font-light">
-                          Applied: {req.submittedDate}
-                        </span>
-                      </td>
-
-                      {/* Stalls & Budget */}
-                      <td className="py-4 px-4">
-                        <span className="font-bold text-sage-deep block">
-                          {req.allocatedStallCode ? `Stall ${req.allocatedStallCode}` : `${req.stallsWanted} Stall(s)`}
-                        </span>
-                        <span className="text-[10px] text-charcoal-muted font-light">
-                          {req.budgetRange}
-                        </span>
-                      </td>
-
-                      {/* Contact */}
-                      <td className="py-4 px-4" onClick={(e) => e.stopPropagation()}>
-                        <a
-                          href={`https://wa.me/${req.phone.replace(/[^0-9]/g, '')}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1.5 font-medium text-emerald-800 hover:underline"
-                        >
-                          <MessageSquare className="w-3.5 h-3.5" />
-                          <span>{req.phone}</span>
-                        </a>
-                        <span className="text-[10px] text-charcoal-muted font-light block mt-0.5 truncate max-w-[140px]">
-                          {req.email}
-                        </span>
-                      </td>
-
-                      {/* Status */}
-                      <td className="py-4 px-4">
-                        <span className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${getStatusBadge(req.status)}`}>
-                          {req.status}
-                        </span>
-                      </td>
-
-                      {/* Actions */}
-                      <td className="py-4 px-5 text-right" onClick={(e) => e.stopPropagation()}>
-                        <div className="flex items-center justify-end gap-1.5">
-                          {req.status !== 'approved' && (
-                            <button
-                              onClick={() => handleOpenAction(req, 'approved')}
-                              className="p-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition-colors glass-rise-btn"
-                              title="Approve Applicant"
-                            >
-                              <CheckCircle2 className="w-4 h-4" />
-                            </button>
-                          )}
-
-                          {req.status !== 'waitlisted' && (
-                            <button
-                              onClick={() => handleOpenAction(req, 'waitlisted')}
-                              className="p-1.5 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-800 border border-purple-200 transition-colors glass-rise-btn"
-                              title="Move to Waitlist"
-                            >
-                              <Clock className="w-4 h-4" />
-                            </button>
-                          )}
-
-                          {req.status !== 'rejected' && (
-                            <button
-                              onClick={() => handleOpenAction(req, 'rejected')}
-                              className="p-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-200 transition-colors glass-rise-btn"
-                              title="Reject Application"
-                            >
-                              <XCircle className="w-4 h-4" />
-                            </button>
-                          )}
-
-                          <button
-                            onClick={() => {
-                              setSelectedExhibitionId(req.exhibitionId);
-                              setActiveTab('floor-plan');
-                            }}
-                            className="px-3 py-1.5 rounded-lg bg-sage-800 hover:bg-sage-900 text-cream text-[11px] font-semibold uppercase tracking-wider ml-1 glass-rise-btn"
-                          >
-                            Allocate
-                          </button>
-                        </div>
-                      </td>
-
                     </tr>
-                  ))}
+                  ) : (
+                    filteredRequests.map((req) => (
+                      <tr 
+                        key={req.id} 
+                        onClick={() => setDetailRequest(req)}
+                        className="glass-rise-row hover:bg-white/90 dark:hover:bg-white/5 transition-all cursor-pointer"
+                      >
+                        
+                        {/* Brand & Business */}
+                        <td className="py-4 px-5">
+                          <span className="font-sans font-bold text-sm text-charcoal dark:text-white block tracking-tight">
+                            {req.brandName}
+                          </span>
+                          <span className="text-charcoal-muted dark:text-white/60 text-[11px] font-normal">
+                            {req.vendorName !== req.brandName ? req.vendorName : 'Exhibitor Contact'}
+                          </span>
+                          {req.notes && (
+                            <span className="text-[10px] text-sage-800 dark:text-sage-300 italic block mt-0.5 max-w-xs truncate">
+                              "{req.notes}"
+                            </span>
+                          )}
+                        </td>
+
+                        {/* Category */}
+                        <td className="py-4 px-4 text-charcoal-light dark:text-white/80 font-medium">
+                          {req.productCategory}
+                        </td>
+
+                        {/* Exhibition */}
+                        <td className="py-4 px-4">
+                          <span className="font-medium text-charcoal dark:text-white block">
+                            {req.exhibitionName}
+                          </span>
+                          <span className="text-[10px] text-charcoal-muted dark:text-white/50 font-light">
+                            Applied: {req.submittedDate}
+                          </span>
+                        </td>
+
+                        {/* Stalls & Budget */}
+                        <td className="py-4 px-4">
+                          <span className="font-bold text-sage-deep dark:text-sage-300 block">
+                            {req.allocatedStallCode ? `Stall ${req.allocatedStallCode}` : `${req.stallsWanted} Stall(s)`}
+                          </span>
+                          <span className="text-[10px] text-charcoal-muted dark:text-white/50 font-light">
+                            {req.budgetRange}
+                          </span>
+                        </td>
+
+                        {/* Contact */}
+                        <td className="py-4 px-4" onClick={(e) => e.stopPropagation()}>
+                          <a
+                            href={`https://wa.me/${req.phone.replace(/[^0-9]/g, '')}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1.5 font-medium text-emerald-800 dark:text-emerald-400 hover:underline"
+                          >
+                            <MessageSquare className="w-3.5 h-3.5" />
+                            <span>{req.phone || 'No phone'}</span>
+                          </a>
+                          {req.email && (
+                            <span className="text-[10px] text-charcoal-muted dark:text-white/50 font-light block mt-0.5 truncate max-w-[140px]">
+                              {req.email}
+                            </span>
+                          )}
+                        </td>
+
+                        {/* Status */}
+                        <td className="py-4 px-4">
+                          <span className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${getStatusBadge(req.status)}`}>
+                            {req.status}
+                          </span>
+                        </td>
+
+                        {/* Actions */}
+                        <td className="py-4 px-5 text-right" onClick={(e) => e.stopPropagation()}>
+                          <div className="flex items-center justify-end gap-1.5">
+                            {isOwner ? (
+                              <>
+                                {req.status !== 'approved' && (
+                                  <button
+                                    onClick={() => handleOpenAction(req, 'approved')}
+                                    className="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 transition-colors glass-rise-btn"
+                                    title="Approve Applicant"
+                                  >
+                                    <CheckCircle2 className="w-4 h-4" />
+                                  </button>
+                                )}
+
+                                {req.status !== 'waitlisted' && (
+                                  <button
+                                    onClick={() => handleOpenAction(req, 'waitlisted')}
+                                    className="p-1.5 rounded-lg bg-purple-50 dark:bg-purple-950/40 hover:bg-purple-100 text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-800 transition-colors glass-rise-btn"
+                                    title="Move to Waitlist"
+                                  >
+                                    <Clock className="w-4 h-4" />
+                                  </button>
+                                )}
+
+                                {req.status !== 'rejected' && (
+                                  <button
+                                    onClick={() => handleOpenAction(req, 'rejected')}
+                                    className="p-1.5 rounded-lg bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800 transition-colors glass-rise-btn"
+                                    title="Reject Application"
+                                  >
+                                    <XCircle className="w-4 h-4" />
+                                  </button>
+                                )}
+                              </>
+                            ) : null}
+
+                            <button
+                              onClick={() => {
+                                setSelectedExhibitionId(req.exhibitionId);
+                                setActiveTab('floor-plan');
+                              }}
+                              className="px-3 py-1.5 rounded-lg bg-sage-800 dark:bg-sage-700 hover:bg-sage-900 text-cream text-[11px] font-semibold uppercase tracking-wider ml-1 glass-rise-btn"
+                            >
+                              Allocate
+                            </button>
+                          </div>
+                        </td>
+
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -299,7 +320,7 @@ export default function VendorRequestsPage() {
       ) : (
         /* Visual Floor Plan Grid View */
         <StallAllocationGrid
-          selectedExhibitionId={selectedExhibitionId}
+          selectedExhibitionId={selectedExhibitionId === 'All' ? (exhibitions[0]?.id || '2') : selectedExhibitionId}
           onSelectExhibition={setSelectedExhibitionId}
         />
       )}
@@ -309,7 +330,7 @@ export default function VendorRequestsPage() {
         request={detailRequest}
         onClose={() => setDetailRequest(null)}
         onOpenAction={(status) => {
-          if (detailRequest) {
+          if (detailRequest && isOwner) {
             handleOpenAction(detailRequest, status);
           }
         }}

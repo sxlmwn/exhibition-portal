@@ -1,4 +1,4 @@
-export type UserRole = 'owner' | 'admin' | 'staff';
+export type UserRole = 'owner' | 'staff';
 
 export interface StaffUser {
   id: string;
@@ -36,6 +36,7 @@ export interface Exhibition {
   totalStallCapacity: number;
   bookedStallsCount: number;
   budgetAllocated: number; // Funding received / Allocated budget in PKR
+  budgetReceived?: number; // Actual funds received to date in PKR
   stallRevenueBooked: number;
   totalExpensesLogged: number;
   description: string;
@@ -83,19 +84,25 @@ export interface VendorRequest {
   reviewedAt?: string;
 }
 
+export type ContactStatus = 'booked' | 'enquired' | 'waitlisted' | 'past-client' | 'referral';
+
 export interface CRMContact {
   id: string;
+  fullName: string;
   name: string;
   businessName: string;
   phone: string;
   email: string;
   category: string;
-  tags: string[]; // e.g. ['Lahore 2026', 'Booked', 'Apparel', 'High Value', 'Referral']
-  exhibitionIds: string[];
-  status: 'booked' | 'enquired' | 'waitlisted' | 'past-client' | 'referral';
-  totalSpend: number;
-  lastActivityDate: string;
-  notes: string;
+  status: ContactStatus;
+  source: string;
+  exhibitionId: string;
+  exhibitionName: string;
+  tags?: string[];
+  exhibitionIds?: string[];
+  totalSpend?: number;
+  lastActivityDate?: string;
+  notes?: string;
   assignedStallCodes?: string[];
 }
 
@@ -120,12 +127,12 @@ export interface ExpenseItem {
   date: string;
   description: string;
   receiptUrl?: string;
-  enteredById: string;
-  enteredByName: string;
-  enteredByRole: UserRole;
-  status: ExpenseStatus;
+  enteredById?: string;
+  enteredByName?: string;
+  enteredByRole?: UserRole;
+  status?: ExpenseStatus;
   approvedBy?: string;
-  paymentMethod: 'Cash' | 'Bank Transfer' | 'Cheque' | 'Card';
+  paymentMethod?: 'Cash' | 'Bank Transfer' | 'Cheque' | 'Card' | string;
 }
 
 export interface MarketingCampaign {

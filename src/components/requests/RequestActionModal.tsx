@@ -19,7 +19,8 @@ export const RequestActionModal: React.FC<RequestActionModalProps> = ({
   actionType,
   onClose
 }) => {
-  const { updateRequestStatus } = useAdmin();
+  const { updateRequestStatus, currentRole } = useAdmin();
+  const isOwner = currentRole === 'owner';
   const [adminNote, setAdminNote] = useState('');
 
   const effectiveAction = targetStatus || actionType;
@@ -27,6 +28,7 @@ export const RequestActionModal: React.FC<RequestActionModalProps> = ({
   if (!request || !effectiveAction) return null;
 
   const handleConfirm = () => {
+    if (!isOwner) return;
     updateRequestStatus(request.id, effectiveAction);
     onClose();
   };
@@ -76,7 +78,7 @@ export const RequestActionModal: React.FC<RequestActionModalProps> = ({
   const Icon = config.icon;
 
   return (
-    <ModalPortal isOpen={!!request && !!actionType} onClose={onClose} maxWidthClass="max-w-lg">
+    <ModalPortal isOpen={!!request && !!effectiveAction} onClose={onClose} maxWidthClass="max-w-lg">
       <div className="modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full p-6 sm:p-8 shadow-soft-2xl">
         
         <div className="flex items-center justify-between mb-4">
@@ -85,42 +87,42 @@ export const RequestActionModal: React.FC<RequestActionModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-cream-200 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal transition-colors"
+            className="p-2 rounded-full hover:bg-cream-200 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal dark:hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <h3 className="font-sans text-2xl font-extrabold text-charcoal mb-2 tracking-tight">
+        <h3 className="font-sans text-2xl font-extrabold text-charcoal dark:text-white mb-2 tracking-tight">
           {config.title}
         </h3>
-        <p className="text-xs sm:text-sm text-charcoal-muted font-normal leading-relaxed mb-6">
+        <p className="text-xs sm:text-sm text-charcoal-muted dark:text-white/60 font-normal leading-relaxed mb-6">
           {config.description}
         </p>
 
         {/* Applicant Summary */}
         <div className="p-4 rounded-2xl bg-cream-50 dark:bg-white/[0.04] border border-sage-200 dark:border-white/10 text-xs space-y-1.5 mb-6">
           <div className="flex justify-between">
-            <span className="text-charcoal-muted">Brand:</span>
-            <span className="font-bold text-charcoal">{request.brandName}</span>
+            <span className="text-charcoal-muted dark:text-white/60">Brand:</span>
+            <span className="font-bold text-charcoal dark:text-white">{request.brandName}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-charcoal-muted">Contact:</span>
-            <span className="text-charcoal">{request.vendorName} ({request.phone})</span>
+            <span className="text-charcoal-muted dark:text-white/60">Contact:</span>
+            <span className="text-charcoal dark:text-white">{request.vendorName} ({request.phone})</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-charcoal-muted">Category:</span>
-            <span className="text-charcoal">{request.productCategory}</span>
+            <span className="text-charcoal-muted dark:text-white/60">Category:</span>
+            <span className="text-charcoal dark:text-white">{request.productCategory}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-charcoal-muted">Target Edition:</span>
+            <span className="text-charcoal-muted dark:text-white/60">Target Edition:</span>
             <span className="text-sage-800 dark:text-sage-300 font-semibold">{request.exhibitionName}</span>
           </div>
         </div>
 
         {/* Admin note */}
         <div className="mb-6">
-          <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
+          <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal dark:text-white mb-1.5">
             Internal Note / Curator Remarks (Optional)
           </label>
           <textarea
@@ -128,20 +130,21 @@ export const RequestActionModal: React.FC<RequestActionModalProps> = ({
             value={adminNote}
             onChange={(e) => setAdminNote(e.target.value)}
             placeholder="e.g. Approved for Corner slot after Instagram review..."
-            className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
+            className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
           />
         </div>
 
         <div className="flex items-center justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-5 py-2.5 rounded-full border border-sage-300 text-charcoal hover:bg-cream-100 dark:hover:bg-white/10 text-xs font-semibold uppercase tracking-wider"
+            className="px-5 py-2.5 rounded-full border border-sage-300 dark:border-white/20 text-charcoal dark:text-white hover:bg-cream-100 dark:hover:bg-white/10 text-xs font-semibold uppercase tracking-wider"
           >
             Cancel
           </button>
           <button
             onClick={handleConfirm}
-            className={`px-6 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider shadow-sm transition-colors ${config.btnClass}`}
+            disabled={!isOwner}
+            className={`px-6 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider shadow-sm transition-colors disabled:opacity-50 ${config.btnClass}`}
           >
             {config.btnText}
           </button>

@@ -108,7 +108,7 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
             title="Switch User Role to test permissions"
           >
             <span className={`w-2 h-2 rounded-full ${
-              currentRole === 'owner' ? 'bg-emerald-600' : currentRole === 'admin' ? 'bg-purple-600' : 'bg-amber-600'
+              currentRole === 'owner' ? 'bg-emerald-600' : 'bg-amber-600'
             }`} />
             <span className="text-charcoal-muted text-[11px] uppercase tracking-wider">Role:</span>
             <span className="font-bold text-charcoal capitalize">{currentRole}</span>
@@ -120,7 +120,7 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
               <div className="px-3 py-2 border-b border-sage-100 dark:border-white/10 text-[11px] text-charcoal-muted font-bold uppercase tracking-wider">
                 Switch Role (Permission Test)
               </div>
-              {(['owner', 'admin', 'staff'] as UserRole[]).map((role) => (
+              {(['owner', 'staff'] as UserRole[]).map((role) => (
                 <button
                   key={role}
                   onClick={() => handleRoleChange(role)}
@@ -130,7 +130,7 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
                       : 'text-charcoal-light hover:bg-cream-100 dark:hover:bg-white/5'
                   }`}
                 >
-                  <span className="capitalize">{role === 'owner' ? 'Owner (Full Access)' : role === 'admin' ? 'Admin' : 'Staff (Restricted)'}</span>
+                  <span className="capitalize">{role === 'owner' ? 'Owner (Full Access)' : 'Staff (Restricted)'}</span>
                   {currentRole === role && <CheckCircle2 className="w-4 h-4 text-sage-700 dark:text-sage-300" />}
                 </button>
               ))}

@@ -52,7 +52,6 @@ export default function SettingsPage() {
   const getRoleBadge = (role: UserRole) => {
     switch (role) {
       case 'owner': return 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-900 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700/40';
-      case 'admin': return 'bg-purple-100 dark:bg-purple-900/30 text-purple-900 dark:text-purple-300 border-purple-300 dark:border-purple-700/40';
       case 'staff': return 'bg-amber-100 dark:bg-amber-900/30 text-amber-900 dark:text-amber-300 border-amber-300 dark:border-amber-700/40';
     }
   };
@@ -168,7 +167,6 @@ export default function SettingsPage() {
                         className="px-3 py-1.5 rounded-xl border border-sage-200 bg-white text-xs font-bold text-charcoal outline-none cursor-pointer disabled:opacity-50 glass-select shadow-2xs"
                       >
                         <option value="owner">Owner</option>
-                        <option value="admin">Admin</option>
                         <option value="staff">Staff</option>
                       </select>
 
@@ -200,14 +198,14 @@ export default function SettingsPage() {
             Role Permission Matrix Breakdown
           </span>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             
-            <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-2 text-xs">
-              <div className="flex items-center gap-1.5 text-emerald-900 font-bold">
-                <ShieldCheck className="w-4 h-4 text-emerald-700" />
-                <span>Owner Role</span>
+            <div className="p-4 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/40 space-y-2 text-xs">
+              <div className="flex items-center gap-1.5 text-emerald-900 dark:text-emerald-300 font-bold">
+                <ShieldCheck className="w-4 h-4 text-emerald-700 dark:text-emerald-400" />
+                <span>Owner Role (Full Governance)</span>
               </div>
-              <ul className="space-y-1 text-[11px] text-emerald-800 font-light">
+              <ul className="space-y-1 text-[11px] text-emerald-800 dark:text-emerald-300/80 font-light">
                 <li>&bull; Full administrative authority</li>
                 <li>&bull; Manage & delete exhibitions</li>
                 <li>&bull; Approve/reject expense vouchers</li>
@@ -216,30 +214,16 @@ export default function SettingsPage() {
               </ul>
             </div>
 
-            <div className="p-4 rounded-2xl bg-purple-50/70 border border-purple-200 space-y-2 text-xs">
-              <div className="flex items-center gap-1.5 text-purple-900 font-bold">
-                <ShieldCheck className="w-4 h-4 text-purple-700" />
-                <span>Admin Role</span>
+            <div className="p-4 rounded-2xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/40 space-y-2 text-xs">
+              <div className="flex items-center gap-1.5 text-amber-900 dark:text-amber-300 font-bold">
+                <ShieldCheck className="w-4 h-4 text-amber-700 dark:text-amber-400" />
+                <span>Staff Role (Operations & Entry)</span>
               </div>
-              <ul className="space-y-1 text-[11px] text-purple-800 font-light">
-                <li>&bull; Add/edit exhibitions</li>
-                <li>&bull; Review & approve vendor requests</li>
-                <li>&bull; Floor plan stall allocations</li>
-                <li>&bull; Expense review & CRM blasts</li>
-                <li>&bull; Cannot delete core financial ledgers</li>
-              </ul>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-2 text-xs">
-              <div className="flex items-center gap-1.5 text-amber-900 font-bold">
-                <ShieldCheck className="w-4 h-4 text-amber-700" />
-                <span>Staff Role</span>
-              </div>
-              <ul className="space-y-1 text-[11px] text-amber-800 font-light">
+              <ul className="space-y-1 text-[11px] text-amber-800 dark:text-amber-300/80 font-light">
                 <li>&bull; Floor plan stall assignments</li>
-                <li>&bull; Log expense vouchers (marked Pending)</li>
+                <li>&bull; Log expense vouchers (marked Pending Approval)</li>
                 <li>&bull; View vendor contacts & directory</li>
-                <li>&bull; Approvals & deletes restricted</li>
+                <li>&bull; Deletions and financial approvals restricted</li>
               </ul>
             </div>
 

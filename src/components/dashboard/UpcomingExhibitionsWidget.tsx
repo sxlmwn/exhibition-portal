@@ -35,67 +35,73 @@ export const UpcomingExhibitionsWidget: React.FC<UpcomingExhibitionsWidgetProps>
         </div>
 
         <div className="space-y-3.5">
-          {activeExhibitions.map((exh) => {
-            const fillPct = Math.round((exh.bookedStallsCount / exh.totalStallCapacity) * 100);
+          {activeExhibitions.length > 0 ? (
+            activeExhibitions.map((exh) => {
+              const fillPct = Math.round((exh.bookedStallsCount / exh.totalStallCapacity) * 100);
 
-            return (
-              <div
-                key={exh.id}
-                onClick={() => onSelectExhibition && onSelectExhibition(exh)}
-                className="p-4 rounded-2xl bg-white/75 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 border border-sage-200/60 dark:border-white/10 shadow-2xs glass-rise-row cursor-pointer transition-all"
-              >
-                <div className="flex items-start justify-between gap-3 mb-2">
-                  <div>
-                    <h4 className="font-sans text-base font-extrabold text-charcoal leading-snug tracking-tight">
-                      {exh.title}
-                    </h4>
-                    <div className="flex items-center gap-2 text-xs text-charcoal-muted mt-1 font-light">
-                      <span className="flex items-center gap-1">
-                        <MapPin className="w-3.5 h-3.5 text-sage-600" />
-                        {exh.city}
+              return (
+                <div
+                  key={exh.id}
+                  onClick={() => onSelectExhibition && onSelectExhibition(exh)}
+                  className="p-4 rounded-2xl bg-white/75 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 border border-sage-200/60 dark:border-white/10 shadow-2xs glass-rise-row cursor-pointer transition-all"
+                >
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <div>
+                      <h4 className="font-sans text-base font-extrabold text-charcoal leading-snug tracking-tight">
+                        {exh.title}
+                      </h4>
+                      <div className="flex items-center gap-2 text-xs text-charcoal-muted mt-1 font-light">
+                        <span className="flex items-center gap-1">
+                          <MapPin className="w-3.5 h-3.5 text-sage-600" />
+                          {exh.city}
+                        </span>
+                        <span>&bull;</span>
+                        <span className="flex items-center gap-1">
+                          <CalendarDays className="w-3.5 h-3.5 text-sage-600" />
+                          {exh.startDate}
+                        </span>
+                      </div>
+                    </div>
+                    <span className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${
+                      fillPct >= 90 
+                        ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-900 dark:text-amber-300 border-amber-300 dark:border-amber-700/40' 
+                        : 'bg-sage-100 dark:bg-sage-800/30 text-sage-800 dark:text-sage-300 border-sage-200 dark:border-sage-700/40'
+                    }`}>
+                      {fillPct >= 100 ? 'Sold Out' : `${exh.daysLeft || 14}d Left`}
+                    </span>
+                  </div>
+
+                  {/* Stall Fill Progress Bar */}
+                  <div className="mt-3">
+                    <div className="flex items-center justify-between text-[11px] mb-1">
+                      <span className="text-charcoal-light font-medium flex items-center gap-1">
+                        <Store className="w-3 h-3 text-sage-600" />
+                        Capacity: {exh.bookedStallsCount}/{exh.totalStallCapacity}
                       </span>
-                      <span>&bull;</span>
-                      <span className="flex items-center gap-1">
-                        <CalendarDays className="w-3.5 h-3.5 text-sage-600" />
-                        {exh.startDate}
-                      </span>
+                      <span className="font-bold text-sage-deep">{fillPct}% Booked</span>
+                    </div>
+                    <div className="w-full h-2 bg-cream-200 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all duration-500 ${
+                          fillPct >= 90 ? 'bg-amber-600' : 'bg-sage-600'
+                        }`}
+                        style={{ width: `${fillPct}%` }}
+                      />
                     </div>
                   </div>
-                  <span className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${
-                    fillPct >= 90 
-                      ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-900 dark:text-amber-300 border-amber-300 dark:border-amber-700/40' 
-                      : 'bg-sage-100 dark:bg-sage-800/30 text-sage-800 dark:text-sage-300 border-sage-200 dark:border-sage-700/40'
-                  }`}>
-                    {fillPct >= 100 ? 'Sold Out' : `${exh.daysLeft || 14}d Left`}
-                  </span>
                 </div>
-
-                {/* Stall Fill Progress Bar */}
-                <div className="mt-3">
-                  <div className="flex items-center justify-between text-[11px] mb-1">
-                    <span className="text-charcoal-light font-medium flex items-center gap-1">
-                      <Store className="w-3 h-3 text-sage-600" />
-                      Capacity: {exh.bookedStallsCount}/{exh.totalStallCapacity}
-                    </span>
-                    <span className="font-bold text-sage-deep">{fillPct}% Booked</span>
-                  </div>
-                  <div className="w-full h-2 bg-cream-200 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full transition-all duration-500 ${
-                        fillPct >= 90 ? 'bg-amber-600' : 'bg-sage-600'
-                      }`}
-                      style={{ width: `${fillPct}%` }}
-                    />
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <div className="p-8 text-center text-xs text-charcoal-muted font-light">
+              No active editions scheduled yet.
+            </div>
+          )}
         </div>
       </div>
 
       <div className="pt-4 mt-4 border-t border-sage-100 flex items-center justify-between text-xs text-charcoal-muted">
-        <span>3 editions scheduled for 2026</span>
+        <span>{activeExhibitions.length} edition{activeExhibitions.length === 1 ? '' : 's'} scheduled for 2026</span>
         <Link href="/exhibitions" className="font-semibold text-sage-800 hover:underline">
           + Add Edition
         </Link>

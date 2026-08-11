@@ -4,20 +4,19 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { X, User, Building2, Phone, Mail, Tag } from 'lucide-react';
-import { CRMContact } from '../../types';
+import { X, User, Building2, Phone, Mail, Tag, Compass } from 'lucide-react';
+import { CRMContact, ContactStatus } from '../../types';
 import { useAdmin } from '../../context/AdminContext';
 import { ModalPortal } from '../common/ModalPortal';
 
 const contactSchema = z.object({
-  name: z.string().min(2, 'Contact person name is required'),
-  businessName: z.string().min(2, 'Brand/Business name is required'),
-  phone: z.string().min(8, 'Valid phone/WhatsApp is required'),
-  email: z.string().email('Valid email is required'),
+  fullName: z.string().min(2, 'Full name is required'),
+  phone: z.string().min(8, 'Valid phone/WhatsApp number is required'),
+  email: z.string().email('Valid email address is required'),
   category: z.string().min(2, 'Category is required'),
+  exhibitionId: z.string().min(1, 'Target exhibition is required'),
   status: z.enum(['booked', 'enquired', 'waitlisted', 'past-client', 'referral']),
-  totalSpend: z.number().min(0).optional(),
-  tagsInput: z.string().optional(),
+  source: z.string().min(2, 'Lead source is required'),
   notes: z.string().optional(),
 });
 
@@ -36,6 +35,8 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
 }) => {
   const { addContact, updateContact, exhibitions } = useAdmin();
 
+  const defaultExhibitionId = exhibitions[0]?.id || '2';
+
   const {
     register,
     handleSubmit,
@@ -44,14 +45,13 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
-      name: '',
-      businessName: '',
+      fullName: '',
       phone: '',
       email: '',
-      category: 'Lifestyle & Apparel',
+      category: 'Haute Couture & Fine Jewelry',
+      exhibitionId: defaultExhibitionId,
       status: 'enquired',
-      totalSpend: 0,
-      tagsInput: 'Lahore 2026, New Lead',
+      source: 'Instagram DM',
       notes: '',
     }
   });
@@ -59,59 +59,59 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
   useEffect(() => {
     if (contactToEdit) {
       reset({
-        name: contactToEdit.name,
-        businessName: contactToEdit.businessName,
-        phone: contactToEdit.phone,
-        email: contactToEdit.email,
-        category: contactToEdit.category,
-        status: contactToEdit.status,
-        totalSpend: contactToEdit.totalSpend,
-        tagsInput: contactToEdit.tags ? contactToEdit.tags.join(', ') : '',
+        fullName: contactToEdit.fullName || contactToEdit.name || '',
+        phone: contactToEdit.phone || '',
+        email: contactToEdit.email || '',
+        category: contactToEdit.category || 'Haute Couture & Fine Jewelry',
+        exhibitionId: contactToEdit.exhibitionId || defaultExhibitionId,
+        status: contactToEdit.status || 'enquired',
+        source: contactToEdit.source || 'Instagram DM',
         notes: contactToEdit.notes || '',
       });
     } else {
       reset({
-        name: '',
-        businessName: '',
+        fullName: '',
         phone: '',
         email: '',
-        category: 'Lifestyle & Apparel',
+        category: 'Haute Couture & Fine Jewelry',
+        exhibitionId: defaultExhibitionId,
         status: 'enquired',
-        totalSpend: 0,
-        tagsInput: 'Lahore 2026, New Lead',
+        source: 'Instagram DM',
         notes: '',
       });
     }
-  }, [contactToEdit, reset, isOpen]);
+  }, [contactToEdit, reset, isOpen, defaultExhibitionId]);
 
   const onSubmit = (data: ContactFormData) => {
-    const parsedTags = data.tagsInput
-      ? data.tagsInput.split(',').map(t => t.trim()).filter(Boolean)
-      : [];
-    
+    const targetExh = exhibitions.find(e => e.id === data.exhibitionId);
+    const exhibitionName = targetExh ? targetExh.title : 'Exhibition Edition';
+
     if (contactToEdit) {
       updateContact(contactToEdit.id, {
-        name: data.name,
-        businessName: data.businessName,
+        fullName: data.fullName,
+        name: data.fullName,
+        businessName: data.fullName,
         phone: data.phone,
         email: data.email,
         category: data.category,
+        exhibitionId: data.exhibitionId,
+        exhibitionName,
         status: data.status,
-        totalSpend: Number(data.totalSpend || 0),
-        tags: parsedTags,
+        source: data.source,
         notes: data.notes || '',
       });
     } else {
       addContact({
-        name: data.name,
-        businessName: data.businessName,
+        fullName: data.fullName,
+        name: data.fullName,
+        businessName: data.fullName,
         phone: data.phone,
         email: data.email,
         category: data.category,
+        exhibitionId: data.exhibitionId,
+        exhibitionName,
         status: data.status,
-        totalSpend: Number(data.totalSpend || 0),
-        tags: parsedTags,
-        exhibitionIds: [exhibitions[0]?.id || 'exh-1'],
+        source: data.source,
         notes: data.notes || '',
       });
     }
@@ -125,15 +125,15 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
         <div className="flex items-center justify-between pb-4 border-b border-sage-100 dark:border-white/10 mb-6">
           <div>
             <span className="eyebrow-label">
-              CRM RECORD
+              CRM DIRECTORY
             </span>
-            <h3 className="font-sans text-2xl font-extrabold text-charcoal tracking-tight">
+            <h3 className="font-sans text-2xl font-extrabold text-charcoal dark:text-white tracking-tight">
               {contactToEdit ? 'Edit Exhibitor Contact' : 'Add New Exhibitor'}
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-cream-200 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal transition-colors"
+            className="p-2 rounded-full hover:bg-cream-200 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal dark:hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -141,82 +141,96 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
-                Brand Name *
-              </label>
-              <input
-                type="text"
-                {...register('businessName')}
-                placeholder="e.g. Terra Clayworks"
-                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
-              />
-              {errors.businessName && <p className="text-rose-600 text-xs mt-1">{errors.businessName.message}</p>}
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
-                Contact Person *
-              </label>
-              <input
-                type="text"
-                {...register('name')}
-                placeholder="e.g. Ayla Siddiqui"
-                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
-              />
-              {errors.name && <p className="text-rose-600 text-xs mt-1">{errors.name.message}</p>}
-            </div>
+          {/* Full Name */}
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal dark:text-white mb-1.5">
+              Full Name / Business Entity *
+            </label>
+            <input
+              type="text"
+              {...register('fullName')}
+              placeholder="e.g. Sania Maskatiya (Maskatiya Pret)"
+              className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
+            />
+            {errors.fullName && <p className="text-rose-600 text-xs mt-1">{errors.fullName.message}</p>}
           </div>
 
+          {/* Phone & Email */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
-                WhatsApp / Phone *
+              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal dark:text-white mb-1.5">
+                WhatsApp / Phone Number *
               </label>
               <input
                 type="text"
                 {...register('phone')}
                 placeholder="+92 300 1234567"
-                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
+                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
               />
               {errors.phone && <p className="text-rose-600 text-xs mt-1">{errors.phone.message}</p>}
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal dark:text-white mb-1.5">
                 Email Address *
               </label>
               <input
                 type="email"
                 {...register('email')}
-                placeholder="ayla@terraclay.com"
-                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
+                placeholder="sania@maskatiya.com"
+                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
               />
               {errors.email && <p className="text-rose-600 text-xs mt-1">{errors.email.message}</p>}
             </div>
           </div>
 
+          {/* Exhibition & Category */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
-                Category *
+              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal dark:text-white mb-1.5">
+                Linked Exhibition Edition *
               </label>
-              <input
-                type="text"
-                {...register('category')}
-                placeholder="e.g. Studio Ceramics"
-                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
-              />
+              <select
+                {...register('exhibitionId')}
+                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white outline-none focus:border-sage-500 bg-white/80 dark:bg-[#1A1D24]"
+              >
+                {exhibitions.map((exh) => (
+                  <option key={exh.id} value={exh.id}>
+                    {exh.title} ({exh.city})
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal dark:text-white mb-1.5">
+                Product Category *
+              </label>
+              <select
+                {...register('category')}
+                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white outline-none focus:border-sage-500 bg-white/80 dark:bg-[#1A1D24]"
+              >
+                <option value="Haute Couture & Fine Jewelry">Haute Couture & Fine Jewelry</option>
+                <option value="Home, Decor & Wellness">Home, Decor & Wellness</option>
+                <option value="Lifestyle & Artisan Craft">Lifestyle & Artisan Craft</option>
+                <option value="Contemporary Art & Design">Contemporary Art & Design</option>
+                <option value="Textile & Apparel">Textile & Apparel</option>
+                <option value="Studio Ceramics">Studio Ceramics</option>
+                <option value="Beauty & Skincare">Beauty & Skincare</option>
+                <option value="Leather & Accessories">Leather & Accessories</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Status & Source */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal dark:text-white mb-1.5">
                 Status *
               </label>
               <select
                 {...register('status')}
-                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none bg-white dark:bg-[#1A1D24]"
+                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white outline-none focus:border-sage-500 bg-white/80 dark:bg-[#1A1D24]"
               >
                 <option value="enquired">Enquiry / Lead</option>
                 <option value="booked">Confirmed Booked</option>
@@ -225,29 +239,31 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
                 <option value="referral">Referral Partner</option>
               </select>
             </div>
+
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal dark:text-white mb-1.5">
+                Lead Source *
+              </label>
+              <input
+                type="text"
+                {...register('source')}
+                placeholder="e.g. Instagram DM, VIP Referral, Website"
+                className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
+              />
+              {errors.source && <p className="text-rose-600 text-xs mt-1">{errors.source.message}</p>}
+            </div>
           </div>
 
+          {/* Curator Notes */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
-              Tags (Comma-separated)
-            </label>
-            <input
-              type="text"
-              {...register('tagsInput')}
-              placeholder="e.g. Lahore 2026, Corner Slot, High Demand"
-              className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
-              Curator Notes
+            <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal dark:text-white mb-1.5">
+              Internal Curator Notes (Optional)
             </label>
             <textarea
               rows={3}
               {...register('notes')}
-              placeholder="Add history, past sales performance, or display requirements..."
-              className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 font-sans bg-white/80 dark:bg-white/5"
+              placeholder="Add details on exhibitor history, booth requirements, or communication history..."
+              className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
             />
           </div>
 
@@ -255,7 +271,7 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 rounded-full border border-sage-300 text-charcoal hover:bg-cream-100 dark:hover:bg-white/10 text-xs font-semibold uppercase tracking-wider"
+              className="px-5 py-2.5 rounded-full border border-sage-300 dark:border-white/20 text-charcoal dark:text-white hover:bg-cream-100 dark:hover:bg-white/10 text-xs font-semibold uppercase tracking-wider transition-colors"
             >
               Cancel
             </button>

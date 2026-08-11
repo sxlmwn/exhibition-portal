@@ -238,7 +238,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
                 </span>
                 <span className={`inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full mt-1 ${
                   currentRole === 'owner' ? 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800' :
-                  currentRole === 'admin' ? 'bg-purple-50 text-purple-800 dark:bg-purple-950/60 dark:text-purple-300 border border-purple-200 dark:border-purple-800' :
                   'bg-amber-50 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
                 }`}>
                   <ShieldCheck className="w-3 h-3" />
@@ -267,8 +266,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
               <span className="text-[10px] uppercase font-bold tracking-wider text-charcoal-muted block mb-2">
                 Simulate Portal Role
               </span>
-              <div className="grid grid-cols-3 gap-1.5">
-                {(['owner', 'admin', 'staff'] as UserRole[]).map((r) => (
+              <div className="grid grid-cols-2 gap-1.5">
+                {(['owner', 'staff'] as UserRole[]).map((r) => (
                   <button
                     key={r}
                     onClick={() => handleRoleChange(r)}

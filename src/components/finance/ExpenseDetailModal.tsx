@@ -13,54 +13,49 @@ import {
   FileText, 
   Store, 
   ShieldCheck,
-  CreditCard
+  CreditCard,
+  Edit3,
+  Trash2,
+  ExternalLink
 } from 'lucide-react';
 import { ExpenseItem, ExpenseStatus } from '../../types';
 import { useAdmin } from '../../context/AdminContext';
 import { ModalPortal } from '../common/ModalPortal';
+import { isPdfUrl, openReceiptUrl } from '../../lib/storage';
 
 interface ExpenseDetailModalProps {
   expense: ExpenseItem | null;
   onClose: () => void;
-  onViewReceipt?: (receipt: any) => void;
+  onEdit?: (expense: ExpenseItem) => void;
+  onViewReceipt?: (receiptUrl: string) => void;
 }
 
 export const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({
   expense,
   onClose,
+  onEdit,
   onViewReceipt
 }) => {
-  const { updateExpenseStatus, currentRole, exhibitions } = useAdmin();
+  const { deleteExpense, currentRole } = useAdmin();
 
   if (!expense) return null;
 
-  const targetExhibition = exhibitions.find(e => e.id === expense.exhibitionId);
+  const isOwner = currentRole === 'owner';
+  const isPdf = isPdfUrl(expense.receiptUrl);
 
-  const handleStatusChange = (status: ExpenseStatus) => {
-    updateExpenseStatus(expense.id, status);
-  };
-
-  const getStatusBadge = (status: ExpenseStatus) => {
-    switch (status) {
-      case 'approved':
-        return {
-          bg: 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700',
-          label: 'Approved'
-        };
-      case 'rejected':
-        return {
-          bg: 'bg-rose-100 dark:bg-rose-950/60 text-rose-900 dark:text-rose-300 border-rose-300 dark:border-rose-700',
-          label: 'Rejected'
-        };
-      default:
-        return {
-          bg: 'bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border-amber-300 dark:border-amber-700',
-          label: 'Pending Approval'
-        };
+  const handleDelete = () => {
+    if (!isOwner) return;
+    if (confirm(`Delete this ${expense.category} expense record of Rs. ${expense.amount.toLocaleString()}?`)) {
+      deleteExpense(expense.id);
+      onClose();
     }
   };
 
-  const statusBadge = getStatusBadge(expense.status);
+  const handleOpenReceipt = () => {
+    if (expense.receiptUrl) {
+      openReceiptUrl(expense.receiptUrl);
+    }
+  };
 
   return (
     <ModalPortal isOpen={!!expense} onClose={onClose} maxWidthClass="max-w-2xl">
@@ -70,7 +65,7 @@ export const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({
         {/* Header */}
         <div className="flex items-start justify-between pb-5 border-b border-sage-100 dark:border-white/10 mb-6">
           <div className="flex items-center gap-3.5">
-            <div className="w-12 h-12 rounded-2xl bg-rose-100 dark:bg-rose-950/60 flex items-center justify-center text-rose-800 dark:text-rose-300 font-bold">
+            <div className="w-12 h-12 rounded-2xl bg-rose-100 dark:bg-rose-950/60 flex items-center justify-center text-rose-800 dark:text-rose-300 font-bold shadow-xs">
               <Receipt className="w-6 h-6" />
             </div>
             <div>
@@ -78,11 +73,11 @@ export const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({
                 <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border border-sage-200 dark:border-white/10 text-sage-800 dark:text-sage-300">
                   {expense.category}
                 </span>
-                <span className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${statusBadge.bg}`}>
-                  {statusBadge.label}
+                <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700">
+                  Logged Entry
                 </span>
               </div>
-              <h2 className="font-sans text-2xl sm:text-3xl font-bold text-charcoal tracking-tight">
+              <h2 className="font-sans text-2xl sm:text-3xl font-bold text-charcoal dark:text-white tracking-tight">
                 {expense.category}
               </h2>
             </div>
@@ -90,7 +85,7 @@ export const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({
 
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-cream-100 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal transition-colors"
+            className="p-2 rounded-full hover:bg-cream-100 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal dark:hover:text-white transition-colors"
             title="Close modal"
           >
             <X className="w-5 h-5" />
@@ -103,18 +98,18 @@ export const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({
           {/* Key Amount Callout */}
           <div className="p-5 rounded-3xl bg-cream-50 dark:bg-white/5 border border-sage-200/80 dark:border-white/10 flex items-center justify-between">
             <div>
-              <span className="text-[11px] uppercase tracking-wider font-bold text-charcoal-muted block mb-0.5">
+              <span className="text-[11px] uppercase tracking-wider font-bold text-charcoal-muted dark:text-white/60 block mb-0.5">
                 Total Expense Amount
               </span>
-              <span className="font-sans text-3xl font-bold text-charcoal">
+              <span className="font-sans text-3xl font-bold text-charcoal dark:text-white">
                 Rs. {expense.amount.toLocaleString()}
               </span>
             </div>
             <div className="text-right">
-              <span className="text-[11px] uppercase tracking-wider font-bold text-charcoal-muted block mb-0.5">
-                Voucher Date
+              <span className="text-[11px] uppercase tracking-wider font-bold text-charcoal-muted dark:text-white/60 block mb-0.5">
+                Expense Incurred Date
               </span>
-              <span className="text-xs font-bold text-charcoal">
+              <span className="text-xs font-bold text-charcoal dark:text-white">
                 {expense.date}
               </span>
             </div>
@@ -124,36 +119,29 @@ export const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             
             <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-sage-200/70 dark:border-white/10 space-y-2 text-xs">
-              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted block">
-                Exhibition & Payment Mode
+              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted dark:text-white/60 block">
+                Exhibition Association
               </span>
-              <div className="flex items-center gap-2 text-charcoal font-bold text-sm">
+              <div className="flex items-center gap-2 text-charcoal dark:text-white font-bold text-sm">
                 <Store className="w-4 h-4 text-sage-700 dark:text-sage-400" />
                 <span>{expense.exhibitionName}</span>
               </div>
-              <div className="flex items-center gap-2 text-charcoal-muted">
-                <CreditCard className="w-4 h-4 text-sage-700 dark:text-sage-400" />
-                <span>Method: <strong className="text-charcoal font-medium">{expense.paymentMethod}</strong></span>
-              </div>
+              <span className="text-[11px] text-charcoal-muted dark:text-white/50 block">
+                Exhibition ID #{expense.exhibitionId}
+              </span>
             </div>
 
             <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-sage-200/70 dark:border-white/10 space-y-2 text-xs">
-              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted block">
-                Entered / Logged By
+              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted dark:text-white/60 block">
+                Ledger Entry Origin
               </span>
-              <div className="flex items-center gap-2 text-charcoal font-bold">
+              <div className="flex items-center gap-2 text-charcoal dark:text-white font-bold">
                 <User className="w-4 h-4 text-sage-700 dark:text-sage-400" />
-                <span>{expense.enteredByName}</span>
-                <span className="text-[10px] bg-sage-100 dark:bg-sage-900/60 text-sage-800 dark:text-sage-300 px-2 py-0.5 rounded-full capitalize">
-                  {expense.enteredByRole}
-                </span>
+                <span>{expense.enteredByName || 'Curation Desk'}</span>
               </div>
-              {expense.approvedBy && (
-                <div className="flex items-center gap-2 text-emerald-800 dark:text-emerald-300 text-[11px] font-semibold">
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                  <span>Approved by {expense.approvedBy}</span>
-                </div>
-              )}
+              <span className="text-[11px] text-emerald-800 dark:text-emerald-300 font-semibold block">
+                ✓ Recorded in Supabase Ledger
+              </span>
             </div>
 
           </div>
@@ -161,10 +149,10 @@ export const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({
           {/* Description */}
           {expense.description && (
             <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-sage-200/70 dark:border-white/10">
-              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted block mb-1">
+              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted dark:text-white/60 block mb-1">
                 Itemized Narrative & Purpose
               </span>
-              <p className="text-xs text-charcoal leading-relaxed font-medium">
+              <p className="text-xs text-charcoal dark:text-white/90 leading-relaxed font-medium">
                 {expense.description}
               </p>
             </div>
@@ -173,21 +161,42 @@ export const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({
           {/* Receipt Proof Preview */}
           {expense.receiptUrl && (
             <div className="p-4 rounded-2xl bg-white dark:bg-white/5 border border-sage-200/70 dark:border-white/10 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <img
-                  src={expense.receiptUrl}
-                  alt="Receipt thumbnail"
-                  className="w-12 h-12 rounded-xl object-cover border border-sage-300"
-                />
-                <div>
-                  <span className="text-xs font-bold text-charcoal block">Attached Invoice / Voucher</span>
-                  <span className="text-[11px] text-charcoal-muted">Verified digital voucher proof</span>
+              <div className="flex items-center gap-3 min-w-0">
+                {isPdf ? (
+                  <div className="w-12 h-12 rounded-xl bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 flex items-center justify-center font-bold text-xs shrink-0">
+                    PDF
+                  </div>
+                ) : (
+                  <img
+                    src={expense.receiptUrl}
+                    alt="Receipt thumbnail"
+                    className="w-12 h-12 rounded-xl object-cover border border-sage-300 dark:border-white/10 shrink-0"
+                  />
+                )}
+                <div className="min-w-0">
+                  <span className="text-xs font-bold text-charcoal dark:text-white block truncate">
+                    Attached Invoice Voucher
+                  </span>
+                  <span className="text-[11px] text-charcoal-muted dark:text-white/50 block">
+                    {isPdf ? 'PDF digital document' : 'Verified image proof'}
+                  </span>
                 </div>
               </div>
-              {onViewReceipt && (
+
+              {isPdf ? (
                 <button
-                  onClick={() => onViewReceipt(expense.receiptUrl!)}
-                  className="px-3.5 py-1.5 rounded-xl border border-sage-300 dark:border-white/10 bg-cream-50 dark:bg-white/10 hover:bg-white text-xs font-bold text-charcoal transition-all glass-rise-btn"
+                  type="button"
+                  onClick={handleOpenReceipt}
+                  className="px-3.5 py-1.5 rounded-xl border border-rose-300 dark:border-rose-800 bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 text-xs font-bold transition-all flex items-center gap-1 shrink-0 glass-rise-btn"
+                >
+                  <span>Open PDF</span>
+                  <ExternalLink className="w-3 h-3" />
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => onViewReceipt && onViewReceipt(expense.receiptUrl!)}
+                  className="px-3.5 py-1.5 rounded-xl border border-sage-300 dark:border-white/20 bg-cream-50 dark:bg-white/10 hover:bg-white text-xs font-bold text-charcoal dark:text-white transition-all glass-rise-btn shrink-0"
                 >
                   View Full
                 </button>
@@ -195,56 +204,31 @@ export const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({
             </div>
           )}
 
-          {/* Approval Controls */}
-          <div className="pt-4 border-t border-sage-100 dark:border-white/10">
-            <span className="text-xs uppercase tracking-wider font-bold text-charcoal-muted block mb-3">
-              Expense Verification & Approval
-            </span>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          {/* Action buttons (Edit & Delete for Owner) */}
+          {isOwner && (
+            <div className="pt-4 border-t border-sage-100 dark:border-white/10 flex items-center justify-end gap-3">
               <button
-                onClick={() => handleStatusChange('approved')}
-                disabled={currentRole === 'staff'}
-                className={`px-4 py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 glass-rise-btn ${
-                  expense.status === 'approved'
-                    ? 'bg-emerald-700 text-white shadow-soft'
-                    : 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-300 hover:bg-emerald-100 border border-emerald-200 dark:border-emerald-800'
-                } disabled:opacity-50`}
+                onClick={handleDelete}
+                className="px-4 py-2.5 rounded-full border border-rose-300 dark:border-rose-800 text-rose-700 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 transition-colors"
               >
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>Approve Expense</span>
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Delete Ledger</span>
               </button>
 
-              <button
-                onClick={() => handleStatusChange('rejected')}
-                disabled={currentRole === 'staff'}
-                className={`px-4 py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 glass-rise-btn ${
-                  expense.status === 'rejected'
-                    ? 'bg-rose-700 text-white shadow-soft'
-                    : 'bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-300 hover:bg-rose-100 border border-rose-200 dark:border-rose-800'
-                } disabled:opacity-50`}
-              >
-                <XCircle className="w-3.5 h-3.5" />
-                <span>Reject</span>
-              </button>
-
-              <button
-                onClick={() => handleStatusChange('pending_approval')}
-                className={`px-4 py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 glass-rise-btn ${
-                  expense.status === 'pending_approval'
-                    ? 'bg-amber-600 text-white shadow-soft'
-                    : 'bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300 hover:bg-amber-100 border border-amber-200 dark:border-amber-800'
-                }`}
-              >
-                <Clock className="w-3.5 h-3.5" />
-                <span>Mark Pending</span>
-              </button>
+              {onEdit && (
+                <button
+                  onClick={() => {
+                    onEdit(expense);
+                    onClose();
+                  }}
+                  className="btn-primary px-5 py-2.5 text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5"
+                >
+                  <Edit3 className="w-3.5 h-3.5" />
+                  <span>Edit Record</span>
+                </button>
+              )}
             </div>
-            {currentRole === 'staff' && (
-              <p className="text-[11px] text-amber-700 dark:text-amber-400 mt-2 font-medium">
-                * Staff role cannot authorize expense ledgers. Only Owner and Admin can approve.
-              </p>
-            )}
-          </div>
+          )}
 
         </div>
       </div>

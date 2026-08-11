@@ -13,7 +13,7 @@ const staffSchema = z.object({
   name: z.string().min(2, 'Name is required'),
   email: z.string().email('Valid email is required'),
   phone: z.string().min(8, 'Phone number is required'),
-  role: z.enum(['owner', 'admin', 'staff']),
+  role: z.enum(['owner', 'staff']),
 });
 
 type StaffFormData = z.infer<typeof staffSchema>;
@@ -147,7 +147,6 @@ export const StaffInviteModal: React.FC<StaffInviteModalProps> = ({
               className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none bg-white dark:bg-[#1A1D24]"
             >
               <option value="staff">Staff (Floor Plan Allocation & Entry Only)</option>
-              <option value="admin">Admin (Approval & CRM Oversight)</option>
               <option value="owner">Owner (Full Unrestricted System Governance)</option>
             </select>
           </div>

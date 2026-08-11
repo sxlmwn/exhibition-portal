@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { BrandLogo } from '../../components/BrandLogo';
 import { ModalPortal } from '../../components/common/ModalPortal';
+import { supabase } from '../../lib/supabase';
 import { useAdmin } from '../../context/AdminContext';
 import { UserRole } from '../../types';
 import { 
@@ -46,15 +47,13 @@ export default function LoginPage() {
   const handleRolePreset = (role: UserRole) => {
     setCurrentRole(role);
     if (role === 'owner') {
-      setEmail('zainab.farooq@exhibitionagency.pk');
-    } else if (role === 'admin') {
-      setEmail('bilal.hassan@exhibitionagency.pk');
+      setEmail('admin@exhibitionportal.com');
     } else {
       setEmail('aisha.khan@exhibitionagency.pk');
     }
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
       setErrorMessage('Please enter both email and password.');
@@ -63,10 +62,38 @@ export default function LoginPage() {
     setIsLoading(true);
     setErrorMessage(null);
 
-    setTimeout(() => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
       setIsLoading(false);
-      router.push('/');
-    }, 600);
+      setErrorMessage(error.message);
+      return;
+    }
+
+    if (!data.user) {
+      setIsLoading(false);
+      setErrorMessage('Could not verify your role. Contact the admin.');
+      return;
+    }
+
+    const { data: staffData, error: staffError } = await supabase
+      .from('staff_users')
+      .select('role')
+      .eq('auth_id', data.user.id)
+      .single();
+
+    if (staffError || !staffData || !staffData.role) {
+      setIsLoading(false);
+      setErrorMessage('Could not verify your role. Contact the admin.');
+      return;
+    }
+
+    setCurrentRole(staffData.role as UserRole);
+    setIsLoading(false);
+    router.push('/');
   };
 
   const handleAccessRequest = (e: React.FormEvent) => {
@@ -268,8 +295,8 @@ export default function LoginPage() {
               <span className="text-[10px] uppercase font-bold tracking-wider text-charcoal-muted block mb-2">
                 Quick Role Autofill (Demo Mode)
               </span>
-              <div className="grid grid-cols-3 gap-2">
-                {(['owner', 'admin', 'staff'] as UserRole[]).map((r) => (
+              <div className="grid grid-cols-2 gap-2">
+                {(['owner', 'staff'] as UserRole[]).map((r) => (
                   <button
                     key={r}
                     type="button"
