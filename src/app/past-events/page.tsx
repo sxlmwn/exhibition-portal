@@ -77,7 +77,7 @@ export default function PastEventsPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-transparent to-transparent" />
 
                 <div className="absolute top-4 left-4 flex items-center gap-2">
-                  <span className="bg-cream-50/95 backdrop-blur-md text-sage-900 text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-xs">
+                  <span className="bg-cream-50 dark:bg-white/15 dark:backdrop-blur-md dark:border dark:border-white/20 text-[#33422f] dark:text-white text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-xs dark:shadow-none">
                     {event.edition}
                   </span>
                   <span className="bg-charcoal/70 backdrop-blur-md text-white text-[11px] font-medium px-3 py-1 rounded-full">

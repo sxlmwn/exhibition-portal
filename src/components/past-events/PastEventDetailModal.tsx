@@ -46,7 +46,7 @@ export const PastEventDetailModal: React.FC<PastEventDetailModalProps> = ({
             alt={event.title}
             className="w-full h-full object-cover opacity-80"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-charcoal/95 via-sage-950/60 to-charcoal/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-charcoal/95 via-sage-950/75 to-charcoal/40" />
 
           {/* Close button */}
           <button
@@ -59,16 +59,21 @@ export const PastEventDetailModal: React.FC<PastEventDetailModalProps> = ({
           {/* Overlaid Meta */}
           <div className="absolute bottom-6 left-6 right-6 text-white">
             <div className="flex items-center gap-2 mb-2">
-              <span className="bg-cream-50/95 text-sage-950 text-[11px] font-bold uppercase tracking-wider px-3.5 py-1 rounded-full shadow-xs">
+              <span className="bg-cream-50 dark:bg-white/15 dark:backdrop-blur-md dark:border dark:border-white/20 text-[#2b3a26] dark:text-white text-[11px] font-bold uppercase tracking-wider px-3.5 py-1 rounded-full shadow-md dark:shadow-none">
                 {event.edition}
               </span>
               <span className="bg-white/20 backdrop-blur-md text-white text-[11px] font-medium tracking-wider px-3 py-1 rounded-full">
                 {event.city} &bull; {event.dateRange}
               </span>
             </div>
-            <h2 className="font-sans text-2xl sm:text-3xl font-bold tracking-tight">
-              {event.title}
-            </h2>
+            <div className="inline-block dark:bg-white/10 dark:backdrop-blur-xl dark:border dark:border-white/15 rounded-2xl px-4 py-2.5 -ml-4 dark:shadow-lg">
+              <h2
+                className="font-sans text-2xl sm:text-3xl font-bold tracking-tight text-white"
+                style={{ textShadow: '0 2px 12px rgba(0,0,0,0.65)' }}
+              >
+                {event.title}
+              </h2>
+            </div>
           </div>
         </div>
 

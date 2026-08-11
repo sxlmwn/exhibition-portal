@@ -159,7 +159,7 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
                     </span>
 
                     {isBooked ? (
-                      <span className="text-[9px] font-bold text-sage-900 mt-1 truncate max-w-[90%] block bg-white/70 px-1.5 py-0.5 rounded">
+                      <span className="text-[9px] font-bold text-[#33422f] mt-1 truncate max-w-[90%] block bg-white/70 px-1.5 py-0.5 rounded">
                         {stall.assignedBrandName || 'Booked'}
                       </span>
                     ) : (
@@ -211,7 +211,7 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
                     </span>
 
                     {isBooked ? (
-                      <span className="text-[9px] font-bold text-sage-900 mt-1 truncate max-w-[90%] block bg-white/70 px-1.5 py-0.5 rounded">
+                      <span className="text-[9px] font-bold text-[#33422f] mt-1 truncate max-w-[90%] block bg-white/70 px-1.5 py-0.5 rounded">
                         {stall.assignedBrandName || 'Booked'}
                       </span>
                     ) : (
@@ -256,7 +256,7 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
                     </span>
 
                     {isBooked ? (
-                      <span className="text-[9px] font-bold text-sage-900 mt-1 truncate max-w-[90%] block bg-white/70 px-1.5 py-0.5 rounded">
+                      <span className="text-[9px] font-bold text-[#33422f] mt-1 truncate max-w-[90%] block bg-white/70 px-1.5 py-0.5 rounded">
                         {stall.assignedBrandName || 'Booked'}
                       </span>
                     ) : (
