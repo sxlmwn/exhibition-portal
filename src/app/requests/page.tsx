@@ -298,7 +298,7 @@ export default function VendorRequestsPage() {
 
                             <button
                               onClick={() => {
-                                setSelectedExhibitionId(req.exhibitionId);
+                                setSelectedExhibitionId(req.exhibitionId || '');
                                 setActiveTab('floor-plan');
                               }}
                               className="px-3 py-1.5 rounded-lg bg-sage-800 dark:bg-sage-700 hover:bg-sage-900 text-cream text-[11px] font-semibold uppercase tracking-wider ml-1 glass-rise-btn"

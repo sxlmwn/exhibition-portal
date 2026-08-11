@@ -48,7 +48,7 @@ export type StallTier = 'small' | 'medium' | 'premium' | 'corner';
 export interface StallSlot {
   id: string;
   code: string;
-  exhibitionId: string;
+  exhibitionId?: string;
   tier: StallTier;
   tierName: string;
   dimensions: string;
@@ -69,8 +69,8 @@ export interface VendorRequest {
   brandName: string;
   email: string;
   phone: string;
-  exhibitionId: string;
-  exhibitionName: string;
+  exhibitionId?: string;
+  exhibitionName?: string;
   stallsWanted: number;
   stallTierPreference: StallTier;
   preferredStallCode?: string;
@@ -88,16 +88,16 @@ export type ContactStatus = 'booked' | 'enquired' | 'waitlisted' | 'past-client'
 
 export interface CRMContact {
   id: string;
-  fullName: string;
+  fullName?: string;
   name: string;
   businessName: string;
   phone: string;
   email: string;
   category: string;
   status: ContactStatus;
-  source: string;
-  exhibitionId: string;
-  exhibitionName: string;
+  source?: string;
+  exhibitionId?: string;
+  exhibitionName?: string;
   tags?: string[];
   exhibitionIds?: string[];
   totalSpend?: number;
@@ -120,8 +120,8 @@ export type ExpenseStatus = 'pending_approval' | 'approved' | 'rejected';
 
 export interface ExpenseItem {
   id: string;
-  exhibitionId: string;
-  exhibitionName: string;
+  exhibitionId?: string;
+  exhibitionName?: string;
   category: ExpenseCategory;
   amount: number;
   date: string;
