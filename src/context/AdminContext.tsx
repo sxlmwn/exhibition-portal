@@ -19,9 +19,6 @@ import {
   RequestStatus
 } from '../types';
 import { 
-  INITIAL_CAMPAIGNS, 
-  INITIAL_PAST_EVENTS, 
-  INITIAL_STAFF_USERS, 
   INITIAL_AGENCY_SETTINGS 
 } from '../data/mockData';
 import { supabase } from '../lib/supabase';
@@ -340,15 +337,257 @@ export const mapExpenseItemToDB = (exp: Partial<ExpenseItem>): any => {
   return payload;
 };
 
+// Helper mappers for Marketing Campaigns
+export const mapCampaignFromDB = (row: any): MarketingCampaign => {
+  const id = String(row.id);
+  const exhibitionId = String(row.exhibition_id || '');
+  const exhibitionName = row.exhibitions?.name || (row.exhibition_id ? `Exhibition #${row.exhibition_id}` : 'General Exhibition');
+  const platform = row.platform || 'Instagram';
+  const amountSpent = Number(row.amount_spent || 0);
+  const startDate = row.start_date || new Date().toISOString().split('T')[0];
+  const endDate = row.end_date || new Date().toISOString().split('T')[0];
+  const leadsGenerated = Number(row.leads_generated || 0);
+
+  // Compute duration in days & human duration label
+  let runDuration = 'Ongoing';
+  if (row.start_date && row.end_date) {
+    const diffMs = new Date(row.end_date).getTime() - new Date(row.start_date).getTime();
+    const days = Math.max(1, Math.round(diffMs / (1000 * 60 * 60 * 24)));
+    runDuration = `${days} Days (${row.start_date} – ${row.end_date})`;
+  }
+
+  // Derive status based on current date vs start/end date
+  const nowStr = new Date().toISOString().split('T')[0];
+  let status: 'active' | 'completed' | 'scheduled' = 'active';
+  if (endDate < nowStr) {
+    status = 'completed';
+  } else if (startDate > nowStr) {
+    status = 'scheduled';
+  }
+
+  // Derive title, reach impressions & notes
+  const title = row.title || `${platform} Outreach — ${exhibitionName}`;
+  const reachImpressions = row.reach_impressions || `${(Math.max(1, leadsGenerated) * 350).toLocaleString()} impressions`;
+  const notes = row.notes || `${platform} ad campaign targeting visitors and exhibitors for ${exhibitionName}.`;
+
+  return {
+    id,
+    title,
+    platform: platform as any,
+    amountSpent,
+    runDuration,
+    startDate,
+    endDate,
+    linkedExhibitionId: exhibitionId,
+    linkedExhibitionName: exhibitionName,
+    leadsGenerated,
+    reachImpressions,
+    notes,
+    status,
+  };
+};
+
+export const mapCampaignToDB = (cmp: Partial<MarketingCampaign>): any => {
+  const payload: any = {};
+  if (cmp.id !== undefined && !String(cmp.id).startsWith('cmp-') && !isNaN(Number(cmp.id))) {
+    payload.id = Number(cmp.id);
+  }
+  if (cmp.linkedExhibitionId !== undefined && !isNaN(Number(cmp.linkedExhibitionId))) {
+    payload.exhibition_id = Number(cmp.linkedExhibitionId);
+  }
+  if (cmp.platform !== undefined) {
+    payload.platform = cmp.platform;
+  }
+  if (cmp.amountSpent !== undefined) {
+    payload.amount_spent = Number(cmp.amountSpent);
+  }
+  if (cmp.startDate !== undefined) {
+    payload.start_date = cmp.startDate;
+  }
+  if (cmp.endDate !== undefined) {
+    payload.end_date = cmp.endDate;
+  }
+  if (cmp.leadsGenerated !== undefined) {
+    payload.leads_generated = Number(cmp.leadsGenerated);
+  }
+  return payload;
+};
+
+// Helper mappers for Past Event Stories
+export const mapPastEventFromDB = (row: any): PastEventStory => {
+  const id = String(row.id);
+  const title = row.title || 'Untitled Past Exhibition';
+  const location = row.location || 'Lahore';
+  let city = location;
+  if (location.includes(',')) {
+    const parts = location.split(',').map((s: string) => s.trim());
+    city = parts[parts.length - 1] || location;
+  }
+
+  // Parse photo_urls safely (supports JSON array, raw array, or comma-separated string)
+  let photos: string[] = [];
+  if (Array.isArray(row.photo_urls)) {
+    photos = row.photo_urls;
+  } else if (typeof row.photo_urls === 'string') {
+    try {
+      const parsed = JSON.parse(row.photo_urls);
+      if (Array.isArray(parsed)) {
+        photos = parsed;
+      } else if (parsed) {
+        photos = [String(parsed)];
+      }
+    } catch {
+      photos = row.photo_urls.split(',').map((s: string) => s.trim()).filter(Boolean);
+    }
+  }
+
+  if (photos.length === 0) {
+    photos = ['/images/1.jpg', '/images/2.jpg'];
+  }
+
+  const coverImage = photos[0] || '/images/1.jpg';
+  const footfallNumber = Number(row.footfall || 12000);
+  const vendorCount = Number(row.vendor_count || 45);
+  const eventDate = row.event_date || '2025-03-01';
+
+  // Format human-readable date range
+  let dateRange = eventDate;
+  try {
+    const d = new Date(eventDate);
+    if (!isNaN(d.getTime())) {
+      dateRange = d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    }
+  } catch {
+    dateRange = eventDate;
+  }
+
+  const yearMatch = title.match(/\b(20\d\d)\b/) || eventDate.match(/\b(20\d\d)\b/);
+  const editionYear = yearMatch ? yearMatch[1] : '2025';
+  const edition = row.edition || `${editionYear} Edition`;
+  const totalRevenueGMV = row.total_revenue_gmv || `Rs. ${Math.max(15, Math.round(vendorCount * 0.45))}M+`;
+  const satisfactionRate = row.satisfaction_rate || '98%';
+  const narrativeExcerpt = row.narrative || row.narrativeExcerpt || 'A celebrated showcase featuring leading artisans, designers, and craft houses.';
+  const tags = row.tags || ['Artisan Craft', 'Curated Runway', city];
+
+  return {
+    id,
+    title,
+    edition,
+    city,
+    dateRange,
+    footfallNumber,
+    vendorCount,
+    totalRevenueGMV,
+    satisfactionRate,
+    narrativeExcerpt,
+    coverImage,
+    photos,
+    tags,
+  };
+};
+
+export const mapPastEventToDB = (story: Partial<PastEventStory>): any => {
+  const payload: any = {};
+  if (story.id !== undefined && !String(story.id).startsWith('pe-') && !String(story.id).startsWith('pst-') && !isNaN(Number(story.id))) {
+    payload.id = Number(story.id);
+  }
+  if (story.title !== undefined) {
+    payload.title = story.title;
+  }
+  if (story.city !== undefined) {
+    payload.location = story.city;
+  }
+  if (story.footfallNumber !== undefined) {
+    payload.footfall = Number(story.footfallNumber);
+  }
+  if (story.vendorCount !== undefined) {
+    payload.vendor_count = Number(story.vendorCount);
+  }
+  if (story.narrativeExcerpt !== undefined) {
+    payload.narrative = story.narrativeExcerpt;
+  }
+
+  // Handle dateRange -> event_date (YYYY-MM-DD)
+  if (story.dateRange !== undefined) {
+    const dateMatch = story.dateRange.match(/\b\d{4}-\d{2}-\d{2}\b/);
+    if (dateMatch) {
+      payload.event_date = dateMatch[0];
+    } else {
+      const parsedDate = new Date(story.dateRange);
+      if (!isNaN(parsedDate.getTime())) {
+        payload.event_date = parsedDate.toISOString().split('T')[0];
+      } else {
+        payload.event_date = '2025-10-15';
+      }
+    }
+  }
+
+  // Handle photos / coverImage -> photo_urls JSON string
+  if (story.photos !== undefined && story.photos.length > 0) {
+    payload.photo_urls = JSON.stringify(story.photos);
+  } else if (story.coverImage !== undefined) {
+    payload.photo_urls = JSON.stringify([story.coverImage]);
+  }
+
+  return payload;
+};
+
+// Helper mappers for Staff Users
+export const mapStaffUserFromDB = (row: any): StaffUser => {
+  const isOwner = row.role === 'owner';
+  return {
+    id: String(row.id),
+    name: row.full_name || row.name || row.email,
+    email: row.email,
+    role: (row.role as UserRole) || 'staff',
+    avatar: row.avatar || (isOwner
+      ? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200'
+      : 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&q=80&w=200'),
+    phone: row.phone || '+92 300 123 4567',
+    status: (row.status as any) || 'active',
+    joinedDate: row.created_at ? new Date(row.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : 'Verified Member',
+    lastActive: 'Active',
+    permissions: {
+      canManageExhibitions: isOwner,
+      canApproveRequests: isOwner,
+      canAllocateStalls: true,
+      canApproveExpenses: isOwner,
+      canDeleteRecords: isOwner,
+      canSendBulkMessages: true,
+    }
+  };
+};
+
+export const mapStaffUserToDB = (user: Partial<StaffUser>): any => {
+  const payload: any = {};
+  if (user.id !== undefined && !String(user.id).startsWith('usr-') && !isNaN(Number(user.id))) {
+    payload.id = Number(user.id);
+  }
+  if (user.name !== undefined) {
+    payload.full_name = user.name;
+  }
+  if (user.email !== undefined) {
+    payload.email = user.email;
+  }
+  if (user.role !== undefined) {
+    payload.role = user.role;
+  }
+  if (user.phone !== undefined) {
+    payload.phone = user.phone;
+  }
+  return payload;
+};
+
 interface AdminContextType {
   // Current user & role
   currentUser: StaffUser;
   currentRole: UserRole;
   setCurrentRole: (role: UserRole) => void;
   staffUsers: StaffUser[];
-  inviteStaffUser: (user: Omit<StaffUser, 'id' | 'joinedDate' | 'lastActive'>) => void;
-  updateStaffRole: (userId: string, newRole: UserRole) => void;
-  deleteStaffUser: (userId: string) => void;
+  fetchStaffUsers: () => Promise<void>;
+  inviteStaffUser: (user: Omit<StaffUser, 'id' | 'joinedDate' | 'lastActive'>) => Promise<void> | void;
+  updateStaffRole: (userId: string, newRole: UserRole) => Promise<void> | void;
+  deleteStaffUser: (userId: string) => Promise<void> | void;
 
   // Exhibitions
   exhibitions: Exhibition[];
@@ -382,14 +621,17 @@ interface AdminContextType {
 
   // Marketing Campaigns
   campaigns: MarketingCampaign[];
-  addCampaign: (campaign: Omit<MarketingCampaign, 'id'>) => void;
-  deleteCampaign: (id: string) => void;
+  fetchCampaigns: () => Promise<void>;
+  addCampaign: (campaign: Omit<MarketingCampaign, 'id'>) => Promise<void> | void;
+  updateCampaign: (id: string, updates: Partial<MarketingCampaign>) => Promise<void> | void;
+  deleteCampaign: (id: string) => Promise<void> | void;
 
   // Past Events
   pastEvents: PastEventStory[];
-  addPastEvent: (event: Omit<PastEventStory, 'id'>) => void;
-  updatePastEvent: (id: string, updates: Partial<PastEventStory>) => void;
-  deletePastEvent: (id: string) => void;
+  fetchPastEvents: () => Promise<void>;
+  addPastEvent: (event: Omit<PastEventStory, 'id'>) => Promise<void> | void;
+  updatePastEvent: (id: string, updates: Partial<PastEventStory>) => Promise<void> | void;
+  deletePastEvent: (id: string) => Promise<void> | void;
 
   // Agency Settings
   settings: AgencySettings;
@@ -404,19 +646,36 @@ interface AdminContextType {
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
 export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [staffUsers, setStaffUsers] = useState<StaffUser[]>(INITIAL_STAFF_USERS);
+  const [staffUsers, setStaffUsers] = useState<StaffUser[]>([]);
   const [currentRole, setCurrentRole] = useState<UserRole>('owner');
   const [exhibitions, setExhibitions] = useState<Exhibition[]>([]);
   const [stalls, setStalls] = useState<StallSlot[]>([]);
   const [vendorRequests, setVendorRequests] = useState<VendorRequest[]>([]);
   const [contacts, setContacts] = useState<CRMContact[]>([]);
   const [expenses, setExpenses] = useState<ExpenseItem[]>([]);
-  const [campaigns, setCampaigns] = useState<MarketingCampaign[]>(INITIAL_CAMPAIGNS);
-  const [pastEvents, setPastEvents] = useState<PastEventStory[]>(INITIAL_PAST_EVENTS);
+  const [campaigns, setCampaigns] = useState<MarketingCampaign[]>([]);
+  const [pastEvents, setPastEvents] = useState<PastEventStory[]>([]);
   const [settings, setSettings] = useState<AgencySettings>(INITIAL_AGENCY_SETTINGS);
   const [theme, setThemeState] = useState<'light' | 'dark'>('light');
 
   // Supabase Fetchers
+  const fetchStaffUsers = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('staff_users')
+        .select('*')
+        .order('id', { ascending: true });
+
+      if (!error && data) {
+        setStaffUsers(data.map(mapStaffUserFromDB));
+      } else if (error) {
+        console.error('Failed to load staff_users from Supabase:', error.message);
+      }
+    } catch (err) {
+      console.error('Error fetching staff_users from Supabase:', err);
+    }
+  };
+
   const fetchExhibitions = async () => {
     try {
       const { data, error } = await supabase
@@ -502,6 +761,40 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
+  const fetchCampaigns = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('marketing_campaigns')
+        .select('*, exhibitions(id, name, location)')
+        .order('id', { ascending: false });
+
+      if (!error && data) {
+        setCampaigns(data.map(mapCampaignFromDB));
+      } else if (error) {
+        console.error('Failed to load marketing_campaigns from Supabase:', error.message);
+      }
+    } catch (err) {
+      console.error('Error fetching marketing_campaigns from Supabase:', err);
+    }
+  };
+
+  const fetchPastEvents = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('past_event_stories')
+        .select('*')
+        .order('event_date', { ascending: false });
+
+      if (!error && data) {
+        setPastEvents(data.map(mapPastEventFromDB));
+      } else if (error) {
+        console.error('Failed to load past_event_stories from Supabase:', error.message);
+      }
+    } catch (err) {
+      console.error('Error fetching past_event_stories from Supabase:', err);
+    }
+  };
+
   useEffect(() => {
     const savedTheme = localStorage.getItem('exhibition_admin_theme') as 'light' | 'dark' | null;
     if (savedTheme) {
@@ -514,11 +807,14 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
 
     // Initial fetch from Supabase
+    fetchStaffUsers();
     fetchExhibitions();
     fetchVendorRequests();
     fetchStalls();
     fetchContacts();
     fetchExpenses();
+    fetchCampaigns();
+    fetchPastEvents();
 
     // Check initial auth session and sync user role from staff_users
     const syncAuthUser = async () => {
@@ -553,11 +849,14 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         if (staffData?.role) {
           setCurrentRole(staffData.role as UserRole);
         }
+        fetchStaffUsers();
         fetchExhibitions();
         fetchVendorRequests();
         fetchStalls();
         fetchContacts();
         fetchExpenses();
+        fetchCampaigns();
+        fetchPastEvents();
       }
     });
 
@@ -580,25 +879,108 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
-  const currentUser = staffUsers.find(u => u.role === currentRole) || staffUsers[0];
+  const defaultFallbackUser: StaffUser = {
+    id: 'usr-admin',
+    name: 'Sal (Owner)',
+    email: 'admin@exhibitionportal.com',
+    role: currentRole,
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200',
+    phone: '+92 300 123 4567',
+    status: 'active',
+    joinedDate: 'Verified',
+    lastActive: 'Just now',
+    permissions: {
+      canManageExhibitions: currentRole === 'owner',
+      canApproveRequests: currentRole === 'owner',
+      canAllocateStalls: true,
+      canApproveExpenses: currentRole === 'owner',
+      canDeleteRecords: currentRole === 'owner',
+      canSendBulkMessages: true,
+    }
+  };
+
+  const currentUser = staffUsers.find(u => u.role === currentRole) || staffUsers[0] || defaultFallbackUser;
 
   // Staff Management
-  const inviteStaffUser = (user: Omit<StaffUser, 'id' | 'joinedDate' | 'lastActive'>) => {
-    const newUser: StaffUser = {
-      ...user,
-      id: `usr-${Date.now()}`,
-      joinedDate: 'Just now',
-      lastActive: 'Just now'
-    };
-    setStaffUsers(prev => [...prev, newUser]);
+  const inviteStaffUser = async (user: Omit<StaffUser, 'id' | 'joinedDate' | 'lastActive'>) => {
+    try {
+      const response = await fetch('/api/staff/invite', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(user)
+      });
+      const res = await response.json();
+      if (!response.ok || !res.success) {
+        alert(res.error || 'Failed to invite staff member');
+        return;
+      }
+      if (res.user) {
+        setStaffUsers(prev => [...prev, mapStaffUserFromDB(res.user)]);
+      }
+    } catch (err: any) {
+      console.error('Error inviting staff user:', err);
+      alert(err.message || 'Failed to invite staff member');
+    }
   };
 
-  const updateStaffRole = (userId: string, newRole: UserRole) => {
-    setStaffUsers(prev => prev.map(u => u.id === userId ? { ...u, role: newRole } : u));
+  const updateStaffRole = async (userId: string, newRole: UserRole) => {
+    if (currentRole !== 'owner') {
+      alert('Only owners can modify staff roles.');
+      return;
+    }
+
+    setStaffUsers(prev => prev.map(u => u.id === userId ? {
+      ...u,
+      role: newRole,
+      permissions: {
+        ...u.permissions,
+        canManageExhibitions: newRole === 'owner',
+        canApproveRequests: newRole === 'owner',
+        canApproveExpenses: newRole === 'owner',
+        canDeleteRecords: newRole === 'owner',
+      }
+    } : u));
+
+    try {
+      const numericId = Number(userId);
+      if (!isNaN(numericId)) {
+        const { error } = await supabase
+          .from('staff_users')
+          .update({ role: newRole })
+          .eq('id', numericId);
+
+        if (error) {
+          console.error('Error updating staff role in Supabase:', error.message);
+        }
+      }
+    } catch (err) {
+      console.error('Error syncing updateStaffRole to Supabase:', err);
+    }
   };
 
-  const deleteStaffUser = (userId: string) => {
+  const deleteStaffUser = async (userId: string) => {
+    if (currentRole !== 'owner') {
+      alert('Only owners can remove staff members.');
+      return;
+    }
+
     setStaffUsers(prev => prev.filter(u => u.id !== userId));
+
+    try {
+      const numericId = Number(userId);
+      if (!isNaN(numericId)) {
+        const { error } = await supabase
+          .from('staff_users')
+          .delete()
+          .eq('id', numericId);
+
+        if (error) {
+          console.error('Error deleting staff user from Supabase:', error.message);
+        }
+      }
+    } catch (err) {
+      console.error('Error syncing deleteStaffUser to Supabase:', err);
+    }
   };
 
   // Exhibition Actions
@@ -1011,33 +1393,125 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   // Marketing Campaigns
-  const addCampaign = (campaign: Omit<MarketingCampaign, 'id'>) => {
-    const newCmp: MarketingCampaign = {
+  const addCampaign = async (campaign: Omit<MarketingCampaign, 'id'>) => {
+    const tempId = `cmp-${Date.now()}`;
+    const localCreated: MarketingCampaign = {
       ...campaign,
-      id: `cmp-${Date.now()}`
+      id: tempId
     };
-    setCampaigns(prev => [newCmp, ...prev]);
+    setCampaigns(prev => [localCreated, ...prev]);
+
+    try {
+      const dbPayload = mapCampaignToDB(localCreated);
+      const { data, error } = await supabase
+        .from('marketing_campaigns')
+        .insert([dbPayload])
+        .select('*, exhibitions(id, name, location)')
+        .single();
+
+      if (!error && data) {
+        const serverCmp = mapCampaignFromDB(data);
+        setCampaigns(prev => prev.map(c => c.id === tempId ? serverCmp : c));
+      } else if (error) {
+        console.error('Error inserting campaign into Supabase:', error.message);
+      }
+    } catch (err) {
+      console.error('Error syncing addCampaign to Supabase:', err);
+    }
   };
 
-  const deleteCampaign = (id: string) => {
+  const updateCampaign = async (id: string, updates: Partial<MarketingCampaign>) => {
+    setCampaigns(prev => prev.map(c => c.id === id ? { ...c, ...updates } : c));
+
+    try {
+      const numericId = Number(id);
+      if (!isNaN(numericId)) {
+        const dbPayload = mapCampaignToDB(updates);
+        await supabase
+          .from('marketing_campaigns')
+          .update(dbPayload)
+          .eq('id', numericId);
+      }
+    } catch (err) {
+      console.error('Error updating campaign in Supabase:', err);
+    }
+  };
+
+  const deleteCampaign = async (id: string) => {
     setCampaigns(prev => prev.filter(c => c.id !== id));
+
+    try {
+      const numericId = Number(id);
+      if (!isNaN(numericId)) {
+        await supabase
+          .from('marketing_campaigns')
+          .delete()
+          .eq('id', numericId);
+      }
+    } catch (err) {
+      console.error('Error deleting campaign from Supabase:', err);
+    }
   };
 
   // Past Events
-  const addPastEvent = (event: Omit<PastEventStory, 'id'>) => {
-    const newEvent: PastEventStory = {
+  const addPastEvent = async (event: Omit<PastEventStory, 'id'>) => {
+    const tempId = `pe-${Date.now()}`;
+    const localCreated: PastEventStory = {
       ...event,
-      id: `pst-${Date.now()}`
+      id: tempId
     };
-    setPastEvents(prev => [newEvent, ...prev]);
+    setPastEvents(prev => [localCreated, ...prev]);
+
+    try {
+      const dbPayload = mapPastEventToDB(localCreated);
+      const { data, error } = await supabase
+        .from('past_event_stories')
+        .insert([dbPayload])
+        .select()
+        .single();
+
+      if (!error && data) {
+        const serverEvent = mapPastEventFromDB(data);
+        setPastEvents(prev => prev.map(p => p.id === tempId ? serverEvent : p));
+      } else if (error) {
+        console.error('Error inserting past event into Supabase:', error.message);
+      }
+    } catch (err) {
+      console.error('Error syncing addPastEvent to Supabase:', err);
+    }
   };
 
-  const updatePastEvent = (id: string, updates: Partial<PastEventStory>) => {
+  const updatePastEvent = async (id: string, updates: Partial<PastEventStory>) => {
     setPastEvents(prev => prev.map(p => p.id === id ? { ...p, ...updates } : p));
+
+    try {
+      const numericId = Number(id);
+      if (!isNaN(numericId)) {
+        const dbPayload = mapPastEventToDB(updates);
+        await supabase
+          .from('past_event_stories')
+          .update(dbPayload)
+          .eq('id', numericId);
+      }
+    } catch (err) {
+      console.error('Error updating past event in Supabase:', err);
+    }
   };
 
-  const deletePastEvent = (id: string) => {
+  const deletePastEvent = async (id: string) => {
     setPastEvents(prev => prev.filter(p => p.id !== id));
+
+    try {
+      const numericId = Number(id);
+      if (!isNaN(numericId)) {
+        await supabase
+          .from('past_event_stories')
+          .delete()
+          .eq('id', numericId);
+      }
+    } catch (err) {
+      console.error('Error deleting past event from Supabase:', err);
+    }
   };
 
   // Settings
@@ -1051,6 +1525,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       currentRole,
       setCurrentRole,
       staffUsers,
+      fetchStaffUsers,
       inviteStaffUser,
       updateStaffRole,
       deleteStaffUser,
@@ -1075,9 +1550,12 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       updateExpenseStatus,
       deleteExpense,
       campaigns,
+      fetchCampaigns,
       addCampaign,
+      updateCampaign,
       deleteCampaign,
       pastEvents,
+      fetchPastEvents,
       addPastEvent,
       updatePastEvent,
       deletePastEvent,

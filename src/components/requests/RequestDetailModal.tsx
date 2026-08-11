@@ -35,8 +35,8 @@ export const RequestDetailModal: React.FC<RequestDetailModalProps> = ({
   onOpenAction,
   onAllocateStallClick
 }) => {
-  const { updateRequestStatus, exhibitions, currentRole } = useAdmin();
-  const isOwner = currentRole === 'owner';
+  const { updateRequestStatus, exhibitions, currentUser } = useAdmin();
+  const isOwner = currentUser.permissions.canApproveRequests || currentUser.role === 'owner';
 
   if (!request) return null;
 

@@ -36,11 +36,11 @@ export const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({
   onEdit,
   onViewReceipt
 }) => {
-  const { deleteExpense, currentRole } = useAdmin();
+  const { deleteExpense, currentUser } = useAdmin();
 
   if (!expense) return null;
 
-  const isOwner = currentRole === 'owner';
+  const isOwner = currentUser.permissions.canApproveExpenses || currentUser.role === 'owner';
   const isPdf = isPdfUrl(expense.receiptUrl);
 
   const handleDelete = () => {

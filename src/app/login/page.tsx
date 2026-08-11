@@ -25,10 +25,10 @@ import {
 
 export default function LoginPage() {
   const router = useRouter();
-  const { currentRole, setCurrentRole, theme, toggleTheme } = useAdmin();
+  const { setCurrentRole, theme, toggleTheme } = useAdmin();
   
-  const [email, setEmail] = useState('zainab.farooq@exhibitionagency.pk');
-  const [password, setPassword] = useState('••••••••••••');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -42,15 +42,6 @@ export default function LoginPage() {
     const x = (e.clientX - window.innerWidth / 2) / 28;
     const y = (e.clientY - window.innerHeight / 2) / 28;
     setParallax({ x, y });
-  };
-
-  const handleRolePreset = (role: UserRole) => {
-    setCurrentRole(role);
-    if (role === 'owner') {
-      setEmail('admin@exhibitionportal.com');
-    } else {
-      setEmail('aisha.khan@exhibitionagency.pk');
-    }
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -288,29 +279,6 @@ export default function LoginPage() {
               <p className="text-xs text-charcoal-muted mt-1 font-medium">
                 Enter your credentials to access the exhibition management suite.
               </p>
-            </div>
-
-            {/* Demo Quick Role Selector (1-Click Switch) */}
-            <div className="p-3.5 rounded-2xl bg-cream-50 dark:bg-white/[0.04] border border-sage-200/60 dark:border-white/10 mb-6">
-              <span className="text-[10px] uppercase font-bold tracking-wider text-charcoal-muted block mb-2">
-                Quick Role Autofill (Demo Mode)
-              </span>
-              <div className="grid grid-cols-2 gap-2">
-                {(['owner', 'staff'] as UserRole[]).map((r) => (
-                  <button
-                    key={r}
-                    type="button"
-                    onClick={() => handleRolePreset(r)}
-                    className={`py-1.5 px-2 rounded-xl text-[11px] font-bold capitalize transition-all glass-rise-btn ${
-                      currentRole === r
-                        ? 'bg-sage-800 dark:bg-sage-700 text-cream shadow-xs'
-                        : 'bg-white dark:bg-white/10 text-charcoal hover:bg-cream-100 dark:hover:bg-white/15 border border-sage-200/80 dark:border-white/10'
-                    }`}
-                  >
-                    {r}
-                  </button>
-                ))}
-              </div>
             </div>
 
             {/* Error Message */}

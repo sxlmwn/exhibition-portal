@@ -26,8 +26,8 @@ import { RequestActionModal } from '../../components/requests/RequestActionModal
 import { RequestDetailModal } from '../../components/requests/RequestDetailModal';
 
 export default function VendorRequestsPage() {
-  const { vendorRequests, exhibitions, currentRole } = useAdmin();
-  const isOwner = currentRole === 'owner';
+  const { vendorRequests, exhibitions, currentUser } = useAdmin();
+  const canApprove = currentUser.permissions.canApproveRequests;
 
   const [activeTab, setActiveTab] = useState<'table' | 'floor-plan'>('table');
   const [selectedExhibitionId, setSelectedExhibitionId] = useState<string>('All');
@@ -51,7 +51,7 @@ export default function VendorRequestsPage() {
   });
 
   const handleOpenAction = (req: VendorRequest, status: RequestStatus) => {
-    if (!isOwner) return;
+    if (!canApprove) return;
     setSelectedRequest(req);
     setTargetStatus(status);
   };
@@ -262,7 +262,7 @@ export default function VendorRequestsPage() {
                         {/* Actions */}
                         <td className="py-4 px-5 text-right" onClick={(e) => e.stopPropagation()}>
                           <div className="flex items-center justify-end gap-1.5">
-                            {isOwner ? (
+                            {canApprove ? (
                               <>
                                 {req.status !== 'approved' && (
                                   <button
@@ -330,7 +330,7 @@ export default function VendorRequestsPage() {
         request={detailRequest}
         onClose={() => setDetailRequest(null)}
         onOpenAction={(status) => {
-          if (detailRequest && isOwner) {
+          if (detailRequest && canApprove) {
             handleOpenAction(detailRequest, status);
           }
         }}

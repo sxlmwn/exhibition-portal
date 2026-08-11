@@ -1,8 +1,6 @@
-'use client';
-
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { BrandLogo } from '../BrandLogo';
 import { 
   LayoutDashboard, 
@@ -26,6 +24,7 @@ import {
 } from 'lucide-react';
 import { useAdmin } from '../../context/AdminContext';
 import { UserRole } from '../../types';
+import { supabase } from '../../lib/supabase';
 
 interface SidebarProps {
   collapsed: boolean;
@@ -34,9 +33,9 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => {
   const pathname = usePathname();
-  const { currentUser, currentRole, setCurrentRole, vendorRequests, expenses, theme, toggleTheme } = useAdmin();
+  const router = useRouter();
+  const { currentUser, currentRole, vendorRequests, expenses, theme, toggleTheme } = useAdmin();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
-  const [logoutMessage, setLogoutMessage] = useState<string | null>(null);
 
   const profileRef = useRef<HTMLDivElement>(null);
 
@@ -50,16 +49,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleRoleChange = (role: UserRole) => {
-    setCurrentRole(role);
-  };
-
-  const handleLogout = () => {
-    setLogoutMessage('Session reset.');
-    setTimeout(() => {
-      setLogoutMessage(null);
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+    } catch (err) {
+      console.error('Error signing out:', err);
+    } finally {
       setShowProfileMenu(false);
-    }, 2000);
+      router.push('/login');
+    }
   };
 
   const pendingRequestsCount = vendorRequests.filter(r => r.status === 'pending').length;
@@ -261,28 +259,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
               </button>
             </div>
 
-            {/* Switch Active Role */}
-            <div className="py-3 border-b border-sage-100 dark:border-white/10">
-              <span className="text-[10px] uppercase font-bold tracking-wider text-charcoal-muted block mb-2">
-                Simulate Portal Role
-              </span>
-              <div className="grid grid-cols-2 gap-1.5">
-                {(['owner', 'staff'] as UserRole[]).map((r) => (
-                  <button
-                    key={r}
-                    onClick={() => handleRoleChange(r)}
-                    className={`py-1.5 rounded-xl text-[11px] font-bold capitalize transition-all glass-rise-btn ${
-                      currentRole === r
-                        ? 'bg-sage-800 text-cream shadow-xs'
-                        : 'bg-cream-50 dark:bg-white/5 text-charcoal hover:bg-cream-100 dark:hover:bg-white/10 border border-sage-200/60 dark:border-white/10'
-                    }`}
-                  >
-                    {r}
-                  </button>
-                ))}
-              </div>
-            </div>
-
             {/* Quick Links */}
             <div className="py-2 space-y-1">
               <Link
@@ -315,14 +291,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
               </Link>
             </div>
 
-            {/* Reset / Sign Out */}
+            {/* Sign Out */}
             <div className="pt-2 border-t border-sage-100 dark:border-white/10">
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
+                className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold text-rose-700 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
               >
                 <LogOut className="w-3.5 h-3.5" />
-                <span>{logoutMessage || 'Reset Demo Session'}</span>
+                <span>Log Out</span>
               </button>
             </div>
 

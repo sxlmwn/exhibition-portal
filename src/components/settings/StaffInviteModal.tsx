@@ -47,8 +47,19 @@ export const StaffInviteModal: React.FC<StaffInviteModalProps> = ({
 
   const selectedRole = watch('role');
 
-  const onSubmit = (data: StaffFormData) => {
-    inviteStaffUser({
+  React.useEffect(() => {
+    if (isOpen) {
+      reset({
+        name: '',
+        email: '',
+        phone: '+92 300 ',
+        role: 'staff',
+      });
+    }
+  }, [isOpen, reset]);
+
+  const onSubmit = async (data: StaffFormData) => {
+    await inviteStaffUser({
       name: data.name,
       email: data.email,
       phone: data.phone,

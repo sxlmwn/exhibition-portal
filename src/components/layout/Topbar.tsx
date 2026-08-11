@@ -1,18 +1,13 @@
-'use client';
-
 import React, { useState, useRef, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { 
   Bell, 
   Menu, 
   MessageSquare, 
-  ChevronDown,
-  CheckCircle2,
-  Sun,
-  Moon
+  Sun, 
+  Moon 
 } from 'lucide-react';
 import { useAdmin } from '../../context/AdminContext';
-import { UserRole } from '../../types';
 
 interface TopbarProps {
   onToggleMobileSidebar: () => void;
@@ -20,18 +15,13 @@ interface TopbarProps {
 
 export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
   const pathname = usePathname();
-  const { currentRole, setCurrentRole, settings, theme, toggleTheme } = useAdmin();
-  const [showRoleDropdown, setShowRoleDropdown] = useState(false);
+  const { settings, theme, toggleTheme } = useAdmin();
   const [showNotifications, setShowNotifications] = useState(false);
 
-  const roleRef = useRef<HTMLDivElement>(null);
   const notifRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (roleRef.current && !roleRef.current.contains(event.target as Node)) {
-        setShowRoleDropdown(false);
-      }
       if (notifRef.current && !notifRef.current.contains(event.target as Node)) {
         setShowNotifications(false);
       }
@@ -56,11 +46,6 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
 
   const pageInfo = getPageTitle();
 
-  const handleRoleChange = (role: UserRole) => {
-    setCurrentRole(role);
-    setShowRoleDropdown(false);
-  };
-
   return (
     <header className="h-20 glass-topbar sticky top-0 z-30 px-6 sm:px-10 flex items-center justify-between gap-4">
       
@@ -83,7 +68,7 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
         </div>
       </div>
 
-      {/* Right Actions: Dark/Light Mode + Role Switcher + WhatsApp + Notifications */}
+      {/* Right Actions: Dark/Light Mode + WhatsApp + Notifications */}
       <div className="flex items-center gap-3 sm:gap-4">
         
         {/* Dark/Light Theme Toggle */}
@@ -99,44 +84,6 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
             <Moon className="w-4 h-4 text-sage-800 animate-fadeIn" />
           )}
         </button>
-
-        {/* Role Simulator Pill */}
-        <div className="relative" ref={roleRef}>
-          <button
-            onClick={() => setShowRoleDropdown(!showRoleDropdown)}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-full glass-pill hover:bg-white dark:hover:bg-white/10 text-xs font-semibold transition-all shadow-xs border border-sage-300/80 glass-rise-btn"
-            title="Switch User Role to test permissions"
-          >
-            <span className={`w-2 h-2 rounded-full ${
-              currentRole === 'owner' ? 'bg-emerald-600' : 'bg-amber-600'
-            }`} />
-            <span className="text-charcoal-muted text-[11px] uppercase tracking-wider">Role:</span>
-            <span className="font-bold text-charcoal capitalize">{currentRole}</span>
-            <ChevronDown className="w-3.5 h-3.5 text-charcoal-muted" />
-          </button>
-
-          {showRoleDropdown && (
-            <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-[#14171E] backdrop-blur-2xl rounded-2xl shadow-2xl border border-sage-200 dark:border-white/15 p-2 z-50 animate-fadeIn">
-              <div className="px-3 py-2 border-b border-sage-100 dark:border-white/10 text-[11px] text-charcoal-muted font-bold uppercase tracking-wider">
-                Switch Role (Permission Test)
-              </div>
-              {(['owner', 'staff'] as UserRole[]).map((role) => (
-                <button
-                  key={role}
-                  onClick={() => handleRoleChange(role)}
-                  className={`w-full text-left px-3 py-2.5 rounded-xl text-xs flex items-center justify-between transition-colors ${
-                    currentRole === role 
-                      ? 'bg-sage-100 dark:bg-white/10 text-sage-900 dark:text-white font-bold' 
-                      : 'text-charcoal-light hover:bg-cream-100 dark:hover:bg-white/5'
-                  }`}
-                >
-                  <span className="capitalize">{role === 'owner' ? 'Owner (Full Access)' : 'Staff (Restricted)'}</span>
-                  {currentRole === role && <CheckCircle2 className="w-4 h-4 text-sage-700 dark:text-sage-300" />}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
 
         {/* WhatsApp Lead Desk Quick Link */}
         <a

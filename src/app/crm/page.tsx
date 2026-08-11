@@ -28,7 +28,7 @@ import { BulkWhatsAppModal } from '../../components/crm/BulkWhatsAppModal';
 import { buildWhatsAppUrl, formatWhatsAppNumber } from '../../lib/whatsapp';
 
 export default function CRMPage() {
-  const { contacts, exhibitions, deleteContact } = useAdmin();
+  const { contacts, exhibitions, deleteContact, currentUser } = useAdmin();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedExhibitionId, setSelectedExhibitionId] = useState('All');
@@ -436,13 +436,15 @@ export default function CRMPage() {
                           >
                             <Edit3 className="w-4 h-4" />
                           </button>
-                          <button
-                            onClick={() => handleDelete(contact)}
-                            className="p-1.5 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/40 text-rose-600 hover:text-rose-800 transition-colors"
-                            title="Delete Contact"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
+                          {currentUser.permissions.canDeleteRecords && (
+                            <button
+                              onClick={() => handleDelete(contact)}
+                              className="p-1.5 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/40 text-rose-600 hover:text-rose-800 transition-colors"
+                              title="Delete Contact"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          )}
                         </div>
                       </td>
 

@@ -35,11 +35,11 @@ export default function FinancePage() {
     expenses, 
     exhibitions, 
     stalls, 
-    currentRole, 
+    currentUser, 
     deleteExpense 
   } = useAdmin();
 
-  const isOwner = currentRole === 'owner';
+  const isOwner = currentUser.permissions.canApproveExpenses || currentUser.role === 'owner';
 
   // Filters state
   const [selectedExhibitionId, setSelectedExhibitionId] = useState<string>('All');

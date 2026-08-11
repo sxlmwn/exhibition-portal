@@ -25,7 +25,7 @@ export const CampaignDetailModal: React.FC<CampaignDetailModalProps> = ({
   campaign,
   onClose
 }) => {
-  const { deleteCampaign, currentRole } = useAdmin();
+  const { deleteCampaign, currentUser } = useAdmin();
 
   if (!campaign) return null;
 
@@ -162,7 +162,7 @@ export const CampaignDetailModal: React.FC<CampaignDetailModalProps> = ({
               Campaign ID: <strong className="text-charcoal font-mono">{campaign.id}</strong>
             </span>
 
-            {currentRole === 'owner' && (
+            {currentUser.permissions.canDeleteRecords && (
               <button
                 onClick={() => {
                   if (confirm(`Delete campaign "${campaign.title}"?`)) {

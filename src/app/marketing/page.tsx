@@ -20,7 +20,7 @@ import { LeadSourceChart } from '../../components/marketing/LeadSourceChart';
 import { CampaignDetailModal } from '../../components/marketing/CampaignDetailModal';
 
 export default function MarketingPage() {
-  const { campaigns, deleteCampaign, exhibitions } = useAdmin();
+  const { campaigns, deleteCampaign, exhibitions, currentUser } = useAdmin();
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [detailCampaign, setDetailCampaign] = useState<MarketingCampaign | null>(null);
@@ -203,17 +203,19 @@ export default function MarketingPage() {
 
                   {/* Actions */}
                   <td className="py-4 px-5 text-right" onClick={(e) => e.stopPropagation()}>
-                    <button
-                      onClick={() => {
-                        if (confirm('Delete this campaign log?')) {
-                          deleteCampaign(cmp.id);
-                        }
-                      }}
-                      className="p-1.5 rounded-lg hover:bg-rose-100 dark:hover:bg-rose-950/40 text-charcoal-muted hover:text-rose-700 transition-colors"
-                      title="Delete Campaign"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    {currentUser.permissions.canDeleteRecords && (
+                      <button
+                        onClick={() => {
+                          if (confirm('Delete this campaign log?')) {
+                            deleteCampaign(cmp.id);
+                          }
+                        }}
+                        className="p-1.5 rounded-lg hover:bg-rose-100 dark:hover:bg-rose-950/40 text-charcoal-muted hover:text-rose-700 transition-colors"
+                        title="Delete Campaign"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
                   </td>
 
                 </tr>

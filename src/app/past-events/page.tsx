@@ -19,7 +19,7 @@ import { PastEventFormModal } from '../../components/past-events/PastEventFormMo
 import { PastEventDetailModal } from '../../components/past-events/PastEventDetailModal';
 
 export default function PastEventsPage() {
-  const { pastEvents, deletePastEvent } = useAdmin();
+  const { pastEvents, deletePastEvent, currentUser } = useAdmin();
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [eventToEdit, setEventToEdit] = useState<PastEventStory | null>(null);
@@ -162,17 +162,19 @@ export default function PastEventsPage() {
                 >
                   <Edit3 className="w-4 h-4" />
                 </button>
-                <button
-                  onClick={() => {
-                    if (confirm(`Delete "${event.title}" from portfolio?`)) {
-                      deletePastEvent(event.id);
-                    }
-                  }}
-                  className="p-2 rounded-xl hover:bg-rose-100 dark:hover:bg-rose-950/40 text-charcoal-muted hover:text-rose-700 transition-colors"
-                  title="Delete Story"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+                {currentUser.permissions.canDeleteRecords && (
+                  <button
+                    onClick={() => {
+                      if (confirm(`Delete "${event.title}" from portfolio?`)) {
+                        deletePastEvent(event.id);
+                      }
+                    }}
+                    className="p-2 rounded-xl hover:bg-rose-100 dark:hover:bg-rose-950/40 text-charcoal-muted hover:text-rose-700 transition-colors"
+                    title="Delete Story"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                )}
               </div>
             </div>
 

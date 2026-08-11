@@ -25,7 +25,7 @@ export const ExhibitionCard: React.FC<ExhibitionCardProps> = ({
   onEdit,
   onViewDetails
 }) => {
-  const { deleteExhibition, currentRole } = useAdmin();
+  const { deleteExhibition, currentUser } = useAdmin();
 
   const fillPct = Math.round((exhibition.bookedStallsCount / exhibition.totalStallCapacity) * 100);
 
@@ -162,7 +162,7 @@ export const ExhibitionCard: React.FC<ExhibitionCardProps> = ({
             <Edit3 className="w-3.5 h-3.5" />
           </button>
           
-          {currentRole !== 'staff' && (
+          {currentUser.permissions.canDeleteRecords && (
             <button
               onClick={handleDelete}
               className="p-2 rounded-xl hover:bg-rose-100 dark:hover:bg-rose-950/40 text-charcoal-muted hover:text-rose-700 dark:hover:text-rose-400 transition-colors"

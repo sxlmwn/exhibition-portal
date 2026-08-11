@@ -1,13 +1,12 @@
-'use client';
-
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { X, History, CalendarDays, MapPin, Users, TrendingUp, Sparkles, Image as ImageIcon } from 'lucide-react';
+import { X, History, CalendarDays, MapPin, Users, TrendingUp, Sparkles, Image as ImageIcon, Upload, CheckCircle2, Loader2 } from 'lucide-react';
 import { PastEventStory } from '../../types';
 import { useAdmin } from '../../context/AdminContext';
 import { ModalPortal } from '../common/ModalPortal';
+import { supabase } from '../../lib/supabase';
 
 const pastEventSchema = z.object({
   title: z.string().min(3, 'Event title is required'),
@@ -37,6 +36,12 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
   eventToEdit
 }) => {
   const { addPastEvent, updatePastEvent } = useAdmin();
+  const [coverMode, setCoverMode] = useState<'preset' | 'upload'>('preset');
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+  const [uploadSuccessName, setUploadSuccessName] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const {
     register,
@@ -79,6 +84,11 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
         coverImage: eventToEdit.coverImage,
         tagsInput: eventToEdit.tags ? eventToEdit.tags.join(', ') : '',
       });
+      if (eventToEdit.coverImage?.startsWith('http') || eventToEdit.coverImage?.startsWith('data:')) {
+        setCoverMode('upload');
+      } else {
+        setCoverMode('preset');
+      }
     } else {
       reset({
         title: '',
@@ -93,13 +103,69 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
         coverImage: '/images/1.jpg',
         tagsInput: 'Artisan Craft, Festive Edition',
       });
+      setCoverMode('preset');
     }
+    setUploadError(null);
+    setUploadSuccessName(null);
   }, [eventToEdit, reset, isOpen]);
+
+  const handleFileUpload = async (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      setUploadError('Please select a valid image file (JPG, PNG, WebP).');
+      return;
+    }
+    if (file.size > 15 * 1024 * 1024) {
+      setUploadError('Image size exceeds 15MB limit.');
+      return;
+    }
+
+    setIsUploading(true);
+    setUploadError(null);
+    setUploadSuccessName(null);
+
+    try {
+      const fileExt = file.name.split('.').pop() || 'jpg';
+      const cleanFileName = `pastevent-${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+      const filePath = `${cleanFileName}`;
+
+      const { data, error } = await supabase.storage
+        .from('exhibitions')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: true,
+        });
+
+      if (!error && data) {
+        const { data: pubUrl } = supabase.storage.from('exhibitions').getPublicUrl(filePath);
+        setValue('coverImage', pubUrl.publicUrl);
+        setUploadSuccessName(file.name);
+      } else {
+        // Fallback to Data URL
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const result = e.target?.result as string;
+          setValue('coverImage', result);
+          setUploadSuccessName(file.name);
+          setIsUploading(false);
+        };
+        reader.readAsDataURL(file);
+        return;
+      }
+    } catch (err: any) {
+      console.error('Past event image upload error:', err);
+      setUploadError(err.message || 'Failed to upload image. Please try again.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   const onSubmit = (data: PastEventFormData) => {
     const parsedTags = data.tagsInput
       ? data.tagsInput.split(',').map(t => t.trim()).filter(Boolean)
       : [];
+
+    const existingPhotos = eventToEdit?.photos || [data.coverImage, '/images/2.jpg'];
+    const updatedPhotos = [data.coverImage, ...existingPhotos.filter(p => p !== data.coverImage)];
 
     if (eventToEdit) {
       updatePastEvent(eventToEdit.id, {
@@ -113,6 +179,7 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
         satisfactionRate: data.satisfactionRate,
         narrativeExcerpt: data.narrativeExcerpt,
         coverImage: data.coverImage,
+        photos: updatedPhotos,
         tags: parsedTags,
       });
     } else {
@@ -127,7 +194,7 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
         satisfactionRate: data.satisfactionRate,
         narrativeExcerpt: data.narrativeExcerpt,
         coverImage: data.coverImage,
-        photos: [data.coverImage, '/images/2.jpg'],
+        photos: updatedPhotos,
         tags: parsedTags,
       });
     }
@@ -285,26 +352,121 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1.5">
-              Cover Image Selection
-            </label>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-              {sampleImages.map((img) => (
+            <div className="flex items-center justify-between mb-2">
+              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal">
+                Cover Photo *
+              </label>
+              <div className="flex items-center bg-cream-100 dark:bg-white/5 p-0.5 rounded-lg border border-sage-200 dark:border-white/10 text-[11px]">
                 <button
-                  key={img.path}
                   type="button"
-                  onClick={() => setValue('coverImage', img.path)}
-                  className={`p-2 rounded-2xl border text-left text-xs transition-all relative overflow-hidden group ${
-                    selectedCover === img.path
-                      ? 'border-sage-800 dark:border-sage-400 bg-sage-50 dark:bg-white/10 ring-2 ring-sage-400'
-                      : 'border-sage-200 dark:border-white/10 bg-cream-50 dark:bg-white/[0.04] hover:bg-cream-100 dark:hover:bg-white/[0.08]'
+                  onClick={() => setCoverMode('preset')}
+                  className={`px-2.5 py-1 rounded-md font-semibold transition-all ${
+                    coverMode === 'preset'
+                      ? 'bg-white dark:bg-white/20 text-charcoal shadow-xs'
+                      : 'text-charcoal-muted hover:text-charcoal'
                   }`}
                 >
-                  <img src={img.path} alt={img.label} className="w-full h-14 object-cover rounded-lg mb-1.5" />
-                  <span className="block text-[11px] font-bold text-charcoal truncate">{img.label}</span>
+                  Presets
                 </button>
-              ))}
+                <button
+                  type="button"
+                  onClick={() => setCoverMode('upload')}
+                  className={`px-2.5 py-1 rounded-md font-semibold transition-all ${
+                    coverMode === 'upload'
+                      ? 'bg-white dark:bg-white/20 text-charcoal shadow-xs'
+                      : 'text-charcoal-muted hover:text-charcoal'
+                  }`}
+                >
+                  Device Upload
+                </button>
+              </div>
             </div>
+
+            {coverMode === 'preset' ? (
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                {sampleImages.map((img) => (
+                  <button
+                    key={img.path}
+                    type="button"
+                    onClick={() => setValue('coverImage', img.path)}
+                    className={`p-2 rounded-2xl border text-left text-xs transition-all relative overflow-hidden group ${
+                      selectedCover === img.path
+                        ? 'border-sage-800 dark:border-sage-400 bg-sage-50 dark:bg-white/10 ring-2 ring-sage-400'
+                        : 'border-sage-200 dark:border-white/10 bg-cream-50 dark:bg-white/[0.04] hover:bg-cream-100 dark:hover:bg-white/[0.08]'
+                    }`}
+                  >
+                    <img src={img.path} alt={img.label} className="w-full h-14 object-cover rounded-lg mb-1.5" />
+                    <span className="block text-[11px] font-bold text-charcoal truncate">{img.label}</span>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) handleFileUpload(file);
+                  }}
+                  accept="image/jpeg,image/png,image/webp"
+                  className="hidden"
+                />
+
+                <div
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    setIsDragging(true);
+                  }}
+                  onDragLeave={() => setIsDragging(false)}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    setIsDragging(false);
+                    const file = e.dataTransfer.files?.[0];
+                    if (file) handleFileUpload(file);
+                  }}
+                  onClick={() => fileInputRef.current?.click()}
+                  className={`border-2 border-dashed rounded-2xl p-4 text-center cursor-pointer transition-all ${
+                    isDragging
+                      ? 'border-sage-600 bg-sage-50/50 dark:bg-white/10'
+                      : 'border-sage-200 dark:border-white/15 hover:border-sage-400 dark:hover:border-white/30 bg-white/50 dark:bg-white/[0.02]'
+                  }`}
+                >
+                  {isUploading ? (
+                    <div className="flex flex-col items-center justify-center py-2 text-sage-700 dark:text-sage-300">
+                      <Loader2 className="w-6 h-6 animate-spin mb-1" />
+                      <span className="text-xs font-semibold">Uploading to Supabase Storage...</span>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center py-2">
+                      <div className="w-8 h-8 rounded-full bg-sage-100 dark:bg-white/10 flex items-center justify-center text-sage-800 dark:text-sage-300 mb-1.5">
+                        <Upload className="w-4 h-4" />
+                      </div>
+                      <span className="text-xs font-bold text-charcoal mb-0.5">Click to choose image or drag & drop</span>
+                      <span className="text-[10px] text-charcoal-muted font-medium">PNG, JPG, or WebP up to 15MB</span>
+                    </div>
+                  )}
+                </div>
+
+                {uploadError && (
+                  <p className="text-rose-600 text-xs">{uploadError}</p>
+                )}
+
+                {selectedCover && (
+                  <div className="flex items-center gap-3 p-2.5 rounded-xl bg-cream-50 dark:bg-white/5 border border-sage-200 dark:border-white/10">
+                    <img src={selectedCover} alt="Cover preview" className="w-12 h-10 object-cover rounded-lg" />
+                    <div className="flex-1 min-w-0">
+                      <span className="text-xs font-bold text-charcoal block truncate">
+                        {uploadSuccessName || 'Custom Uploaded Photo'}
+                      </span>
+                      <span className="text-[10px] text-emerald-700 dark:text-emerald-400 flex items-center gap-1 font-semibold">
+                        <CheckCircle2 className="w-3 h-3" /> Ready to publish
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           <div>

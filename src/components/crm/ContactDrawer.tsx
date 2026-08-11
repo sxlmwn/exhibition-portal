@@ -34,7 +34,7 @@ export const ContactDrawer: React.FC<ContactDrawerProps> = ({
   onClose,
   onEdit
 }) => {
-  const { updateContact, deleteContact, currentRole } = useAdmin();
+  const { updateContact, deleteContact, currentUser } = useAdmin();
   const [newNote, setNewNote] = useState('');
 
   if (!contact) return null;
@@ -213,7 +213,7 @@ export const ContactDrawer: React.FC<ContactDrawerProps> = ({
               <span>Edit Contact</span>
             </button>
 
-            {currentRole === 'owner' && (
+            {currentUser.permissions.canDeleteRecords && (
               <button
                 onClick={handleDelete}
                 className="p-2.5 rounded-2xl hover:bg-rose-100 dark:hover:bg-rose-950/40 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-800 transition-colors"

@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { 
   Settings, 
-  ShieldCheck, 
   UserPlus, 
   Building2, 
   Phone, 
@@ -25,13 +24,15 @@ export default function SettingsPage() {
     staffUsers, 
     updateStaffRole, 
     deleteStaffUser, 
-    currentRole, 
+    currentUser,
     settings, 
     updateSettings 
   } = useAdmin();
 
   const [isInviteOpen, setIsInviteOpen] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+
+  const isOwner = currentUser.permissions.canDeleteRecords || currentUser.role === 'owner';
 
   const [agencyForm, setAgencyForm] = useState({
     agencyName: settings.agencyName,
@@ -44,6 +45,7 @@ export default function SettingsPage() {
 
   const handleSaveAgency = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!isOwner) return;
     updateSettings(agencyForm);
     setSaveSuccess(true);
     setTimeout(() => setSaveSuccess(false), 3000);
@@ -70,13 +72,15 @@ export default function SettingsPage() {
           </h2>
         </div>
 
-        <button
-          onClick={() => setIsInviteOpen(true)}
-          className="btn-primary glass-rise-btn px-6 py-3 text-xs font-bold uppercase tracking-wider flex items-center gap-2 self-start sm:self-auto shadow-soft"
-        >
-          <UserPlus className="w-4 h-4" />
-          <span>Invite Member</span>
-        </button>
+        {isOwner && (
+          <button
+            onClick={() => setIsInviteOpen(true)}
+            className="btn-primary glass-rise-btn px-6 py-3 text-xs font-bold uppercase tracking-wider flex items-center gap-2 self-start sm:self-auto shadow-soft"
+          >
+            <UserPlus className="w-4 h-4" />
+            <span>Invite Member</span>
+          </button>
+        )}
       </div>
 
       {/* Staff & Roles Management Section */}
@@ -163,14 +167,14 @@ export default function SettingsPage() {
                       <select
                         value={user.role}
                         onChange={(e) => updateStaffRole(user.id, e.target.value as UserRole)}
-                        disabled={currentRole !== 'owner' && user.role === 'owner'}
-                        className="px-3 py-1.5 rounded-xl border border-sage-200 bg-white text-xs font-bold text-charcoal outline-none cursor-pointer disabled:opacity-50 glass-select shadow-2xs"
+                        disabled={!isOwner || user.id === currentUser.id}
+                        className="px-3 py-1.5 rounded-xl border border-sage-200 bg-white text-xs font-bold text-charcoal outline-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed glass-select shadow-2xs"
                       >
                         <option value="owner">Owner</option>
                         <option value="staff">Staff</option>
                       </select>
 
-                      {currentRole === 'owner' && user.role !== 'owner' && (
+                      {isOwner && user.role !== 'owner' && (
                         <button
                           onClick={() => {
                             if (confirm(`Remove staff access for ${user.name}?`)) {
@@ -190,44 +194,6 @@ export default function SettingsPage() {
               ))}
             </tbody>
           </table>
-        </div>
-
-        {/* Permissions Matrix Reference Table */}
-        <div className="pt-6 border-t border-sage-100">
-          <span className="text-xs uppercase tracking-wider font-semibold text-charcoal block mb-3">
-            Role Permission Matrix Breakdown
-          </span>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            
-            <div className="p-4 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-800/40 space-y-2 text-xs">
-              <div className="flex items-center gap-1.5 text-emerald-900 dark:text-emerald-300 font-bold">
-                <ShieldCheck className="w-4 h-4 text-emerald-700 dark:text-emerald-400" />
-                <span>Owner Role (Full Governance)</span>
-              </div>
-              <ul className="space-y-1 text-[11px] text-emerald-800 dark:text-emerald-300/80 font-light">
-                <li>&bull; Full administrative authority</li>
-                <li>&bull; Manage & delete exhibitions</li>
-                <li>&bull; Approve/reject expense vouchers</li>
-                <li>&bull; Invite staff & change roles</li>
-                <li>&bull; Permanent record deletion</li>
-              </ul>
-            </div>
-
-            <div className="p-4 rounded-2xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/40 space-y-2 text-xs">
-              <div className="flex items-center gap-1.5 text-amber-900 dark:text-amber-300 font-bold">
-                <ShieldCheck className="w-4 h-4 text-amber-700 dark:text-amber-400" />
-                <span>Staff Role (Operations & Entry)</span>
-              </div>
-              <ul className="space-y-1 text-[11px] text-amber-800 dark:text-amber-300/80 font-light">
-                <li>&bull; Floor plan stall assignments</li>
-                <li>&bull; Log expense vouchers (marked Pending Approval)</li>
-                <li>&bull; View vendor contacts & directory</li>
-                <li>&bull; Deletions and financial approvals restricted</li>
-              </ul>
-            </div>
-
-          </div>
         </div>
 
       </div>
@@ -263,7 +229,8 @@ export default function SettingsPage() {
                 type="text"
                 value={agencyForm.agencyName}
                 onChange={(e) => setAgencyForm({ ...agencyForm, agencyName: e.target.value })}
-                className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none focus:border-sage-500 font-medium glass-input"
+                disabled={!isOwner}
+                className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none focus:border-sage-500 font-medium glass-input disabled:opacity-60 disabled:bg-cream-50"
               />
             </div>
 
@@ -275,7 +242,8 @@ export default function SettingsPage() {
                 type="text"
                 value={agencyForm.tagline}
                 onChange={(e) => setAgencyForm({ ...agencyForm, tagline: e.target.value })}
-                className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none focus:border-sage-500 font-medium glass-input"
+                disabled={!isOwner}
+                className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none focus:border-sage-500 font-medium glass-input disabled:opacity-60 disabled:bg-cream-50"
               />
             </div>
           </div>
@@ -289,7 +257,8 @@ export default function SettingsPage() {
                 type="email"
                 value={agencyForm.supportEmail}
                 onChange={(e) => setAgencyForm({ ...agencyForm, supportEmail: e.target.value })}
-                className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none focus:border-sage-500 font-medium glass-input"
+                disabled={!isOwner}
+                className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none focus:border-sage-500 font-medium glass-input disabled:opacity-60 disabled:bg-cream-50"
               />
             </div>
 
@@ -301,7 +270,8 @@ export default function SettingsPage() {
                 type="text"
                 value={agencyForm.coordinatorWhatsApp}
                 onChange={(e) => setAgencyForm({ ...agencyForm, coordinatorWhatsApp: e.target.value })}
-                className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none focus:border-sage-500 font-medium glass-input"
+                disabled={!isOwner}
+                className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none focus:border-sage-500 font-medium glass-input disabled:opacity-60 disabled:bg-cream-50"
               />
             </div>
 
@@ -312,7 +282,8 @@ export default function SettingsPage() {
               <select
                 value={agencyForm.currency}
                 onChange={(e) => setAgencyForm({ ...agencyForm, currency: e.target.value })}
-                className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none font-bold glass-select"
+                disabled={!isOwner}
+                className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none font-bold glass-select disabled:opacity-60 disabled:bg-cream-50"
               >
                 <option value="PKR (Rs.)">PKR (Rs.)</option>
                 <option value="USD ($)">USD ($)</option>
@@ -329,19 +300,28 @@ export default function SettingsPage() {
               type="text"
               value={agencyForm.headquartersAddress}
               onChange={(e) => setAgencyForm({ ...agencyForm, headquartersAddress: e.target.value })}
-              className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none focus:border-sage-500 font-medium glass-input"
+              disabled={!isOwner}
+              className="w-full px-4 py-3 rounded-2xl border border-sage-200 text-xs text-charcoal bg-white outline-none focus:border-sage-500 font-medium glass-input disabled:opacity-60 disabled:bg-cream-50"
             />
           </div>
 
-          <div className="pt-4 border-t border-sage-100 flex items-center justify-end">
-            <button
-              type="submit"
-              className="btn-primary glass-rise-btn px-8 py-3 text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-soft"
-            >
-              <Check className="w-4 h-4" />
-              <span>Save Agency Settings</span>
-            </button>
-          </div>
+          {isOwner ? (
+            <div className="pt-4 border-t border-sage-100 flex items-center justify-end">
+              <button
+                type="submit"
+                className="btn-primary glass-rise-btn px-8 py-3 text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-soft"
+              >
+                <Check className="w-4 h-4" />
+                <span>Save Agency Settings</span>
+              </button>
+            </div>
+          ) : (
+            <div className="pt-4 border-t border-sage-100 text-right">
+              <span className="text-xs text-charcoal-muted font-medium italic">
+                Agency defaults and settings can only be modified by Owners.
+              </span>
+            </div>
+          )}
 
         </form>
 

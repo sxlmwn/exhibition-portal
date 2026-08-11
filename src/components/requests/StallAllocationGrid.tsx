@@ -25,8 +25,8 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
   selectedExhibitionId,
   onSelectExhibition
 }) => {
-  const { exhibitions, stalls, vendorRequests, allocateStall, releaseStall, currentRole } = useAdmin();
-  const isOwner = currentRole === 'owner';
+  const { exhibitions, stalls, vendorRequests, allocateStall, releaseStall, currentUser } = useAdmin();
+  const isOwner = currentUser.permissions.canApproveRequests || currentUser.role === 'owner';
 
   const [selectedStall, setSelectedStall] = useState<StallSlot | null>(null);
   const [vendorToAssignId, setVendorToAssignId] = useState<string>('');
@@ -342,12 +342,14 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
                     </p>
                   )}
 
-                  <button
-                    onClick={() => handleRelease(selectedStall.id)}
-                    className="w-full mt-4 py-2.5 rounded-xl border border-rose-300 dark:border-rose-800/60 text-rose-700 dark:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-xs font-semibold uppercase tracking-wider transition-colors"
-                  >
-                    Release Stall Back to Pool
-                  </button>
+                  {isOwner && (
+                    <button
+                      onClick={() => handleRelease(selectedStall.id)}
+                      className="w-full mt-4 py-2.5 rounded-xl border border-rose-300 dark:border-rose-800/60 text-rose-700 dark:text-rose-300 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-xs font-semibold uppercase tracking-wider transition-colors"
+                    >
+                      Release Stall Back to Pool
+                    </button>
+                  )}
                 </div>
               ) : (
                 /* If available: Show dropdown to assign to an applicant */

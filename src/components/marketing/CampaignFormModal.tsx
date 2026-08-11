@@ -41,6 +41,7 @@ export const CampaignFormModal: React.FC<CampaignFormModalProps> = ({
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors, isSubmitting }
   } = useForm<CampaignFormData>({
     resolver: zodResolver(campaignSchema),
@@ -51,13 +52,31 @@ export const CampaignFormModal: React.FC<CampaignFormModalProps> = ({
       runDuration: '14 Days',
       startDate: new Date().toISOString().split('T')[0],
       endDate: new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0],
-      linkedExhibitionId: exhibitions[0]?.id || 'exh-1',
+      linkedExhibitionId: exhibitions[0]?.id || '',
       leadsGenerated: 15,
       reachImpressions: '45000',
       notes: '',
       status: 'active',
     }
   });
+
+  React.useEffect(() => {
+    if (isOpen) {
+      reset({
+        title: '',
+        platform: 'Instagram',
+        amountSpent: 25000,
+        runDuration: '14 Days',
+        startDate: new Date().toISOString().split('T')[0],
+        endDate: new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0],
+        linkedExhibitionId: exhibitions[0]?.id || '',
+        leadsGenerated: 15,
+        reachImpressions: '45000',
+        notes: '',
+        status: 'active',
+      });
+    }
+  }, [isOpen, exhibitions, reset]);
 
   const onSubmit = (data: CampaignFormData) => {
     const exh = exhibitions.find(e => e.id === data.linkedExhibitionId);
