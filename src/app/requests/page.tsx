@@ -320,7 +320,7 @@ export default function VendorRequestsPage() {
       ) : (
         /* Visual Floor Plan Grid View */
         <StallAllocationGrid
-          selectedExhibitionId={selectedExhibitionId === 'All' ? (exhibitions[0]?.id || '2') : selectedExhibitionId}
+          selectedExhibitionId={selectedExhibitionId === 'All' ? (exhibitions[0]?.id ?? '2') : selectedExhibitionId}
           onSelectExhibition={setSelectedExhibitionId}
         />
       )}

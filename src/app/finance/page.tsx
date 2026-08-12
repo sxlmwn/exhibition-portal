@@ -84,7 +84,7 @@ export default function FinancePage() {
         const matchesSearch = 
           exp.description.toLowerCase().includes(q) ||
           exp.category.toLowerCase().includes(q) ||
-          exp.exhibitionName?.toLowerCase().includes(q);
+          (exp.exhibitionName?.toLowerCase().includes(q) ?? false);
 
         return matchesExh && matchesCat && matchesStart && matchesEnd && matchesSearch;
       })

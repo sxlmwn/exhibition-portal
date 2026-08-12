@@ -137,7 +137,7 @@ export const BulkWhatsAppModal: React.FC<BulkWhatsAppModalProps> = ({
                     onClick={handleDispatchNext}
                     className="px-6 py-3.5 rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-sans text-xs font-bold uppercase tracking-wider shadow-md hover:shadow-lg transition-all flex items-center gap-2 glass-rise-btn"
                   >
-                    <span>Send to {currentNextContact?.fullName?.split(' ')[0] || 'Next'} ({openedCount + 1} of {contacts.length})</span>
+                    <span>Send to {(currentNextContact?.fullName?.split(' ')[0]) ?? 'Next'} ({openedCount + 1} of {contacts.length})</span>
                     <ArrowRight className="w-4 h-4" />
                   </button>
                 </div>

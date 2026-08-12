@@ -109,7 +109,7 @@ export const RevenueChart: React.FC = () => {
                           </div>
                           <div className="flex items-center justify-between gap-4 text-charcoal-muted dark:text-gray-300 mt-1 font-semibold">
                             <span>Logged Costs:</span>
-                            <span>Rs. {(payload[1]?.value as number || 0).toLocaleString()}</span>
+                            <span>Rs. {(payload[1]?.value as number ?? 0).toLocaleString()}</span>
                           </div>
                         </>
                       ) : (

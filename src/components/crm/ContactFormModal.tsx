@@ -35,7 +35,7 @@ export const ContactFormModal: React.FC<ContactFormModalProps> = ({
 }) => {
   const { addContact, updateContact, exhibitions } = useAdmin();
 
-  const defaultExhibitionId = exhibitions[0]?.id || '2';
+  const defaultExhibitionId = exhibitions[0]?.id ?? '2';
 
   const {
     register,

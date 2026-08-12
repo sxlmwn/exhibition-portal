@@ -84,7 +84,7 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
         coverImage: eventToEdit.coverImage,
         tagsInput: eventToEdit.tags ? eventToEdit.tags.join(', ') : '',
       });
-      if (eventToEdit.coverImage?.startsWith('http') || eventToEdit.coverImage?.startsWith('data:')) {
+      if (eventToEdit.coverImage && (eventToEdit.coverImage.startsWith('http') || eventToEdit.coverImage.startsWith('data:'))) {
         setCoverMode('upload');
       } else {
         setCoverMode('preset');
@@ -143,7 +143,7 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
         // Fallback to Data URL
         const reader = new FileReader();
         reader.onload = (e) => {
-          const result = e.target?.result as string;
+          const result = e.target?.result as string ?? '';
           setValue('coverImage', result);
           setUploadSuccessName(file.name);
           setIsUploading(false);
@@ -164,7 +164,7 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
       ? data.tagsInput.split(',').map(t => t.trim()).filter(Boolean)
       : [];
 
-    const existingPhotos = eventToEdit?.photos || [data.coverImage, '/images/2.jpg'];
+    const existingPhotos = eventToEdit?.photos ?? [data.coverImage, '/images/2.jpg'];
     const updatedPhotos = [data.coverImage, ...existingPhotos.filter(p => p !== data.coverImage)];
 
     if (eventToEdit) {

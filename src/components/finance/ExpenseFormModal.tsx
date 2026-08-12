@@ -67,7 +67,7 @@ export const ExpenseFormModal: React.FC<ExpenseFormModalProps> = ({
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
 
-  const initialExhId = expenseToEdit?.exhibitionId || defaultExhibitionId || exhibitions[0]?.id || '';
+  const initialExhId = expenseToEdit?.exhibitionId ?? defaultExhibitionId ?? exhibitions[0]?.id ?? '';
 
   const {
     register,
@@ -138,7 +138,7 @@ export const ExpenseFormModal: React.FC<ExpenseFormModalProps> = ({
       }
     } else {
       reset({
-        exhibitionId: defaultExhibitionId || exhibitions[0]?.id || '',
+        exhibitionId: defaultExhibitionId ?? exhibitions[0]?.id ?? '',
         category: 'Venue Rent',
         amount: 50000,
         date: new Date().toISOString().split('T')[0],
@@ -163,7 +163,7 @@ export const ExpenseFormModal: React.FC<ExpenseFormModalProps> = ({
     setIsUploading(true);
     setUploadError(null);
 
-    const fileExt = file.name.split('.').pop()?.toLowerCase() || 'jpg';
+    const fileExt = file.name.split('.').pop()?.toLowerCase() ?? 'jpg';
     const cleanFileName = `receipt-${Date.now()}-${Math.random().toString(36).substring(2, 7)}.${fileExt}`;
     const filePath = `receipts/${cleanFileName}`;
 
@@ -187,12 +187,12 @@ export const ExpenseFormModal: React.FC<ExpenseFormModalProps> = ({
       }
 
       // Storage failed - log clear diagnostics
-      console.warn('[Supabase Storage Warning] Storage upload failed:', error?.message);
+      console.warn('[Supabase Storage Warning] Storage upload failed:', error?.message ?? 'Unknown error');
 
       // 2. Safety Net Fallback: Only if remote Storage is genuinely unconfigured/down
       const reader = new FileReader();
       reader.onload = (ev) => {
-        const result = ev.target?.result as string;
+        const result = ev.target?.result as string ?? '';
         console.warn('[Supabase Storage] Stored receipt via safety net fallback (Data URL). Note: Ensure the "exhibitions" bucket is created in Supabase Storage.');
         setValue('receiptUrl', result);
         setUploadedFileName(file.name);
@@ -207,7 +207,7 @@ export const ExpenseFormModal: React.FC<ExpenseFormModalProps> = ({
       console.warn('[Supabase Storage] Upload exception:', err);
       const reader = new FileReader();
       reader.onload = (ev) => {
-        const result = ev.target?.result as string;
+        const result = ev.target?.result as string ?? '';
         setValue('receiptUrl', result);
         setUploadedFileName(file.name);
         setIsUploading(false);
@@ -374,7 +374,7 @@ export const ExpenseFormModal: React.FC<ExpenseFormModalProps> = ({
               <div className="mt-1.5 p-2 rounded-lg bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-xs text-rose-700 dark:text-rose-300 flex items-center gap-1.5 font-medium">
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 <span>
-                  Date {selectedDate} is outside allowable window ({dateWindow?.minDate} to {dateWindow?.maxDate}). Please select a valid date within ±7 days of the exhibition.
+                  Date {selectedDate} is outside allowable window ({dateWindow?.minDate ?? 'N/A'} to {dateWindow?.maxDate ?? 'N/A'}). Please select a valid date within ±7 days of the exhibition.
                 </span>
               </div>
             )}

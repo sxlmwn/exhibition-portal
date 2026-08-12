@@ -101,7 +101,7 @@ export const ExhibitionFormModal: React.FC<ExhibitionFormModalProps> = ({
         coverImage: exhibitionToEdit.coverImage,
         status: exhibitionToEdit.status,
       });
-      if (exhibitionToEdit.coverImage?.startsWith('http') || exhibitionToEdit.coverImage?.startsWith('data:')) {
+      if (exhibitionToEdit.coverImage && (exhibitionToEdit.coverImage.startsWith('http') || exhibitionToEdit.coverImage.startsWith('data:'))) {
         setCoverMode('upload');
       }
     } else {
