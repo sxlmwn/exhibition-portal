@@ -230,7 +230,7 @@ export default function LoginPage() {
             <div className="relative z-10 mt-auto pt-8">
               <div className="p-6 bg-white/10 backdrop-blur-md rounded-3xl border border-white/20 shadow-xl space-y-4">
                 <p className="text-xs font-medium text-cream-100 italic leading-relaxed">
-                  "The interactive stall allocator and WhatsApp vendor broadcast trimmed our operational overhead by over 80%. An indispensable system for premium showcases."
+                  &ldquo;The interactive stall allocator and WhatsApp vendor broadcast trimmed our operational overhead by over 80%. An indispensable system for premium showcases.&rdquo;
                 </p>
                 <div className="flex items-center gap-3 pt-1">
                   <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-sage-300/60 shrink-0">

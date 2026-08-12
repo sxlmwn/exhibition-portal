@@ -140,7 +140,7 @@ export const ExhibitionFormModal: React.FC<ExhibitionFormModalProps> = ({
     setUploadSuccessName(null);
 
     try {
-      const fileExt = file.name.split('.').pop() || 'jpg';
+      const fileExt = file.name.split('.').pop() ?? 'jpg';
       const cleanFileName = `exhibition-${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
       const filePath = `${cleanFileName}`;
 

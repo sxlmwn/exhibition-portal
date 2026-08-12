@@ -126,7 +126,7 @@ export const ExpenseFormModal: React.FC<ExpenseFormModalProps> = ({
   useEffect(() => {
     if (expenseToEdit) {
       reset({
-        exhibitionId: expenseToEdit.exhibitionId,
+        exhibitionId: expenseToEdit.exhibitionId ?? initialExhId,
         category: expenseToEdit.category,
         amount: expenseToEdit.amount,
         date: expenseToEdit.date,
@@ -148,7 +148,7 @@ export const ExpenseFormModal: React.FC<ExpenseFormModalProps> = ({
       setUploadedFileName(null);
     }
     setUploadError(null);
-  }, [expenseToEdit, reset, isOpen, defaultExhibitionId, exhibitions]);
+  }, [expenseToEdit, reset, isOpen, defaultExhibitionId, exhibitions]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Primary Path: Upload to Supabase Storage 'exhibitions' bucket
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {

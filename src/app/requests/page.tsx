@@ -204,7 +204,7 @@ export default function VendorRequestsPage() {
                           </span>
                           {req.notes && (
                             <span className="text-[10px] text-sage-800 dark:text-sage-300 italic block mt-0.5 max-w-xs truncate">
-                              "{req.notes}"
+                              &ldquo;{req.notes}&rdquo;
                             </span>
                           )}
                         </td>

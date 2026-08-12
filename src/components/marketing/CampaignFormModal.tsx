@@ -89,7 +89,7 @@ export const CampaignFormModal: React.FC<CampaignFormModalProps> = ({
       startDate: data.startDate,
       endDate: data.endDate,
       linkedExhibitionId: data.linkedExhibitionId,
-      linkedExhibitionName: exh ? exh.title : 'Exhibition',
+      linkedExhibitionName: exh?.title ?? 'Exhibition',
       leadsGenerated: data.leadsGenerated,
       reachImpressions: data.reachImpressions,
       notes: data.notes,

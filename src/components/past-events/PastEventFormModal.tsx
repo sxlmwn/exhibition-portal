@@ -124,7 +124,7 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
     setUploadSuccessName(null);
 
     try {
-      const fileExt = file.name.split('.').pop() || 'jpg';
+      const fileExt = file.name.split('.').pop() ?? 'jpg';
       const cleanFileName = `pastevent-${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
       const filePath = `${cleanFileName}`;
 

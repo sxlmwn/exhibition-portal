@@ -240,7 +240,7 @@ export const BulkWhatsAppModal: React.FC<BulkWhatsAppModalProps> = ({
                           </span>
                         </div>
                         <p className="text-[11px] text-charcoal-muted dark:text-white/60 italic mt-1 line-clamp-1">
-                          "{interpolatedMessage}"
+                          &ldquo;{interpolatedMessage}&rdquo;
                         </p>
                       </div>
                     </div>

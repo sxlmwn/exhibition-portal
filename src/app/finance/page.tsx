@@ -94,7 +94,7 @@ export default function FinancePage() {
   // Per-Exhibition Financial KPI Calculations
   const financialSummary = useMemo(() => {
     if (currentExhibition) {
-      const budgetAllocated = currentExhibition.budgetAllocated || 0;
+      const budgetAllocated = currentExhibition.budgetAllocated ?? 0;
       const budgetReceived = currentExhibition.budgetReceived != null ? currentExhibition.budgetReceived : budgetAllocated;
       const exhExpenses = expenses.filter(e => e.exhibitionId === currentExhibition.id);
       const totalSpent = exhExpenses.reduce((sum, e) => sum + e.amount, 0);
@@ -104,7 +104,7 @@ export default function FinancePage() {
       const bookedStalls = stalls.filter(s => s.exhibitionId === currentExhibition.id && s.status === 'booked');
       const stallRevenueBooked = bookedStalls.length > 0
         ? bookedStalls.reduce((sum, s) => sum + s.price, 0)
-        : currentExhibition.stallRevenueBooked || 0;
+        : currentExhibition.stallRevenueBooked ?? 0;
 
       // Category breakdown
       const categorySpendMap: Record<string, number> = {};
@@ -124,15 +124,15 @@ export default function FinancePage() {
       };
     } else {
       // Consolidated
-      const budgetAllocated = exhibitions.reduce((sum, e) => sum + (e.budgetAllocated || 0), 0);
-      const budgetReceived = exhibitions.reduce((sum, e) => sum + (e.budgetReceived != null ? e.budgetReceived : e.budgetAllocated || 0), 0);
+      const budgetAllocated = exhibitions.reduce((sum, e) => sum + (e.budgetAllocated ?? 0), 0);
+      const budgetReceived = exhibitions.reduce((sum, e) => sum + (e.budgetReceived != null ? e.budgetReceived : e.budgetAllocated ?? 0), 0);
       const totalSpent = expenses.reduce((sum, e) => sum + e.amount, 0);
       const remainingBudget = budgetReceived - totalSpent;
       
       const bookedStalls = stalls.filter(s => s.status === 'booked');
       const stallRevenueBooked = bookedStalls.length > 0
         ? bookedStalls.reduce((sum, s) => sum + s.price, 0)
-        : exhibitions.reduce((sum, e) => sum + (e.stallRevenueBooked || 0), 0);
+        : exhibitions.reduce((sum, e) => sum + (e.stallRevenueBooked ?? 0), 0);
 
       const categorySpendMap: Record<string, number> = {};
       expenses.forEach((e) => {
