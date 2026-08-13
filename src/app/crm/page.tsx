@@ -175,10 +175,10 @@ export default function CRMPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="eyebrow-label">
-            VENDOR RELATIONSHIPS & CRM
+            VENDOR DIRECTORY
           </span>
           <h2 className="font-sans text-3xl sm:text-4xl font-bold text-charcoal dark:text-white tracking-tight">
-            Vendor Directory & CRM
+            Vendor Directory & Contacts
           </h2>
         </div>
 
@@ -195,11 +195,11 @@ export default function CRMPage() {
       </div>
 
       {/* Shared WhatsApp Template Banner */}
-      <div className="glass-card p-5 rounded-3xl border border-sage-200/80 dark:border-white/10 space-y-3 shadow-soft">
+      <div className="glass-card p-5 rounded-2xl border border-sage-200/80 dark:border-white/10 space-y-3 shadow-soft">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="flex items-center gap-2 text-xs font-bold text-charcoal dark:text-white uppercase tracking-wider">
             <MessageSquare className="w-4 h-4 text-emerald-700 dark:text-emerald-400" />
-            <span>Shared WhatsApp Outreach Template</span>
+            <span>WhatsApp Message Template</span>
           </div>
           <span className="text-[11px] text-charcoal-muted dark:text-white/60">
             Variables: <code className="text-sage-800 dark:text-sage-300 font-bold">{'{Name}'}</code>, <code className="text-sage-800 dark:text-sage-300 font-bold">{'{Business}'}</code>, <code className="text-sage-800 dark:text-sage-300 font-bold">{'{Exhibition}'}</code>
@@ -210,13 +210,13 @@ export default function CRMPage() {
           rows={2}
           value={waTemplate}
           onChange={(e) => setWaTemplate(e.target.value)}
-          placeholder="Type message template..."
-          className="w-full px-4 py-3 rounded-2xl border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5 font-sans leading-relaxed"
+          placeholder="Type message template to send to vendors..."
+          className="w-full px-4 py-3 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5 font-sans leading-relaxed"
         />
       </div>
 
       {/* Filter Bar, Search & Bulk Actions */}
-      <div className="glass-card p-4 sm:p-5 rounded-3xl flex flex-col lg:flex-row items-center justify-between gap-4 border border-sage-200/80 dark:border-white/10">
+      <div className="glass-card p-4 sm:p-5 rounded-2xl flex flex-col lg:flex-row items-center justify-between gap-4 border border-sage-200/80 dark:border-white/10">
         
         {/* Search */}
         <div className="relative w-full lg:w-72">
@@ -225,8 +225,8 @@ export default function CRMPage() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search name, phone, email, source..."
-            className="w-full pl-11 pr-4 py-2.5 rounded-full border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white bg-white/80 dark:bg-white/5 outline-none focus:border-sage-500 font-medium"
+            placeholder="Search name, phone, email..."
+            className="w-full pl-11 pr-4 py-2.5 rounded-lg border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white bg-white/80 dark:bg-white/5 outline-none focus:border-sage-500 font-medium"
           />
         </div>
 
@@ -237,7 +237,7 @@ export default function CRMPage() {
           <select
             value={selectedExhibitionId}
             onChange={(e) => setSelectedExhibitionId(e.target.value)}
-            className="px-4 py-2.5 rounded-full border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white bg-white/80 dark:bg-[#1A1D24] outline-none focus:border-sage-500 font-bold glass-select"
+            className="px-4 py-2.5 rounded-lg border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white bg-white/80 dark:bg-[#1A1D24] outline-none focus:border-sage-500 font-bold glass-select cursor-pointer"
           >
             <option value="All">All Exhibitions</option>
             {exhibitions.map((exh) => (
@@ -251,7 +251,7 @@ export default function CRMPage() {
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="px-4 py-2.5 rounded-full border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white bg-white/80 dark:bg-[#1A1D24] outline-none focus:border-sage-500 font-bold glass-select"
+            className="px-4 py-2.5 rounded-lg border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white bg-white/80 dark:bg-[#1A1D24] outline-none focus:border-sage-500 font-bold glass-select cursor-pointer"
           >
             {categories.map((c) => (
               <option key={c} value={c}>
@@ -264,7 +264,7 @@ export default function CRMPage() {
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="px-4 py-2.5 rounded-full border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white bg-white/80 dark:bg-[#1A1D24] outline-none focus:border-sage-500 capitalize font-bold glass-select"
+            className="px-4 py-2.5 rounded-lg border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white bg-white/80 dark:bg-[#1A1D24] outline-none focus:border-sage-500 capitalize font-bold glass-select cursor-pointer"
           >
             {statuses.map((s) => (
               <option key={s.value} value={s.value}>
@@ -277,7 +277,7 @@ export default function CRMPage() {
           <button
             onClick={handleOpenBulkWhatsApp}
             className="btn-primary glass-rise-btn px-4 py-2.5 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs"
-            title="Open WhatsApp dispatch queue"
+            title="Open WhatsApp message queue"
           >
             <Send className="w-3.5 h-3.5" />
             <span>Send WhatsApp ({selectedContactIds.length > 0 ? selectedContactIds.length : filteredContacts.length})</span>
@@ -286,8 +286,8 @@ export default function CRMPage() {
           {/* Export CSV Action */}
           <button
             onClick={handleExportCSV}
-            className="px-4 py-2.5 rounded-full border border-sage-300 dark:border-white/20 text-charcoal dark:text-white hover:bg-cream-100 dark:hover:bg-white/10 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 glass-rise-btn transition-colors"
-            title="Export contacts as CSV file"
+            className="px-4 py-2.5 rounded-lg border border-sage-300 dark:border-white/20 text-charcoal dark:text-white hover:bg-cream-100 dark:hover:bg-white/10 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 glass-rise-btn transition-colors"
+            title="Download CSV spreadsheet"
           >
             <Download className="w-3.5 h-3.5" />
             <span>Export CSV</span>
@@ -298,7 +298,7 @@ export default function CRMPage() {
       </div>
 
       {/* Contacts Table */}
-      <div className="glass-card rounded-3xl overflow-hidden shadow-soft border border-sage-200/80 dark:border-white/10">
+      <div className="glass-card rounded-2xl overflow-hidden shadow-soft border border-sage-200/80 dark:border-white/10">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-cream-100/80 dark:bg-white/5 border-b border-sage-200 dark:border-white/10 text-[11px] font-bold uppercase tracking-wider text-charcoal-muted dark:text-white/60">
@@ -315,11 +315,10 @@ export default function CRMPage() {
                     )}
                   </button>
                 </th>
-                <th className="py-4 px-4">Full Name / Brand</th>
+                <th className="py-4 px-4">Contact / Brand</th>
                 <th className="py-4 px-4">Category</th>
-                <th className="py-4 px-4">Linked Exhibition</th>
-                <th className="py-4 px-4">Contact Details</th>
-                <th className="py-4 px-4">Source</th>
+                <th className="py-4 px-4">Event</th>
+                <th className="py-4 px-4">Phone / WhatsApp</th>
                 <th className="py-4 px-4">Status</th>
                 <th className="py-4 px-5 text-right">Actions</th>
               </tr>
@@ -327,9 +326,9 @@ export default function CRMPage() {
             <tbody className="divide-y divide-sage-100 dark:divide-white/5">
               {filteredContacts.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="py-12 text-center text-charcoal-muted dark:text-white/50">
+                  <td colSpan={7} className="py-12 text-center text-charcoal-muted dark:text-white/50">
                     <Users className="w-8 h-8 mx-auto mb-2 opacity-40" />
-                    <p className="font-semibold text-sm">No CRM contacts found</p>
+                    <p className="font-semibold text-sm">No contacts found</p>
                     <p className="text-xs">Try adjusting your search criteria or add a new contact.</p>
                   </td>
                 </tr>
@@ -365,8 +364,9 @@ export default function CRMPage() {
                         <span className="font-sans font-bold text-sm text-charcoal dark:text-white block tracking-tight">
                           {contact.fullName || contact.name}
                         </span>
-                        <span className="text-charcoal-muted dark:text-white/60 text-[11px] font-normal">
+                        <span className="text-charcoal-muted dark:text-white/60 text-[11px] font-normal block">
                           {contact.businessName && contact.businessName !== contact.fullName ? contact.businessName : 'Exhibitor Contact'}
+                          {contact.source && ` • via ${contact.source}`}
                         </span>
                       </td>
 
@@ -389,10 +389,10 @@ export default function CRMPage() {
                       <td className="py-4 px-4" onClick={(e) => e.stopPropagation()}>
                         <button
                           onClick={() => handleOpenSingleWhatsApp(contact)}
-                          className="flex items-center gap-1.5 font-semibold text-emerald-800 dark:text-emerald-400 hover:underline"
+                          className="inline-flex items-center gap-1.5 font-semibold text-emerald-800 dark:text-emerald-400 hover:underline"
                           title="Open WhatsApp with pre-filled message"
                         >
-                          <MessageSquare className="w-3.5 h-3.5" />
+                          <MessageSquare className="w-3.5 h-3.5 shrink-0" />
                           <span>{contact.phone || 'No phone'}</span>
                         </button>
                         {contact.email && (
@@ -400,13 +400,6 @@ export default function CRMPage() {
                             {contact.email}
                           </span>
                         )}
-                      </td>
-
-                      {/* Source */}
-                      <td className="py-4 px-4 text-charcoal-muted dark:text-white/70">
-                        <span className="px-2 py-0.5 rounded-md bg-sage-50 dark:bg-white/5 border border-sage-200 dark:border-white/10 text-[11px] font-medium">
-                          {contact.source || 'Website Lead'}
-                        </span>
                       </td>
 
                       {/* Status */}

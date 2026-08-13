@@ -105,7 +105,7 @@ export const ExhibitionCard: React.FC<ExhibitionCardProps> = ({
             <div className="flex items-center justify-between text-xs mb-1.5">
               <span className="font-bold text-charcoal dark:text-white flex items-center gap-1.5">
                 <Store className="w-3.5 h-3.5 text-sage-700 dark:text-sage-400" />
-                <span>Stall Capacity</span>
+                <span>Stalls Booked</span>
               </span>
               <span className="font-extrabold text-sage-deep dark:text-sage-300">
                 {exhibition.bookedStallsCount} / {exhibition.totalStallCapacity} ({fillPct}%)
@@ -125,7 +125,7 @@ export const ExhibitionCard: React.FC<ExhibitionCardProps> = ({
           <div className="grid grid-cols-2 gap-3 text-xs">
             <div className="p-3 rounded-2xl bg-white/80 dark:bg-white/[0.04] border border-sage-200/60 dark:border-white/[0.08]">
               <span className="text-[10px] text-charcoal-muted uppercase tracking-wider block font-bold mb-0.5">
-                Stall Revenue
+                Revenue
               </span>
               <span className="font-sans text-base font-bold text-sage-deep dark:text-sage-300">
                 Rs. {(exhibition.stallRevenueBooked / 100000).toFixed(1)}L
@@ -133,7 +133,7 @@ export const ExhibitionCard: React.FC<ExhibitionCardProps> = ({
             </div>
             <div className="p-3 rounded-2xl bg-white/80 dark:bg-white/[0.04] border border-sage-200/60 dark:border-white/[0.08]">
               <span className="text-[10px] text-charcoal-muted uppercase tracking-wider block font-bold mb-0.5">
-                Funding/Budget
+                Budget
               </span>
               <span className="font-sans text-base font-bold text-charcoal dark:text-white">
                 Rs. {(exhibition.budgetAllocated / 100000).toFixed(1)}L
@@ -146,26 +146,27 @@ export const ExhibitionCard: React.FC<ExhibitionCardProps> = ({
       {/* Card Footer Actions */}
       <div className="px-6 py-4 border-t border-sage-100 dark:border-white/10 flex items-center justify-between bg-white/40 dark:bg-white/[0.02]">
         <span className="text-xs font-bold text-sage-800 dark:text-sage-300 flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
-          <span>Inspect Details</span>
+          <span>View Details</span>
           <ArrowUpRight className="w-3.5 h-3.5" />
         </span>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1.5">
           <button
             onClick={(e) => {
               e.stopPropagation();
               onEdit(exhibition);
             }}
-            className="p-2 rounded-xl hover:bg-sage-100 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal dark:hover:text-white transition-colors"
+            className="px-2.5 py-1.5 rounded-lg border border-sage-200 dark:border-white/10 hover:bg-sage-100 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal dark:hover:text-white text-xs font-semibold flex items-center gap-1 transition-colors"
             title="Edit Exhibition"
           >
             <Edit3 className="w-3.5 h-3.5" />
+            <span>Edit</span>
           </button>
           
           {currentUser.permissions.canDeleteRecords && (
             <button
               onClick={handleDelete}
-              className="p-2 rounded-xl hover:bg-rose-100 dark:hover:bg-rose-950/40 text-charcoal-muted hover:text-rose-700 dark:hover:text-rose-400 transition-colors"
+              className="p-1.5 rounded-lg border border-transparent hover:border-rose-200 hover:bg-rose-100 dark:hover:bg-rose-950/40 text-charcoal-muted hover:text-rose-700 dark:hover:text-rose-400 transition-colors"
               title="Delete Exhibition"
             >
               <Trash2 className="w-3.5 h-3.5" />

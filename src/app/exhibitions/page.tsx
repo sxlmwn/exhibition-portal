@@ -59,10 +59,10 @@ export default function ExhibitionsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="eyebrow-label">
-            PORTFOLIO MANAGEMENT
+            EXHIBITIONS
           </span>
           <h2 className="font-sans text-3xl sm:text-4xl font-bold text-charcoal tracking-tight">
-            Exhibitions & Schedule
+            My Exhibitions
           </h2>
         </div>
 
@@ -76,7 +76,7 @@ export default function ExhibitionsPage() {
       </div>
 
       {/* Filter & Search Bar */}
-      <div className="glass-card p-4 sm:p-5 rounded-3xl flex flex-col lg:flex-row items-center justify-between gap-4">
+      <div className="glass-card p-4 sm:p-5 rounded-2xl flex flex-col lg:flex-row items-center justify-between gap-4">
         
         {/* Left: Search input */}
         <div className="relative w-full lg:w-96">
@@ -85,8 +85,8 @@ export default function ExhibitionsPage() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search by title, venue, category..."
-            className="w-full pl-11 pr-4 py-2.5 rounded-full border border-sage-200 focus:border-sage-500 focus:ring-2 focus:ring-sage-200 outline-none text-xs text-charcoal bg-white/80 font-medium glass-input"
+            placeholder="Search exhibitions by name or venue..."
+            className="w-full pl-11 pr-4 py-2.5 rounded-lg border border-sage-200 focus:border-sage-500 focus:ring-2 focus:ring-sage-200 outline-none text-xs text-charcoal bg-white/80 font-medium glass-input"
           />
         </div>
 
@@ -94,12 +94,12 @@ export default function ExhibitionsPage() {
         <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-start lg:justify-end">
           
           {/* City Filter */}
-          <div className="flex items-center gap-1.5 bg-white/80 dark:bg-white/[0.06] p-1 rounded-full border border-sage-200/60 dark:border-white/10 shadow-soft-xs backdrop-blur-sm">
+          <div className="flex items-center gap-1.5 bg-white/80 dark:bg-white/[0.06] p-1 rounded-lg border border-sage-200/60 dark:border-white/10 shadow-soft-xs backdrop-blur-sm">
             {cities.map((city) => (
               <button
                 key={city}
                 onClick={() => setSelectedCity(city)}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all glass-rise-btn ${
+                className={`px-4 py-1.5 rounded-lg text-xs font-bold transition-all glass-rise-btn ${
                   selectedCity === city
                     ? 'bg-sage-800 dark:bg-sage-700 text-cream shadow-xs'
                     : 'text-charcoal dark:text-white/80 hover:text-charcoal dark:hover:text-white hover:bg-sage-50 dark:hover:bg-white/10'
@@ -114,11 +114,11 @@ export default function ExhibitionsPage() {
           <select
             value={selectedStatus}
             onChange={(e) => setSelectedStatus(e.target.value)}
-            className="px-4 py-2 rounded-full border border-sage-200 bg-white/80 text-xs font-bold text-charcoal outline-none cursor-pointer glass-select"
+            className="px-4 py-2 rounded-lg border border-sage-200 bg-white/80 text-xs font-bold text-charcoal outline-none cursor-pointer glass-select"
           >
             <option value="All">All Statuses</option>
             <option value="upcoming">Upcoming</option>
-            <option value="ongoing">Ongoing</option>
+            <option value="ongoing">Active Now</option>
             <option value="completed">Completed</option>
           </select>
         </div>
@@ -144,7 +144,7 @@ export default function ExhibitionsPage() {
             No Exhibitions Found
           </h3>
           <p className="text-xs text-charcoal-muted max-w-sm mx-auto mb-5 font-light">
-            No editions match your current search and filter criteria.
+            Nothing matches your search or filters. Try changing what you typed.
           </p>
           <button
             onClick={() => {
@@ -154,7 +154,7 @@ export default function ExhibitionsPage() {
             }}
             className="text-xs font-semibold text-sage-800 underline"
           >
-            Reset Filters
+            Clear filters
           </button>
         </div>
       )}

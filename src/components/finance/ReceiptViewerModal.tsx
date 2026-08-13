@@ -41,7 +41,7 @@ export const ReceiptViewerModal: React.FC<ReceiptViewerModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-cream-200 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal dark:hover:text-white transition-colors"
+            className="p-2 rounded-lg hover:bg-cream-200 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal dark:hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -63,7 +63,7 @@ export const ReceiptViewerModal: React.FC<ReceiptViewerModalProps> = ({
                 <button
                   type="button"
                   onClick={handleOpenNewTab}
-                  className="px-6 py-2.5 rounded-full bg-rose-700 hover:bg-rose-800 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-xs transition-all glass-rise-btn"
+                  className="px-6 py-2.5 rounded-lg bg-rose-700 hover:bg-rose-800 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-2 shadow-xs transition-all glass-rise-btn"
                 >
                   <FileText className="w-4 h-4" />
                   <span>Open Full PDF in New Tab</span>
@@ -117,7 +117,7 @@ export const ReceiptViewerModal: React.FC<ReceiptViewerModalProps> = ({
           )}
           <button
             onClick={onClose}
-            className="px-5 py-2 rounded-full border border-sage-300 dark:border-white/20 text-charcoal dark:text-white hover:bg-cream-100 dark:hover:bg-white/10 text-xs font-semibold uppercase tracking-wider ml-auto transition-colors"
+            className="px-5 py-2 rounded-lg border border-sage-300 dark:border-white/20 text-charcoal dark:text-white hover:bg-cream-100 dark:hover:bg-white/10 text-xs font-semibold uppercase tracking-wider ml-auto transition-colors"
           >
             Close
           </button>

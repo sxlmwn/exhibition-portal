@@ -85,7 +85,7 @@ export const CampaignDetailModal: React.FC<CampaignDetailModalProps> = ({
 
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-cream-100 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal transition-colors"
+            className="p-2 rounded-lg hover:bg-cream-100 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal transition-colors"
             title="Close modal"
           >
             <X className="w-5 h-5" />
@@ -170,10 +170,10 @@ export const CampaignDetailModal: React.FC<CampaignDetailModalProps> = ({
                     onClose();
                   }
                 }}
-                className="px-4 py-2 rounded-xl text-xs font-bold text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/40 border border-rose-200 dark:border-rose-800 transition-colors flex items-center gap-1.5"
+                className="px-4 py-2 rounded-lg text-xs font-bold text-rose-700 hover:bg-rose-50 dark:hover:bg-rose-950/40 border border-rose-200 dark:border-rose-800 transition-colors flex items-center gap-1.5"
               >
                 <Trash2 className="w-3.5 h-3.5" />
-                <span>Delete Log</span>
+                <span>Delete Campaign</span>
               </button>
             )}
           </div>

@@ -120,7 +120,7 @@ export const CampaignFormModal: React.FC<CampaignFormModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-cream-200 text-charcoal-muted hover:text-charcoal"
+            className="p-2 rounded-lg hover:bg-cream-200 text-charcoal-muted hover:text-charcoal"
           >
             <X className="w-5 h-5" />
           </button>
@@ -243,7 +243,7 @@ export const CampaignFormModal: React.FC<CampaignFormModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 rounded-full border border-sage-300 text-charcoal hover:bg-cream-100 text-xs font-semibold uppercase tracking-wider"
+              className="px-5 py-2.5 rounded-lg border border-sage-300 text-charcoal hover:bg-cream-100 text-xs font-semibold uppercase tracking-wider"
             >
               Cancel
             </button>
@@ -252,7 +252,7 @@ export const CampaignFormModal: React.FC<CampaignFormModalProps> = ({
               disabled={isSubmitting}
               className="btn-primary px-7 py-2.5 text-xs font-semibold uppercase tracking-wider"
             >
-              Log Campaign
+              Save Campaign
             </button>
           </div>
         </form>

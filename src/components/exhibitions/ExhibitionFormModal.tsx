@@ -56,6 +56,7 @@ export const ExhibitionFormModal: React.FC<ExhibitionFormModalProps> = ({
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [uploadSuccessName, setUploadSuccessName] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const {
@@ -238,15 +239,15 @@ export const ExhibitionFormModal: React.FC<ExhibitionFormModalProps> = ({
         <div className="p-6 sm:p-8 border-b border-sage-100 dark:border-white/10 flex items-center justify-between sticky top-0 bg-white/95 dark:bg-[#121418]/95 backdrop-blur-md z-10">
           <div>
             <span className="text-xs uppercase tracking-wider font-semibold text-sage-800 dark:text-sage-300 block mb-1">
-              {exhibitionToEdit ? 'Edit Edition' : 'New Exhibition'}
+              {exhibitionToEdit ? 'Edit Exhibition' : 'New Exhibition'}
             </span>
             <h3 className="font-sans text-2xl font-extrabold text-charcoal dark:text-white tracking-tight">
-              {exhibitionToEdit ? 'Update Exhibition Details' : 'Create Exhibition Edition'}
+              {exhibitionToEdit ? 'Update Details' : 'Create Exhibition'}
             </h3>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-cream-200 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal dark:hover:text-white transition-colors"
+            className="p-2 rounded-lg hover:bg-cream-200 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal dark:hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -257,27 +258,27 @@ export const ExhibitionFormModal: React.FC<ExhibitionFormModalProps> = ({
           {/* Title & Tagline */}
           <div className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal dark:text-white mb-1.5">
-                Exhibition Title *
+              <label className="block text-sm font-semibold text-charcoal dark:text-white mb-1.5">
+                Event Name *
               </label>
               <input
                 type="text"
                 {...register('title')}
                 placeholder="e.g. Spring Artisan Showcase 2026"
-                className="w-full px-4 py-3 rounded-2xl border border-sage-200 dark:border-white/10 focus:border-sage-500 focus:ring-2 focus:ring-sage-200 outline-none text-sm text-charcoal dark:text-white bg-cream-50/50 dark:bg-white/5"
+                className="w-full px-4 py-3 rounded-xl border border-sage-200 dark:border-white/10 focus:border-sage-500 focus:ring-2 focus:ring-sage-200 outline-none text-sm text-charcoal dark:text-white bg-cream-50/50 dark:bg-white/5"
               />
               {errors.title && <p className="text-rose-600 text-xs mt-1">{errors.title.message}</p>}
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal dark:text-white mb-1.5">
-                Tagline / Subheading *
+              <label className="block text-sm font-semibold text-charcoal dark:text-white mb-1.5">
+                Short Tagline *
               </label>
               <input
                 type="text"
                 {...register('tagline')}
-                placeholder="e.g. Curated Luxury Crafts & Fashion Apparel"
-                className="w-full px-4 py-3 rounded-2xl border border-sage-200 dark:border-white/10 focus:border-sage-500 focus:ring-2 focus:ring-sage-200 outline-none text-sm text-charcoal dark:text-white bg-cream-50/50 dark:bg-white/5"
+                placeholder="e.g. Luxury Crafts & Fashion Apparel"
+                className="w-full px-4 py-3 rounded-xl border border-sage-200 dark:border-white/10 focus:border-sage-500 focus:ring-2 focus:ring-sage-200 outline-none text-sm text-charcoal dark:text-white bg-cream-50/50 dark:bg-white/5"
               />
               {errors.tagline && <p className="text-rose-600 text-xs mt-1">{errors.tagline.message}</p>}
             </div>
@@ -286,12 +287,12 @@ export const ExhibitionFormModal: React.FC<ExhibitionFormModalProps> = ({
           {/* City & Venue & Category */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal dark:text-white mb-1.5">
+              <label className="block text-sm font-semibold text-charcoal dark:text-white mb-1.5">
                 City *
               </label>
               <select
                 {...register('city')}
-                className="w-full px-4 py-3 rounded-2xl border border-sage-200 dark:border-white/10 focus:border-sage-500 focus:ring-2 focus:ring-sage-200 outline-none text-sm text-charcoal dark:text-white bg-cream-50/50 dark:bg-[#1A1D24]"
+                className="w-full px-4 py-3 rounded-xl border border-sage-200 dark:border-white/10 focus:border-sage-500 focus:ring-2 focus:ring-sage-200 outline-none text-sm text-charcoal dark:text-white bg-cream-50/50 dark:bg-[#1A1D24]"
               >
                 <option value="Lahore">Lahore</option>
                 <option value="Islamabad">Islamabad</option>
@@ -301,25 +302,25 @@ export const ExhibitionFormModal: React.FC<ExhibitionFormModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal dark:text-white mb-1.5">
-                Venue Name *
+              <label className="block text-sm font-semibold text-charcoal dark:text-white mb-1.5">
+                Venue / Location *
               </label>
               <input
                 type="text"
                 {...register('venue')}
                 placeholder="e.g. Expo Centre, Hall 1"
-                className="w-full px-4 py-3 rounded-2xl border border-sage-200 dark:border-white/10 focus:border-sage-500 focus:ring-2 focus:ring-sage-200 outline-none text-sm text-charcoal dark:text-white bg-cream-50/50 dark:bg-white/5"
+                className="w-full px-4 py-3 rounded-xl border border-sage-200 dark:border-white/10 focus:border-sage-500 focus:ring-2 focus:ring-sage-200 outline-none text-sm text-charcoal dark:text-white bg-cream-50/50 dark:bg-white/5"
               />
               {errors.venue && <p className="text-rose-600 text-xs mt-1">{errors.venue.message}</p>}
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal dark:text-white mb-1.5">
+              <label className="block text-sm font-semibold text-charcoal dark:text-white mb-1.5">
                 Category *
               </label>
               <select
                 {...register('category')}
-                className="w-full px-4 py-3 rounded-2xl border border-sage-200 dark:border-white/10 focus:border-sage-500 focus:ring-2 focus:ring-sage-200 outline-none text-sm text-charcoal dark:text-white bg-cream-50/50 dark:bg-[#1A1D24]"
+                className="w-full px-4 py-3 rounded-xl border border-sage-200 dark:border-white/10 focus:border-sage-500 focus:ring-2 focus:ring-sage-200 outline-none text-sm text-charcoal dark:text-white bg-cream-50/50 dark:bg-[#1A1D24]"
               >
                 <option value="Lifestyle & Artisan Craft">Lifestyle & Artisan Craft</option>
                 <option value="Home, Decor & Wellness">Home, Decor & Wellness</option>
@@ -329,10 +330,10 @@ export const ExhibitionFormModal: React.FC<ExhibitionFormModalProps> = ({
             </div>
           </div>
 
-          {/* Dates & Status */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {/* Dates — always visible */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal dark:text-white mb-1.5">
+              <label className="block text-sm font-semibold text-charcoal dark:text-white mb-1.5">
                 Start Date *
               </label>
               <input
@@ -344,7 +345,7 @@ export const ExhibitionFormModal: React.FC<ExhibitionFormModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal dark:text-white mb-1.5">
+              <label className="block text-sm font-semibold text-charcoal dark:text-white mb-1.5">
                 End Date *
               </label>
               <input
@@ -354,62 +355,83 @@ export const ExhibitionFormModal: React.FC<ExhibitionFormModalProps> = ({
               />
               {errors.endDate && <p className="text-rose-600 text-xs mt-1">{errors.endDate.message}</p>}
             </div>
-
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal dark:text-white mb-1.5">
-                Status *
-              </label>
-              <select
-                {...register('status')}
-                className="w-full px-4 py-3 rounded-2xl border border-sage-200 dark:border-white/10 focus:border-sage-500 focus:ring-2 focus:ring-sage-200 outline-none text-sm text-charcoal dark:text-white bg-cream-50/50 dark:bg-[#1A1D24]"
-              >
-                <option value="upcoming">Upcoming</option>
-                <option value="ongoing">Ongoing</option>
-                <option value="completed">Completed</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Stalls Capacity & Budget */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal dark:text-white mb-1.5">
-                Total Stall Capacity *
-              </label>
-              <input
-                type="number"
-                {...register('totalStallCapacity', { valueAsNumber: true })}
-                className="w-full px-4 py-3 rounded-2xl border border-sage-200 dark:border-white/10 focus:border-sage-500 focus:ring-2 focus:ring-sage-200 outline-none text-sm text-charcoal dark:text-white bg-cream-50/50 dark:bg-white/5"
-              />
-              {errors.totalStallCapacity && <p className="text-rose-600 text-xs mt-1">{errors.totalStallCapacity.message}</p>}
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal dark:text-white mb-1.5">
-                Allocated Budget / Funding (PKR) *
-              </label>
-              <input
-                type="number"
-                step="50000"
-                {...register('budgetAllocated', { valueAsNumber: true })}
-                className="w-full px-4 py-3 rounded-2xl border border-sage-200 dark:border-white/10 focus:border-sage-500 focus:ring-2 focus:ring-sage-200 outline-none text-sm text-charcoal dark:text-white bg-cream-50/50 dark:bg-white/5"
-              />
-              {errors.budgetAllocated && <p className="text-rose-600 text-xs mt-1">{errors.budgetAllocated.message}</p>}
-            </div>
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal dark:text-white mb-1.5">
-              Description & Logistics Overview *
+            <label className="block text-sm font-semibold text-charcoal dark:text-white mb-1.5">
+              Description *
             </label>
             <textarea
               rows={3}
               {...register('description')}
-              placeholder="Provide event details, VIP preview timing, hall facilities, and booth setups..."
+              placeholder="Describe the event — what's being showcased, where, and any important details for vendors..."
               className="w-full px-4 py-3 rounded-2xl border border-sage-200 dark:border-white/10 focus:border-sage-500 focus:ring-2 focus:ring-sage-200 outline-none text-sm text-charcoal dark:text-white bg-cream-50/50 dark:bg-white/5"
             />
             {errors.description && <p className="text-rose-600 text-xs mt-1">{errors.description.message}</p>}
+          </div>
+
+          {/* More Options Toggle */}
+          <div>
+            <button
+              type="button"
+              onClick={() => setShowAdvanced(!showAdvanced)}
+              className="flex items-center gap-2 text-xs font-semibold text-sage-800 dark:text-sage-300 hover:text-sage-950 dark:hover:text-white transition-colors"
+            >
+              <span className={`w-4 h-4 rounded border border-sage-300 dark:border-white/20 flex items-center justify-center transition-transform ${showAdvanced ? 'rotate-90' : ''}`}>
+                <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M2 1l4 3-4 3V1z"/></svg>
+              </span>
+              <span>{showAdvanced ? 'Hide extra options' : 'More options'}</span>
+            </button>
+
+            {showAdvanced && (
+              <div className="mt-4 space-y-4 p-4 rounded-2xl bg-cream-50/60 dark:bg-white/[0.03] border border-sage-200/60 dark:border-white/10">
+                <p className="text-[11px] text-charcoal-muted dark:text-white/50 font-medium">These fields have sensible defaults — only change them if needed.</p>
+
+                {/* Status */}
+                <div>
+                  <label className="block text-sm font-semibold text-charcoal dark:text-white mb-1.5">
+                    Status
+                  </label>
+                  <select
+                    {...register('status')}
+                    className="w-full px-4 py-3 rounded-2xl border border-sage-200 dark:border-white/10 focus:border-sage-500 focus:ring-2 focus:ring-sage-200 outline-none text-sm text-charcoal dark:text-white bg-white/80 dark:bg-[#1A1D24]"
+                  >
+                    <option value="upcoming">Upcoming</option>
+                    <option value="ongoing">Ongoing</option>
+                    <option value="completed">Completed</option>
+                  </select>
+                </div>
+
+                {/* Stalls & Budget */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-charcoal dark:text-white mb-1.5">
+                      Number of Stalls
+                    </label>
+                    <input
+                      type="number"
+                      {...register('totalStallCapacity', { valueAsNumber: true })}
+                      className="w-full px-4 py-3 rounded-2xl border border-sage-200 dark:border-white/10 focus:border-sage-500 focus:ring-2 focus:ring-sage-200 outline-none text-sm text-charcoal dark:text-white bg-white/80 dark:bg-white/5"
+                    />
+                    {errors.totalStallCapacity && <p className="text-rose-600 text-xs mt-1">{errors.totalStallCapacity.message}</p>}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-charcoal dark:text-white mb-1.5">
+                      Budget (PKR)
+                    </label>
+                    <input
+                      type="number"
+                      step="50000"
+                      {...register('budgetAllocated', { valueAsNumber: true })}
+                      className="w-full px-4 py-3 rounded-2xl border border-sage-200 dark:border-white/10 focus:border-sage-500 focus:ring-2 focus:ring-sage-200 outline-none text-sm text-charcoal dark:text-white bg-white/80 dark:bg-white/5"
+                    />
+                    {errors.budgetAllocated && <p className="text-rose-600 text-xs mt-1">{errors.budgetAllocated.message}</p>}
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Cover Image Selector */}
@@ -423,11 +445,11 @@ export const ExhibitionFormModal: React.FC<ExhibitionFormModalProps> = ({
               </div>
 
               {/* Mode Toggle */}
-              <div className="flex items-center gap-1 bg-cream-100 dark:bg-white/10 p-1 rounded-full border border-sage-200/60 dark:border-white/10">
+              <div className="flex items-center gap-1 bg-cream-100 dark:bg-white/10 p-1 rounded-lg border border-sage-200/60 dark:border-white/10">
                 <button
                   type="button"
                   onClick={() => setCoverMode('preset')}
-                  className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
+                  className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${
                     coverMode === 'preset'
                       ? 'bg-sage-800 text-cream shadow-xs'
                       : 'text-charcoal-muted hover:text-charcoal dark:hover:text-white'
@@ -438,7 +460,7 @@ export const ExhibitionFormModal: React.FC<ExhibitionFormModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setCoverMode('upload')}
-                  className={`px-3 py-1 rounded-full text-xs font-bold transition-all flex items-center gap-1 ${
+                  className={`px-3 py-1 rounded-md text-xs font-bold transition-all flex items-center gap-1 ${
                     coverMode === 'upload'
                       ? 'bg-sage-800 text-cream shadow-xs'
                       : 'text-charcoal-muted hover:text-charcoal dark:hover:text-white'
@@ -566,7 +588,7 @@ export const ExhibitionFormModal: React.FC<ExhibitionFormModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-6 py-3 rounded-full border border-sage-300 dark:border-white/20 text-charcoal dark:text-white hover:bg-cream-100 dark:hover:bg-white/10 text-xs font-semibold uppercase tracking-wider transition-colors"
+              className="px-6 py-3 rounded-lg border border-sage-300 dark:border-white/20 text-charcoal dark:text-white hover:bg-cream-100 dark:hover:bg-white/10 text-xs font-semibold uppercase tracking-wider transition-colors"
             >
               Cancel
             </button>
@@ -575,7 +597,7 @@ export const ExhibitionFormModal: React.FC<ExhibitionFormModalProps> = ({
               disabled={isSubmitting || isUploading}
               className="btn-primary px-8 py-3 text-xs font-semibold uppercase tracking-wider disabled:opacity-50"
             >
-              {exhibitionToEdit ? 'Save Changes' : 'Publish Exhibition'}
+              {exhibitionToEdit ? 'Save Changes' : 'Save Exhibition'}
             </button>
           </div>
         </form>

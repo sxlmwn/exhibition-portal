@@ -87,7 +87,7 @@ export const RequestActionModal: React.FC<RequestActionModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-cream-200 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal dark:hover:text-white transition-colors"
+            className="p-2 rounded-lg hover:bg-cream-200 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal dark:hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -137,14 +137,14 @@ export const RequestActionModal: React.FC<RequestActionModalProps> = ({
         <div className="flex items-center justify-end gap-3">
           <button
             onClick={onClose}
-            className="px-5 py-2.5 rounded-full border border-sage-300 dark:border-white/20 text-charcoal dark:text-white hover:bg-cream-100 dark:hover:bg-white/10 text-xs font-semibold uppercase tracking-wider"
+            className="px-5 py-2.5 rounded-lg border border-sage-300 dark:border-white/20 text-charcoal dark:text-white hover:bg-cream-100 dark:hover:bg-white/10 text-xs font-semibold uppercase tracking-wider"
           >
             Cancel
           </button>
           <button
             onClick={handleConfirm}
             disabled={!isOwner}
-            className={`px-6 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider shadow-sm transition-colors disabled:opacity-50 ${config.btnClass}`}
+            className={`px-6 py-2.5 rounded-lg text-xs font-semibold uppercase tracking-wider shadow-sm transition-colors disabled:opacity-50 ${config.btnClass}`}
           >
             {config.btnText}
           </button>

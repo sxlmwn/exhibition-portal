@@ -88,7 +88,7 @@ export const ContactDrawer: React.FC<ContactDrawerProps> = ({
 
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-cream-100 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal dark:hover:text-white transition-colors"
+            className="p-2 rounded-lg hover:bg-cream-100 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal dark:hover:text-white transition-colors"
             title="Close modal"
           >
             <X className="w-5 h-5" />
@@ -164,7 +164,7 @@ export const ContactDrawer: React.FC<ContactDrawerProps> = ({
                 ).url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-3 px-4 py-2 rounded-full bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold shadow-xs transition-all glass-rise-btn flex items-center justify-center gap-1.5 self-start"
+                className="mt-3 px-4 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold shadow-xs transition-all glass-rise-btn flex items-center justify-center gap-1.5 self-start"
               >
                 <MessageSquare className="w-3.5 h-3.5" />
                 <span>Open Chat</span>
@@ -207,7 +207,7 @@ export const ContactDrawer: React.FC<ContactDrawerProps> = ({
                 onEdit(contact);
                 onClose();
               }}
-              className="flex-1 py-2.5 rounded-2xl border border-sage-300 dark:border-white/20 text-charcoal dark:text-white hover:bg-cream-100 dark:hover:bg-white/10 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 glass-rise-btn"
+              className="flex-1 py-2.5 rounded-lg border border-sage-300 dark:border-white/20 text-charcoal dark:text-white hover:bg-cream-100 dark:hover:bg-white/10 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 glass-rise-btn"
             >
               <Edit3 className="w-3.5 h-3.5" />
               <span>Edit Contact</span>
@@ -216,7 +216,7 @@ export const ContactDrawer: React.FC<ContactDrawerProps> = ({
             {currentUser.permissions.canDeleteRecords && (
               <button
                 onClick={handleDelete}
-                className="p-2.5 rounded-2xl hover:bg-rose-100 dark:hover:bg-rose-950/40 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-800 transition-colors"
+                className="p-2.5 rounded-lg hover:bg-rose-100 dark:hover:bg-rose-950/40 text-rose-700 dark:text-rose-400 border border-rose-200 dark:border-rose-800 transition-colors"
                 title="Delete Contact"
               >
                 <Trash2 className="w-4 h-4" />

@@ -102,7 +102,7 @@ export const RequestDetailModal: React.FC<RequestDetailModalProps> = ({
 
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-cream-200 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal dark:hover:text-white transition-colors"
+            className="p-2 rounded-lg hover:bg-cream-200 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal dark:hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -218,7 +218,7 @@ export const RequestDetailModal: React.FC<RequestDetailModalProps> = ({
                 href={`https://wa.me/${request.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello ${request.vendorName}, regarding your stall application for "${request.brandName}" at ${request.exhibitionName}...`)}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-2 rounded-full bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold shadow-xs transition-all glass-rise-btn flex items-center gap-1.5"
+                className="px-4 py-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold shadow-xs transition-all glass-rise-btn flex items-center gap-1.5"
               >
                 <span>Chat WhatsApp</span>
               </a>
@@ -245,7 +245,7 @@ export const RequestDetailModal: React.FC<RequestDetailModalProps> = ({
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                 <button
                   onClick={() => handleStatusChange('approved')}
-                  className={`px-3 py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 glass-rise-btn ${
+                  className={`px-3 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 glass-rise-btn ${
                     request.status === 'approved'
                       ? 'bg-emerald-700 text-white shadow-soft'
                       : 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-300 hover:bg-emerald-100 border border-emerald-200 dark:border-emerald-800'
@@ -257,7 +257,7 @@ export const RequestDetailModal: React.FC<RequestDetailModalProps> = ({
 
                 <button
                   onClick={() => handleStatusChange('waitlisted')}
-                  className={`px-3 py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 glass-rise-btn ${
+                  className={`px-3 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 glass-rise-btn ${
                     request.status === 'waitlisted'
                       ? 'bg-purple-700 text-white shadow-soft'
                       : 'bg-purple-50 dark:bg-purple-950/40 text-purple-900 dark:text-purple-300 hover:bg-purple-100 border border-purple-200 dark:border-purple-800'
@@ -269,7 +269,7 @@ export const RequestDetailModal: React.FC<RequestDetailModalProps> = ({
 
                 <button
                   onClick={() => handleStatusChange('rejected')}
-                  className={`px-3 py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 glass-rise-btn ${
+                  className={`px-3 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 glass-rise-btn ${
                     request.status === 'rejected'
                       ? 'bg-rose-700 text-white shadow-soft'
                       : 'bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-300 hover:bg-rose-100 border border-rose-200 dark:border-rose-800'
@@ -281,7 +281,7 @@ export const RequestDetailModal: React.FC<RequestDetailModalProps> = ({
 
                 <button
                   onClick={() => handleStatusChange('pending')}
-                  className={`px-3 py-2.5 rounded-2xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 glass-rise-btn ${
+                  className={`px-3 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 glass-rise-btn ${
                     request.status === 'pending'
                       ? 'bg-amber-600 text-white shadow-soft'
                       : 'bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300 hover:bg-amber-100 border border-amber-200 dark:border-amber-800'

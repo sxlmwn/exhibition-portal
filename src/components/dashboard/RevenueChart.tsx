@@ -42,10 +42,10 @@ export const RevenueChart: React.FC = () => {
         </div>
 
         {/* Metric Switcher Pills */}
-        <div className="flex items-center gap-2 bg-white/80 dark:bg-white/[0.06] p-1.5 rounded-full border border-sage-200/50 dark:border-white/10 self-start sm:self-auto shadow-soft-xs backdrop-blur-sm">
+        <div className="flex items-center gap-2 bg-white/80 dark:bg-white/[0.06] p-1.5 rounded-lg border border-sage-200/50 dark:border-white/10 self-start sm:self-auto shadow-soft-xs backdrop-blur-sm">
           <button
             onClick={() => setMetric('revenue')}
-            className={`px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all glass-rise-btn ${
+            className={`px-4 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all glass-rise-btn ${
               metric === 'revenue'
                 ? 'bg-sage-800 dark:bg-sage-700 text-cream shadow-xs'
                 : 'text-charcoal dark:text-white/70 hover:text-charcoal dark:hover:text-white hover:bg-sage-50 dark:hover:bg-white/10'
@@ -55,7 +55,7 @@ export const RevenueChart: React.FC = () => {
           </button>
           <button
             onClick={() => setMetric('bookings')}
-            className={`px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all glass-rise-btn ${
+            className={`px-4 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wider transition-all glass-rise-btn ${
               metric === 'bookings'
                 ? 'bg-sage-800 dark:bg-sage-700 text-cream shadow-xs'
                 : 'text-charcoal dark:text-white/70 hover:text-charcoal dark:hover:text-white hover:bg-sage-50 dark:hover:bg-white/10'

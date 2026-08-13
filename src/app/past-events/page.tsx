@@ -42,10 +42,10 @@ export default function PastEventsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="eyebrow-label">
-            PORTFOLIO ARCHIVE
+            PAST EXHIBITIONS
           </span>
-          <h2 className="font-sans text-3xl sm:text-4xl font-bold text-charcoal tracking-tight">
-            Past Exhibitions Showcase
+          <h2 className="font-sans text-3xl sm:text-4xl font-bold text-charcoal dark:text-white tracking-tight">
+            Past Exhibitions
           </h2>
         </div>
 
@@ -64,7 +64,7 @@ export default function PastEventsPage() {
           <div
             key={event.id}
             onClick={() => setDetailEvent(event)}
-            className="glass-card glass-card-hover rounded-3xl overflow-hidden flex flex-col justify-between group border border-sage-200/80 hover:-translate-y-2 hover:shadow-soft-xl transition-all duration-300 cursor-pointer"
+            className="glass-card glass-card-hover rounded-2xl overflow-hidden flex flex-col justify-between group border border-sage-200/80 dark:border-white/10 hover:-translate-y-2 hover:shadow-soft-xl transition-all duration-300 cursor-pointer"
           >
             <div>
               {/* Cover image & tags */}
@@ -100,26 +100,26 @@ export default function PastEventsPage() {
               <div className="p-6 space-y-4">
                 
                 {/* Stats Counters */}
-                <div className="grid grid-cols-3 gap-2 p-3.5 rounded-2xl bg-cream-50 dark:bg-white/5 border border-sage-200/70 dark:border-white/10 text-center">
+                <div className="grid grid-cols-3 gap-2 p-3.5 rounded-xl bg-cream-50 dark:bg-white/5 border border-sage-200/70 dark:border-white/10 text-center">
                   <div>
-                    <span className="text-[10px] text-charcoal-muted uppercase tracking-wider block font-bold">
-                      Footfall
+                    <span className="text-[10px] text-charcoal-muted dark:text-cream-200 uppercase tracking-wider block font-bold">
+                      Visitors
                     </span>
-                    <span className="font-sans text-xs font-bold text-charcoal">
-                      {event.footfallNumber.toLocaleString()}
+                    <span className="font-sans text-xs font-bold text-charcoal dark:text-white">
+                      {event.footfallNumber.toLocaleString()}+
                     </span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-charcoal-muted uppercase tracking-wider block font-bold">
+                    <span className="text-[10px] text-charcoal-muted dark:text-cream-200 uppercase tracking-wider block font-bold">
                       Brands
                     </span>
-                    <span className="font-sans text-xs font-bold text-charcoal">
+                    <span className="font-sans text-xs font-bold text-charcoal dark:text-white">
                       {event.vendorCount}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-charcoal-muted uppercase tracking-wider block font-bold">
-                      GMV
+                    <span className="text-[10px] text-charcoal-muted dark:text-cream-200 uppercase tracking-wider block font-bold">
+                      Sales
                     </span>
                     <span className="font-sans text-xs font-bold text-sage-deep dark:text-sage-300">
                       {event.totalRevenueGMV}
@@ -128,7 +128,7 @@ export default function PastEventsPage() {
                 </div>
 
                 {/* Narrative Excerpt */}
-                <p className="text-xs text-charcoal-muted leading-relaxed line-clamp-3 font-medium">
+                <p className="text-xs text-charcoal-muted dark:text-cream-200 leading-relaxed line-clamp-3 font-medium">
                   {event.narrativeExcerpt}
                 </p>
 
@@ -137,7 +137,7 @@ export default function PastEventsPage() {
                   {event.tags.map((tag, idx) => (
                     <span
                       key={idx}
-                      className="text-[10px] bg-white dark:bg-white/10 px-2.5 py-0.5 rounded-md border border-sage-200 dark:border-white/10 text-charcoal-light font-medium"
+                      className="text-[10px] bg-white dark:bg-white/10 px-2.5 py-0.5 rounded-md border border-sage-200 dark:border-white/10 text-charcoal-light dark:text-cream-100 font-medium"
                     >
                       {tag}
                     </span>
@@ -151,14 +151,14 @@ export default function PastEventsPage() {
             <div className="p-4 border-t border-sage-100 dark:border-white/10 flex items-center justify-between bg-white/40 dark:bg-white/5" onClick={(e) => e.stopPropagation()}>
               <span className="text-[11px] text-sage-800 dark:text-sage-300 font-semibold flex items-center gap-1">
                 <Award className="w-3.5 h-3.5" />
-                <span>{event.satisfactionRate} Satisfaction</span>
+                <span>{event.satisfactionRate} Rating</span>
               </span>
 
               <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => handleOpenEdit(event)}
-                  className="p-2 rounded-xl hover:bg-sage-100 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal transition-colors"
-                  title="Edit Story"
+                  className="p-2 rounded-lg hover:bg-sage-100 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal dark:text-white/70 dark:hover:text-white transition-colors"
+                  title="Edit Event"
                 >
                   <Edit3 className="w-4 h-4" />
                 </button>
@@ -169,8 +169,8 @@ export default function PastEventsPage() {
                         deletePastEvent(event.id);
                       }
                     }}
-                    className="p-2 rounded-xl hover:bg-rose-100 dark:hover:bg-rose-950/40 text-charcoal-muted hover:text-rose-700 transition-colors"
-                    title="Delete Story"
+                    className="p-2 rounded-lg hover:bg-rose-100 dark:hover:bg-rose-950/40 text-charcoal-muted hover:text-rose-700 dark:text-white/70 dark:hover:text-rose-400 transition-colors"
+                    title="Delete Event"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>

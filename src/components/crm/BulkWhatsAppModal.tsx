@@ -98,7 +98,7 @@ export const BulkWhatsAppModal: React.FC<BulkWhatsAppModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-cream-200 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal dark:hover:text-white transition-colors"
+            className="p-2 rounded-lg hover:bg-cream-200 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal dark:hover:text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -135,7 +135,7 @@ export const BulkWhatsAppModal: React.FC<BulkWhatsAppModalProps> = ({
                 <div className="flex items-center gap-2">
                   <button
                     onClick={handleDispatchNext}
-                    className="px-6 py-3.5 rounded-full bg-emerald-700 hover:bg-emerald-800 text-white font-sans text-xs font-bold uppercase tracking-wider shadow-md hover:shadow-lg transition-all flex items-center gap-2 glass-rise-btn"
+                    className="px-6 py-3.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-sans text-xs font-bold uppercase tracking-wider shadow-md hover:shadow-lg transition-all flex items-center gap-2 glass-rise-btn"
                   >
                     <span>Send to {(currentNextContact?.fullName?.split(' ')[0]) ?? 'Next'} ({openedCount + 1} of {contacts.length})</span>
                     <ArrowRight className="w-4 h-4" />
@@ -144,7 +144,7 @@ export const BulkWhatsAppModal: React.FC<BulkWhatsAppModalProps> = ({
               ) : (
                 <button
                   onClick={onClose}
-                  className="px-6 py-3 rounded-full bg-sage-800 dark:bg-sage-700 hover:bg-sage-900 text-cream text-xs font-bold uppercase tracking-wider shadow-xs"
+                  className="px-6 py-3 rounded-lg bg-sage-800 dark:bg-sage-700 hover:bg-sage-900 text-cream text-xs font-bold uppercase tracking-wider shadow-xs"
                 >
                   Done / Close
                 </button>
@@ -247,7 +247,7 @@ export const BulkWhatsAppModal: React.FC<BulkWhatsAppModalProps> = ({
 
                     <button
                       onClick={() => handleOpenContact(contact)}
-                      className={`px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-1.5 shrink-0 transition-colors ${
+                      className={`px-4 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-1.5 shrink-0 transition-colors ${
                         isSent
                           ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-700'
                           : 'bg-emerald-700 hover:bg-emerald-800 text-white shadow-xs'
@@ -278,7 +278,7 @@ export const BulkWhatsAppModal: React.FC<BulkWhatsAppModalProps> = ({
             </span>
             <button
               onClick={onClose}
-              className="px-5 py-2.5 rounded-full border border-sage-300 dark:border-white/20 text-charcoal dark:text-white hover:bg-cream-100 dark:hover:bg-white/10 font-semibold uppercase tracking-wider"
+              className="px-5 py-2.5 rounded-lg border border-sage-300 dark:border-white/20 text-charcoal dark:text-white hover:bg-cream-100 dark:hover:bg-white/10 font-semibold uppercase tracking-wider"
             >
               Close
             </button>

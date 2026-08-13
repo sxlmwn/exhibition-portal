@@ -51,7 +51,7 @@ export const PastEventDetailModal: React.FC<PastEventDetailModalProps> = ({
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-5 right-5 p-2.5 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md text-white transition-colors"
+            className="absolute top-5 right-5 p-2.5 rounded-lg bg-white/20 hover:bg-white/30 backdrop-blur-md text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -84,25 +84,25 @@ export const PastEventDetailModal: React.FC<PastEventDetailModalProps> = ({
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             
             <div className="p-4 rounded-2xl bg-cream-50 dark:bg-white/5 border border-sage-200/80 dark:border-white/10">
-              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted block mb-1">
+              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted dark:text-cream-200 block mb-1">
                 Verified Footfall
               </span>
-              <span className="font-sans text-2xl font-bold text-charcoal">
+              <span className="font-sans text-2xl font-bold text-charcoal dark:text-white">
                 {event.footfallNumber.toLocaleString()}+
               </span>
             </div>
 
             <div className="p-4 rounded-2xl bg-cream-50 dark:bg-white/5 border border-sage-200/80 dark:border-white/10">
-              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted block mb-1">
+              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted dark:text-cream-200 block mb-1">
                 Total Brands
               </span>
-              <span className="font-sans text-2xl font-bold text-charcoal">
+              <span className="font-sans text-2xl font-bold text-charcoal dark:text-white">
                 {event.vendorCount} Stalls
               </span>
             </div>
 
             <div className="p-4 rounded-2xl bg-cream-50 dark:bg-white/5 border border-sage-200/80 dark:border-white/10">
-              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted block mb-1">
+              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted dark:text-cream-200 block mb-1">
                 Vendor Gross Sales
               </span>
               <span className="font-sans text-2xl font-bold text-sage-deep dark:text-sage-300">
@@ -111,7 +111,7 @@ export const PastEventDetailModal: React.FC<PastEventDetailModalProps> = ({
             </div>
 
             <div className="p-4 rounded-2xl bg-cream-50 dark:bg-white/5 border border-sage-200/80 dark:border-white/10">
-              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted block mb-1">
+              <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted dark:text-cream-200 block mb-1">
                 Vendor Rating
               </span>
               <span className="font-sans text-2xl font-bold text-amber-600 flex items-center gap-1">
@@ -127,7 +127,7 @@ export const PastEventDetailModal: React.FC<PastEventDetailModalProps> = ({
             <span className="text-xs uppercase tracking-wider font-bold text-sage-800 dark:text-sage-300 block">
               Curated Event Highlights & Narrative
             </span>
-            <p className="text-sm text-charcoal dark:text-charcoal-light leading-relaxed font-medium">
+            <p className="text-sm text-charcoal dark:text-cream-100 leading-relaxed font-medium">
               {event.narrativeExcerpt}
             </p>
           </div>
@@ -174,7 +174,7 @@ export const PastEventDetailModal: React.FC<PastEventDetailModalProps> = ({
           {/* Footer Actions */}
           <div className="pt-4 border-t border-sage-100 dark:border-white/10 flex items-center justify-between">
             <span className="text-xs text-charcoal-muted font-medium">
-              Archived Record ID: <strong className="text-charcoal font-mono">{event.id}</strong>
+              Record ID: <strong className="text-charcoal font-mono">{event.id}</strong>
             </span>
 
             {onEdit && (
@@ -183,10 +183,10 @@ export const PastEventDetailModal: React.FC<PastEventDetailModalProps> = ({
                   onEdit(event);
                   onClose();
                 }}
-                className="px-5 py-2.5 rounded-2xl bg-sage-800 hover:bg-sage-900 text-cream text-xs font-bold uppercase tracking-wider flex items-center gap-2 glass-rise-btn shadow-xs"
+                className="px-5 py-2.5 rounded-lg bg-sage-800 hover:bg-sage-900 text-cream text-xs font-bold uppercase tracking-wider flex items-center gap-2 glass-rise-btn shadow-xs"
               >
                 <Edit3 className="w-4 h-4" />
-                <span>Edit Case Study</span>
+                <span>Edit Event</span>
               </button>
             )}
           </div>

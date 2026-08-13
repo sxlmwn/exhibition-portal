@@ -74,7 +74,7 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
         {/* Dark/Light Theme Toggle */}
         <button
           onClick={toggleTheme}
-          className="p-2.5 rounded-full glass-pill hover:bg-white dark:hover:bg-white/10 text-charcoal-light hover:text-charcoal transition-all shadow-xs border border-sage-300/80 glass-rise-btn flex items-center justify-center"
+          className="p-2.5 rounded-lg glass-pill hover:bg-white dark:hover:bg-white/10 text-charcoal-light hover:text-charcoal transition-all shadow-xs border border-sage-300/80 glass-rise-btn flex items-center justify-center"
           title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Theme`}
           aria-label="Toggle theme"
         >
@@ -90,7 +90,7 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
           href={`https://wa.me/${settings.coordinatorWhatsApp.replace(/[^0-9]/g, '')}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="hidden md:flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 text-xs font-semibold tracking-wide transition-all glass-rise-btn"
+          className="hidden md:flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100 text-xs font-semibold tracking-wide transition-all glass-rise-btn"
           title="Open WhatsApp Vendor Support Desk"
         >
           <MessageSquare className="w-3.5 h-3.5" />
@@ -101,7 +101,7 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
         <div className="relative" ref={notifRef}>
           <button
             onClick={() => setShowNotifications(!showNotifications)}
-            className="w-10 h-10 rounded-full glass-pill hover:bg-white dark:hover:bg-white/10 flex items-center justify-center text-charcoal-light hover:text-charcoal relative transition-all glass-rise-btn"
+            className="w-10 h-10 rounded-lg glass-pill hover:bg-white dark:hover:bg-white/10 flex items-center justify-center text-charcoal-light hover:text-charcoal relative transition-all glass-rise-btn"
             aria-label="Notifications"
           >
             <Bell className="w-4 h-4" />

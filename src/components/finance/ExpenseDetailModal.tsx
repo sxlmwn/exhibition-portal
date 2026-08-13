@@ -85,7 +85,7 @@ export const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({
 
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-cream-100 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal dark:hover:text-white transition-colors"
+            className="p-2 rounded-lg hover:bg-cream-100 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal dark:hover:text-white transition-colors"
             title="Close modal"
           >
             <X className="w-5 h-5" />
@@ -187,7 +187,7 @@ export const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({
                 <button
                   type="button"
                   onClick={handleOpenReceipt}
-                  className="px-3.5 py-1.5 rounded-xl border border-rose-300 dark:border-rose-800 bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 text-xs font-bold transition-all flex items-center gap-1 shrink-0 glass-rise-btn"
+                  className="px-3.5 py-1.5 rounded-lg border border-rose-300 dark:border-rose-800 bg-rose-50 dark:bg-rose-950/40 text-rose-800 dark:text-rose-300 text-xs font-bold transition-all flex items-center gap-1 shrink-0 glass-rise-btn"
                 >
                   <span>Open PDF</span>
                   <ExternalLink className="w-3 h-3" />
@@ -196,7 +196,7 @@ export const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({
                 <button
                   type="button"
                   onClick={() => onViewReceipt && onViewReceipt(expense.receiptUrl!)}
-                  className="px-3.5 py-1.5 rounded-xl border border-sage-300 dark:border-white/20 bg-cream-50 dark:bg-white/10 hover:bg-white text-xs font-bold text-charcoal dark:text-white transition-all glass-rise-btn shrink-0"
+                  className="px-3.5 py-1.5 rounded-lg border border-sage-300 dark:border-white/20 bg-cream-50 dark:bg-white/10 hover:bg-white text-xs font-bold text-charcoal dark:text-white transition-all glass-rise-btn shrink-0"
                 >
                   View Full
                 </button>
@@ -209,10 +209,10 @@ export const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({
             <div className="pt-4 border-t border-sage-100 dark:border-white/10 flex items-center justify-end gap-3">
               <button
                 onClick={handleDelete}
-                className="px-4 py-2.5 rounded-full border border-rose-300 dark:border-rose-800 text-rose-700 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 transition-colors"
+                className="px-4 py-2.5 rounded-lg border border-rose-300 dark:border-rose-800 text-rose-700 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 transition-colors"
               >
                 <Trash2 className="w-3.5 h-3.5" />
-                <span>Delete Ledger</span>
+                <span>Delete Expense</span>
               </button>
 
               {onEdit && (
@@ -224,7 +224,7 @@ export const ExpenseDetailModal: React.FC<ExpenseDetailModalProps> = ({
                   className="btn-primary px-5 py-2.5 text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5"
                 >
                   <Edit3 className="w-3.5 h-3.5" />
-                  <span>Edit Record</span>
+                  <span>Edit Expense</span>
                 </button>
               )}
             </div>

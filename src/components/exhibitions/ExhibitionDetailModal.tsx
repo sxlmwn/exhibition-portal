@@ -56,7 +56,7 @@ export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-5 right-5 p-2.5 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md text-white transition-colors"
+            className="absolute top-5 right-5 p-2.5 rounded-lg bg-white/20 hover:bg-white/30 backdrop-blur-md text-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -97,7 +97,7 @@ export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
             <div className="p-5 rounded-3xl bg-cream-50 dark:bg-white/[0.06] border border-sage-200/70 dark:border-white/10">
               <div className="flex items-center gap-2 text-xs font-semibold text-sage-800 uppercase tracking-wider mb-2">
                 <Store className="w-4 h-4 text-sage-700" />
-                <span>Stall Fill Rate</span>
+                <span>Stalls Booked</span>
               </div>
               <span className="font-sans text-3xl font-extrabold text-charcoal tracking-tight">
                 {exhibition.bookedStallsCount} / {exhibition.totalStallCapacity}
@@ -109,33 +109,33 @@ export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
                 />
               </div>
               <span className="text-[11px] text-charcoal-muted mt-1.5 block">
-                {availableStalls.length > 0 ? `${availableStalls.length} stalls open for allocation` : 'All allocated'}
+                {availableStalls.length > 0 ? `${availableStalls.length} stalls available` : 'Sold out'}
               </span>
             </div>
 
             <div className="p-5 rounded-3xl bg-cream-50 dark:bg-white/[0.06] border border-sage-200/70 dark:border-white/10">
               <div className="flex items-center gap-2 text-xs font-semibold text-sage-800 uppercase tracking-wider mb-2">
                 <TrendingUp className="w-4 h-4 text-sage-700" />
-                <span>Stall Revenue</span>
+                <span>Total Revenue</span>
               </div>
               <span className="font-sans text-3xl font-extrabold text-sage-deep tracking-tight">
                 Rs. {(exhibition.stallRevenueBooked / 100000).toFixed(1)}L
               </span>
               <span className="text-[11px] text-charcoal-muted mt-3 block">
-                Targeted: Rs. {((exhibition.totalStallCapacity * 85000) / 100000).toFixed(1)}L
+                Goal: Rs. {((exhibition.totalStallCapacity * 85000) / 100000).toFixed(1)}L
               </span>
             </div>
 
             <div className="p-5 rounded-3xl bg-cream-50 dark:bg-white/[0.06] border border-sage-200/70 dark:border-white/10">
               <div className="flex items-center gap-2 text-xs font-semibold text-sage-800 uppercase tracking-wider mb-2">
                 <Receipt className="w-4 h-4 text-sage-700" />
-                <span>Net Financial Snapshot</span>
+                <span>Net Profit</span>
               </div>
               <span className={`font-sans text-3xl font-extrabold tracking-tight ${netMargin >= 0 ? 'text-emerald-800' : 'text-rose-800'}`}>
                 Rs. {(netMargin / 100000).toFixed(1)}L
               </span>
               <span className="text-[11px] text-charcoal-muted mt-3 block">
-                Logged Costs: Rs. {(exhibition.totalExpensesLogged / 100000).toFixed(1)}L
+                Total Costs: Rs. {(exhibition.totalExpensesLogged / 100000).toFixed(1)}L
               </span>
             </div>
 
@@ -144,7 +144,7 @@ export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
           {/* Description & Logistics */}
           <div>
             <h4 className="font-sans text-lg font-bold text-charcoal dark:text-white mb-2 tracking-tight">
-              Logistics & Event Brief
+              About this Exhibition
             </h4>
             <p className="text-xs sm:text-sm text-charcoal-muted dark:text-white/75 font-normal leading-relaxed p-4 rounded-2xl bg-white dark:bg-white/[0.06] border border-sage-100 dark:border-white/10">
               {exhibition.description}
@@ -156,14 +156,14 @@ export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
             <div className="flex items-center justify-between mb-4">
               <h4 className="font-sans text-lg font-bold text-charcoal dark:text-white flex items-center gap-2 tracking-tight">
                 <Users className="w-4 h-4 text-sage-700" />
-                <span>Linked Vendor Requests ({linkedRequests.length})</span>
+                <span>Vendors ({linkedRequests.length})</span>
               </h4>
               <Link
                 href="/requests"
                 onClick={onClose}
                 className="text-xs font-semibold text-sage-800 hover:underline flex items-center gap-1"
               >
-                <span>Interactive Floor Plan</span>
+                <span>View Floor Plan</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -199,7 +199,7 @@ export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
               </div>
             ) : (
               <div className="p-6 rounded-2xl bg-cream-50 text-center text-xs text-charcoal-muted">
-                No vendor requests logged specifically for this edition yet.
+                No vendors linked to this exhibition yet.
               </div>
             )}
           </div>
@@ -212,7 +212,7 @@ export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
             <div className="flex items-center gap-3">
               <button
                 onClick={onClose}
-                className="px-6 py-3 rounded-full border border-sage-300 text-charcoal hover:bg-cream-100 text-xs font-semibold uppercase tracking-wider"
+                className="px-6 py-3 rounded-lg border border-sage-300 text-charcoal hover:bg-cream-100 text-xs font-semibold uppercase tracking-wider"
               >
                 Close
               </button>
@@ -221,7 +221,7 @@ export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
                 onClick={onClose}
                 className="btn-primary px-7 py-3 text-xs font-semibold uppercase tracking-wider flex items-center gap-2"
               >
-                <span>Allocate Stalls Now</span>
+                <span>Manage Stalls</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>

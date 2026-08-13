@@ -194,10 +194,10 @@ export default function FinancePage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="eyebrow-label">
-            FINANCIAL HEALTH & AUDIT
+            FINANCE & BUDGET
           </span>
           <h2 className="font-sans text-3xl sm:text-4xl font-bold text-charcoal dark:text-white tracking-tight">
-            Exhibition Finance & Ledgers
+            Finance & Expenses
           </h2>
         </div>
 
@@ -205,7 +205,7 @@ export default function FinancePage() {
         <div className="flex items-center gap-3 w-full sm:w-auto">
           <button
             onClick={handleExportCSV}
-            className="flex-1 sm:flex-initial px-5 py-3 rounded-full border border-sage-300 dark:border-white/20 bg-white/90 dark:bg-white/5 text-xs font-bold text-charcoal dark:text-white hover:bg-white dark:hover:bg-white/10 transition-all shadow-xs flex items-center justify-center gap-2 glass-rise-btn"
+            className="flex-1 sm:flex-initial px-5 py-3 rounded-lg border border-sage-300 dark:border-white/20 bg-white/90 dark:bg-white/5 text-xs font-bold text-charcoal dark:text-white hover:bg-white dark:hover:bg-white/10 transition-all shadow-xs flex items-center justify-center gap-2 glass-rise-btn"
           >
             <Download className="w-4 h-4 text-sage-700 dark:text-sage-300" />
             <span>Export CSV</span>
@@ -219,26 +219,26 @@ export default function FinancePage() {
             className="flex-1 sm:flex-initial btn-primary px-6 py-3 text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-soft glass-rise-btn"
           >
             <Plus className="w-4 h-4" />
-            <span>Log Expense</span>
+            <span>Add Expense</span>
           </button>
         </div>
       </div>
 
       {/* Per-Exhibition Selector & Financial Summary Panel */}
-      <div className="glass-card p-6 sm:p-8 rounded-4xl border border-sage-200/80 dark:border-white/10 relative overflow-hidden shadow-soft">
+      <div className="glass-card p-6 sm:p-8 rounded-3xl border border-sage-200/80 dark:border-white/10 relative overflow-hidden shadow-soft">
         
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-sage-100 dark:border-white/10">
           <div>
             <span className="eyebrow-label">
-              FINANCIAL AUDIT SCOPE
+              FINANCIAL OVERVIEW
             </span>
             <div className="relative inline-block mt-1">
               <select
                 value={selectedExhibitionId}
                 onChange={(e) => setSelectedExhibitionId(e.target.value)}
-                className="font-sans text-xl sm:text-2xl font-bold text-charcoal dark:text-white bg-white/80 dark:bg-[#1A1D24] hover:bg-white border-2 border-sage-200 dark:border-white/15 focus:border-sage-700 outline-none px-4 py-2 rounded-2xl cursor-pointer tracking-tight glass-select shadow-2xs"
+                className="font-sans text-xl sm:text-2xl font-bold text-charcoal dark:text-white bg-white/80 dark:bg-[#1A1D24] hover:bg-white border-2 border-sage-200 dark:border-white/15 focus:border-sage-700 outline-none px-4 py-2 rounded-lg cursor-pointer tracking-tight glass-select shadow-2xs"
               >
-                <option value="All">All Editions Consolidated</option>
+                <option value="All">All Exhibitions</option>
                 {exhibitions.map((exh) => (
                   <option key={exh.id} value={exh.id} className="text-sm font-sans font-bold">
                     {exh.title} ({exh.city})
@@ -382,17 +382,17 @@ export default function FinancePage() {
       </div>
 
       {/* Filter Bar, Date Range & Search */}
-      <div className="glass-card p-4 sm:p-5 rounded-3xl flex flex-col lg:flex-row items-center justify-between gap-4 border border-sage-200/80 dark:border-white/10">
+      <div className="glass-card p-4 sm:p-5 rounded-2xl flex flex-col lg:flex-row items-center justify-between gap-4 border border-sage-200/80 dark:border-white/10">
         
         {/* Search */}
         <div className="relative w-full lg:w-72">
           <Search className="w-4 h-4 text-sage-600 dark:text-sage-400 absolute left-4 top-3.5" />
           <input
             type="text"
-            placeholder="Search description, memo, category..."
+            placeholder="Search expenses by category or memo..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-11 pr-4 py-2.5 rounded-full border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white bg-white/80 dark:bg-white/5 outline-none focus:border-sage-500 font-medium glass-input"
+            className="w-full pl-11 pr-4 py-2.5 rounded-lg border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white bg-white/80 dark:bg-white/5 outline-none focus:border-sage-500 font-medium glass-input"
           />
         </div>
 
@@ -403,7 +403,7 @@ export default function FinancePage() {
           <select
             value={selectedExhibitionId}
             onChange={(e) => setSelectedExhibitionId(e.target.value)}
-            className="px-4 py-2.5 rounded-full border border-sage-200 dark:border-white/10 bg-white/80 dark:bg-[#1A1D24] text-xs font-bold text-charcoal dark:text-white outline-none cursor-pointer glass-select"
+            className="px-4 py-2.5 rounded-lg border border-sage-200 dark:border-white/10 bg-white/80 dark:bg-[#1A1D24] text-xs font-bold text-charcoal dark:text-white outline-none cursor-pointer glass-select"
           >
             <option value="All">All Exhibitions</option>
             {exhibitions.map((e) => (
@@ -417,7 +417,7 @@ export default function FinancePage() {
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="px-4 py-2.5 rounded-full border border-sage-200 dark:border-white/10 bg-white/80 dark:bg-[#1A1D24] text-xs font-bold text-charcoal dark:text-white outline-none cursor-pointer glass-select"
+            className="px-4 py-2.5 rounded-lg border border-sage-200 dark:border-white/10 bg-white/80 dark:bg-[#1A1D24] text-xs font-bold text-charcoal dark:text-white outline-none cursor-pointer glass-select"
           >
             {categories.map((c) => (
               <option key={c} value={c}>
@@ -427,7 +427,7 @@ export default function FinancePage() {
           </select>
 
           {/* Date Range Start */}
-          <div className="flex items-center gap-1.5 bg-white/80 dark:bg-white/5 border border-sage-200 dark:border-white/10 px-3 py-1.5 rounded-full text-xs">
+          <div className="flex items-center gap-1.5 bg-white/80 dark:bg-white/5 border border-sage-200 dark:border-white/10 px-3 py-1.5 rounded-lg text-xs">
             <span className="text-[10px] uppercase font-bold text-charcoal-muted dark:text-white/50">From:</span>
             <input
               type="date"
@@ -438,7 +438,7 @@ export default function FinancePage() {
           </div>
 
           {/* Date Range End */}
-          <div className="flex items-center gap-1.5 bg-white/80 dark:bg-white/5 border border-sage-200 dark:border-white/10 px-3 py-1.5 rounded-full text-xs">
+          <div className="flex items-center gap-1.5 bg-white/80 dark:bg-white/5 border border-sage-200 dark:border-white/10 px-3 py-1.5 rounded-lg text-xs">
             <span className="text-[10px] uppercase font-bold text-charcoal-muted dark:text-white/50">To:</span>
             <input
               type="date"
@@ -465,16 +465,16 @@ export default function FinancePage() {
       </div>
 
       {/* Expenses Table */}
-      <div className="glass-card rounded-3xl overflow-hidden border border-sage-200/80 dark:border-white/10 shadow-soft">
+      <div className="glass-card rounded-2xl overflow-hidden border border-sage-200/80 dark:border-white/10 shadow-soft">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead className="bg-cream-100/90 dark:bg-white/5 border-b border-sage-200 dark:border-white/10 text-[11px] font-semibold uppercase tracking-wider text-charcoal-muted dark:text-white/60">
               <tr>
-                <th className="py-4 px-5">Category & Memo</th>
-                <th className="py-4 px-4">Amount (PKR)</th>
-                <th className="py-4 px-4">Exhibition</th>
-                <th className="py-4 px-4">Expense Date</th>
-                <th className="py-4 px-4">Receipt Voucher</th>
+                <th className="py-4 px-5">Expense / Category</th>
+                <th className="py-4 px-4">Amount</th>
+                <th className="py-4 px-4">Event</th>
+                <th className="py-4 px-4">Date</th>
+                <th className="py-4 px-4">Receipt</th>
                 <th className="py-4 px-5 text-right">Actions</th>
               </tr>
             </thead>

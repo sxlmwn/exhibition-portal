@@ -27,7 +27,7 @@ export const UpcomingExhibitionsWidget: React.FC<UpcomingExhibitionsWidgetProps>
           </div>
           <Link
             href="/exhibitions"
-            className="text-xs font-bold text-sage-800 hover:text-sage-950 flex items-center gap-1 transition-colors glass-rise-btn px-3 py-1 rounded-full hover:bg-white"
+            className="text-xs font-bold text-sage-800 hover:text-sage-950 flex items-center gap-1 transition-colors glass-rise-btn px-3 py-1 rounded-lg hover:bg-white dark:hover:bg-white/10"
           >
             <span>View All</span>
             <ArrowRight className="w-3.5 h-3.5" />

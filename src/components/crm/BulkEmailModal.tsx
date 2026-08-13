@@ -49,7 +49,7 @@ export const BulkEmailModal: React.FC<BulkEmailModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-cream-200 text-charcoal-muted hover:text-charcoal transition-colors"
+            className="p-2 rounded-lg hover:bg-cream-200 text-charcoal-muted hover:text-charcoal transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -100,7 +100,7 @@ export const BulkEmailModal: React.FC<BulkEmailModalProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="px-6 py-2.5 rounded-full border border-sage-300 text-charcoal hover:bg-cream-100 text-xs font-semibold uppercase tracking-wider"
+                className="px-6 py-2.5 rounded-lg border border-sage-300 text-charcoal hover:bg-cream-100 text-xs font-semibold uppercase tracking-wider"
               >
                 Cancel
               </button>

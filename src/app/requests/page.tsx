@@ -76,7 +76,7 @@ export default function VendorRequestsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <span className="eyebrow-label">
-            EXHIBITOR ONBOARDING
+            VENDOR REQUESTS
           </span>
           <h2 className="font-sans text-3xl sm:text-4xl font-bold text-charcoal dark:text-white tracking-tight">
             Vendor Requests & Stalls
@@ -84,29 +84,29 @@ export default function VendorRequestsPage() {
         </div>
 
         {/* View Switcher Tabs */}
-        <div className="flex items-center gap-2 bg-white/80 dark:bg-white/[0.06] p-1.5 rounded-full border border-sage-200/60 dark:border-white/10 self-start sm:self-auto shadow-soft-xs backdrop-blur-sm">
+        <div className="flex items-center gap-1.5 bg-white/80 dark:bg-white/[0.06] p-1.5 rounded-lg border border-sage-200/60 dark:border-white/10 self-start sm:self-auto shadow-soft-xs backdrop-blur-sm">
           <button
             onClick={() => setActiveTab('table')}
-            className={`flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all glass-rise-btn ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all glass-rise-btn ${
               activeTab === 'table'
                 ? 'bg-sage-800 dark:bg-sage-700 text-cream shadow-xs'
                 : 'text-charcoal dark:text-white/70 hover:text-charcoal dark:hover:text-white hover:bg-sage-50 dark:hover:bg-white/10'
             }`}
           >
-            <List className="w-3.5 h-3.5" />
-            <span>Applications Table</span>
+            <List className="w-4 h-4" />
+            <span>Applications</span>
           </button>
           
           <button
             onClick={() => setActiveTab('floor-plan')}
-            className={`flex items-center gap-2 px-5 py-2 rounded-full text-xs font-bold uppercase tracking-wider transition-all glass-rise-btn ${
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all glass-rise-btn ${
               activeTab === 'floor-plan'
                 ? 'bg-sage-800 dark:bg-sage-700 text-cream shadow-xs'
                 : 'text-charcoal dark:text-white/70 hover:text-charcoal dark:hover:text-white hover:bg-sage-50 dark:hover:bg-white/10'
             }`}
           >
-            <Store className="w-3.5 h-3.5" />
-            <span>Interactive Floor Plan</span>
+            <Store className="w-4 h-4" />
+            <span>Floor Map</span>
           </button>
         </div>
       </div>
@@ -116,7 +116,7 @@ export default function VendorRequestsPage() {
         <div className="space-y-6">
           
           {/* Filter Bar */}
-          <div className="glass-card p-4 sm:p-5 rounded-3xl flex flex-col lg:flex-row items-center justify-between gap-4">
+          <div className="glass-card p-4 sm:p-5 rounded-2xl flex flex-col lg:flex-row items-center justify-between gap-4">
             
             {/* Search */}
             <div className="relative w-full lg:w-80">
@@ -125,8 +125,8 @@ export default function VendorRequestsPage() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search brand, vendor, phone..."
-                className="w-full pl-11 pr-4 py-2.5 rounded-full border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white bg-white/80 dark:bg-white/5 outline-none focus:border-sage-500 font-medium glass-input"
+                placeholder="Search vendor name, brand, or phone..."
+                className="w-full pl-11 pr-4 py-2.5 rounded-lg border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white bg-white/80 dark:bg-white/5 outline-none focus:border-sage-500 font-medium glass-input"
               />
             </div>
 
@@ -136,7 +136,7 @@ export default function VendorRequestsPage() {
               <select
                 value={selectedExhibitionId}
                 onChange={(e) => setSelectedExhibitionId(e.target.value)}
-                className="px-4 py-2.5 rounded-full border border-sage-200 dark:border-white/10 bg-white/80 dark:bg-[#1A1D24] text-xs font-bold text-charcoal dark:text-white outline-none glass-select"
+                className="px-4 py-2.5 rounded-lg border border-sage-200 dark:border-white/10 bg-white/80 dark:bg-[#1A1D24] text-xs font-bold text-charcoal dark:text-white outline-none glass-select cursor-pointer"
               >
                 <option value="All">All Exhibitions</option>
                 {exhibitions.map((exh) => (
@@ -149,30 +149,28 @@ export default function VendorRequestsPage() {
               <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
-                className="px-4 py-2.5 rounded-full border border-sage-200 dark:border-white/10 bg-white/80 dark:bg-[#1A1D24] text-xs font-bold text-charcoal dark:text-white outline-none glass-select"
+                className="px-4 py-2.5 rounded-lg border border-sage-200 dark:border-white/10 bg-white/80 dark:bg-[#1A1D24] text-xs font-bold text-charcoal dark:text-white outline-none glass-select cursor-pointer"
               >
                 <option value="All">All Statuses</option>
-                <option value="pending">Pending Review</option>
+                <option value="pending">Pending</option>
                 <option value="approved">Approved</option>
                 <option value="waitlisted">Waitlisted</option>
                 <option value="rejected">Rejected</option>
               </select>
-
             </div>
 
           </div>
 
           {/* Applications Table */}
-          <div className="glass-card rounded-3xl overflow-hidden border border-sage-200/80 dark:border-white/10 shadow-soft">
+          <div className="glass-card rounded-2xl overflow-hidden border border-sage-200/80 dark:border-white/10 shadow-soft">
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
                 <thead className="bg-cream-100/90 dark:bg-white/5 border-b border-sage-200 dark:border-white/10 text-[11px] font-semibold uppercase tracking-wider text-charcoal-muted dark:text-white/60">
                   <tr>
-                    <th className="py-4 px-5">Brand & Business</th>
-                    <th className="py-4 px-4">Category</th>
-                    <th className="py-4 px-4">Exhibition Edition</th>
-                    <th className="py-4 px-4">Stalls / Budget</th>
-                    <th className="py-4 px-4">Contact Number</th>
+                    <th className="py-4 px-5">Vendor & Brand</th>
+                    <th className="py-4 px-4">Event</th>
+                    <th className="py-4 px-4">Stall / Budget</th>
+                    <th className="py-4 px-4">Phone / WhatsApp</th>
                     <th className="py-4 px-4">Status</th>
                     <th className="py-4 px-5 text-right">Actions</th>
                   </tr>
@@ -180,10 +178,10 @@ export default function VendorRequestsPage() {
                 <tbody className="divide-y divide-sage-100 dark:divide-white/5">
                   {filteredRequests.length === 0 ? (
                     <tr>
-                      <td colSpan={7} className="py-12 text-center text-charcoal-muted dark:text-white/50">
+                      <td colSpan={6} className="py-12 text-center text-charcoal-muted dark:text-white/50">
                         <Store className="w-8 h-8 mx-auto mb-2 opacity-40" />
-                        <p className="font-semibold text-sm">No vendor requests found</p>
-                        <p className="text-xs">Try adjusting your filters or search terms.</p>
+                        <p className="font-semibold text-sm">No applications found</p>
+                        <p className="text-xs">Try changing what you searched or selected above.</p>
                       </td>
                     </tr>
                   ) : (
@@ -194,29 +192,19 @@ export default function VendorRequestsPage() {
                         className="glass-rise-row hover:bg-white/90 dark:hover:bg-white/5 transition-all cursor-pointer"
                       >
                         
-                        {/* Brand & Business */}
+                        {/* Vendor & Brand */}
                         <td className="py-4 px-5">
                           <span className="font-sans font-bold text-sm text-charcoal dark:text-white block tracking-tight">
                             {req.brandName}
                           </span>
-                          <span className="text-charcoal-muted dark:text-white/60 text-[11px] font-normal">
-                            {req.vendorName !== req.brandName ? req.vendorName : 'Exhibitor Contact'}
+                          <span className="text-charcoal-muted dark:text-white/60 text-[11px] font-normal block">
+                            {req.vendorName} &bull; {req.productCategory}
                           </span>
-                          {req.notes && (
-                            <span className="text-[10px] text-sage-800 dark:text-sage-300 italic block mt-0.5 max-w-xs truncate">
-                              &ldquo;{req.notes}&rdquo;
-                            </span>
-                          )}
                         </td>
 
-                        {/* Category */}
-                        <td className="py-4 px-4 text-charcoal-light dark:text-white/80 font-medium">
-                          {req.productCategory}
-                        </td>
-
-                        {/* Exhibition */}
+                        {/* Event */}
                         <td className="py-4 px-4">
-                          <span className="font-medium text-charcoal dark:text-white block">
+                          <span className="font-semibold text-charcoal dark:text-white block">
                             {req.exhibitionName}
                           </span>
                           <span className="text-[10px] text-charcoal-muted dark:text-white/50 font-light">
@@ -240,16 +228,11 @@ export default function VendorRequestsPage() {
                             href={`https://wa.me/${req.phone.replace(/[^0-9]/g, '')}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-1.5 font-medium text-emerald-800 dark:text-emerald-400 hover:underline"
+                            className="inline-flex items-center gap-1.5 font-semibold text-emerald-800 dark:text-emerald-400 hover:underline"
                           >
-                            <MessageSquare className="w-3.5 h-3.5" />
+                            <MessageSquare className="w-3.5 h-3.5 shrink-0" />
                             <span>{req.phone || 'No phone'}</span>
                           </a>
-                          {req.email && (
-                            <span className="text-[10px] text-charcoal-muted dark:text-white/50 font-light block mt-0.5 truncate max-w-[140px]">
-                              {req.email}
-                            </span>
-                          )}
                         </td>
 
                         {/* Status */}
@@ -262,48 +245,36 @@ export default function VendorRequestsPage() {
                         {/* Actions */}
                         <td className="py-4 px-5 text-right" onClick={(e) => e.stopPropagation()}>
                           <div className="flex items-center justify-end gap-1.5">
-                            {canApprove ? (
-                              <>
-                                {req.status !== 'approved' && (
-                                  <button
-                                    onClick={() => handleOpenAction(req, 'approved')}
-                                    className="p-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 transition-colors glass-rise-btn"
-                                    title="Approve Applicant"
-                                  >
-                                    <CheckCircle2 className="w-4 h-4" />
-                                  </button>
-                                )}
+                            {canApprove && req.status === 'pending' && (
+                              <button
+                                onClick={() => handleOpenAction(req, 'approved')}
+                                className="px-2.5 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-[11px] font-bold transition-colors glass-rise-btn flex items-center gap-1"
+                                title="Approve Applicant"
+                              >
+                                <CheckCircle2 className="w-3.5 h-3.5" />
+                                <span>Approve</span>
+                              </button>
+                            )}
 
-                                {req.status !== 'waitlisted' && (
-                                  <button
-                                    onClick={() => handleOpenAction(req, 'waitlisted')}
-                                    className="p-1.5 rounded-lg bg-purple-50 dark:bg-purple-950/40 hover:bg-purple-100 text-purple-800 dark:text-purple-300 border border-purple-200 dark:border-purple-800 transition-colors glass-rise-btn"
-                                    title="Move to Waitlist"
-                                  >
-                                    <Clock className="w-4 h-4" />
-                                  </button>
-                                )}
-
-                                {req.status !== 'rejected' && (
-                                  <button
-                                    onClick={() => handleOpenAction(req, 'rejected')}
-                                    className="p-1.5 rounded-lg bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800 transition-colors glass-rise-btn"
-                                    title="Reject Application"
-                                  >
-                                    <XCircle className="w-4 h-4" />
-                                  </button>
-                                )}
-                              </>
-                            ) : null}
+                            {canApprove && req.status === 'pending' && (
+                              <button
+                                onClick={() => handleOpenAction(req, 'rejected')}
+                                className="px-2 py-1.5 rounded-lg bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800 text-[11px] font-bold transition-colors glass-rise-btn flex items-center gap-1"
+                                title="Reject Application"
+                              >
+                                <XCircle className="w-3.5 h-3.5" />
+                                <span>Reject</span>
+                              </button>
+                            )}
 
                             <button
                               onClick={() => {
                                 setSelectedExhibitionId(req.exhibitionId || '');
                                 setActiveTab('floor-plan');
                               }}
-                              className="px-3 py-1.5 rounded-lg bg-sage-800 dark:bg-sage-700 hover:bg-sage-900 text-cream text-[11px] font-semibold uppercase tracking-wider ml-1 glass-rise-btn"
+                              className="px-3 py-1.5 rounded-lg bg-sage-800 dark:bg-sage-700 hover:bg-sage-900 text-cream text-[11px] font-semibold transition-colors glass-rise-btn"
                             >
-                              Allocate
+                              Assign Stall
                             </button>
                           </div>
                         </td>

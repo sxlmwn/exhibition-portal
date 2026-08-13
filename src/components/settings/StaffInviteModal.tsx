@@ -100,7 +100,7 @@ export const StaffInviteModal: React.FC<StaffInviteModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-cream-200 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal transition-colors"
+            className="p-2 rounded-lg hover:bg-cream-200 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -179,7 +179,7 @@ export const StaffInviteModal: React.FC<StaffInviteModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 rounded-full border border-sage-300 text-charcoal hover:bg-cream-100 dark:hover:bg-white/10 text-xs font-semibold uppercase tracking-wider"
+              className="px-5 py-2.5 rounded-lg border border-sage-300 text-charcoal hover:bg-cream-100 dark:hover:bg-white/10 text-xs font-semibold uppercase tracking-wider"
             >
               Cancel
             </button>
@@ -188,7 +188,7 @@ export const StaffInviteModal: React.FC<StaffInviteModalProps> = ({
               disabled={isSubmitting}
               className="btn-primary px-7 py-2.5 text-xs font-semibold uppercase tracking-wider"
             >
-              Send Staff Invite
+              Send Invite
             </button>
           </div>
 
