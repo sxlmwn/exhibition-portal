@@ -74,7 +74,7 @@ export default function PastEventsPage() {
                   alt={event.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
 
                 <div className="absolute top-4 left-4 flex items-center gap-2">
                   <span className="bg-cream-50 dark:bg-white/15 dark:backdrop-blur-md dark:border dark:border-white/20 text-[#33422f] dark:text-white text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-xs dark:shadow-none">
@@ -86,7 +86,7 @@ export default function PastEventsPage() {
                 </div>
 
                 <div className="absolute bottom-3 left-4 right-4 text-white">
-                  <h3 className="font-sans text-xl font-bold leading-tight tracking-tight">
+                  <h3 className="font-sans text-xl font-bold leading-tight truncate tracking-tight text-white">
                     {event.title}
                   </h3>
                   <span className="text-xs text-cream-200 font-normal flex items-center gap-1 mt-0.5">
