@@ -152,8 +152,17 @@ export const mapVendorRequestToDB = (req: Partial<VendorRequest>): any => {
   if (req.exhibitionId !== undefined && !isNaN(Number(req.exhibitionId))) {
     payload.exhibition_id = Number(req.exhibitionId);
   }
-  if (req.brandName !== undefined || req.vendorName !== undefined) {
-    payload.business_name = req.brandName || req.vendorName;
+  if (req.brandName !== undefined) {
+    payload.business_name = req.brandName;
+  }
+  if (req.vendorName !== undefined) {
+    payload.vendor_name = req.vendorName;
+    if (!payload.business_name) {
+      payload.business_name = req.vendorName;
+    }
+  }
+  if (req.email !== undefined) {
+    payload.email = req.email;
   }
   if (req.phone !== undefined) {
     payload.contact_number = req.phone;
@@ -166,6 +175,15 @@ export const mapVendorRequestToDB = (req: Partial<VendorRequest>): any => {
   }
   if (req.productCategory !== undefined) {
     payload.category = req.productCategory;
+  }
+  if (req.notes !== undefined) {
+    payload.notes = req.notes;
+  }
+  if (req.preferredStallCode !== undefined) {
+    payload.preferred_stall_code = req.preferredStallCode;
+  }
+  if (req.stallTierPreference !== undefined) {
+    payload.stall_tier_preference = req.stallTierPreference;
   }
   if (req.status !== undefined) {
     payload.status = req.status;
