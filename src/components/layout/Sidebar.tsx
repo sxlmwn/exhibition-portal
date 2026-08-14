@@ -214,11 +214,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
         
         {/* Profile Popover / Dropdown Menu */}
         {showProfileMenu && (
-          <div className={`absolute z-[200] bg-white dark:bg-[#14171C] backdrop-blur-2xl rounded-3xl shadow-[0_16px_48px_-8px_rgba(0,0,0,0.3)] dark:shadow-[0_16px_48px_-8px_rgba(0,0,0,0.7)] border border-sage-200/80 dark:border-white/10 p-4 animate-fadeIn ${
-            collapsed 
-              ? 'bottom-2 left-[calc(100%+8px)] w-80' 
-              : 'bottom-full mb-3 left-3 right-3'
-          }`}>
+          <div 
+            className={`absolute z-[200] bg-white dark:bg-[#14171C] rounded-3xl shadow-[0_16px_48px_-8px_rgba(0,0,0,0.3)] dark:shadow-[0_16px_48px_-8px_rgba(0,0,0,0.7)] border border-sage-200/80 dark:border-white/10 p-4 animate-fadeIn ${
+              collapsed 
+                ? 'bottom-2 left-[calc(100%+8px)] w-80' 
+                : 'bottom-full mb-3 left-2 right-2'
+            }`}
+            style={{ backdropFilter: 'none', WebkitBackdropFilter: 'none' }}
+          >
             
             {/* User Identity */}
             <div className="flex items-center gap-3 pb-3 border-b border-sage-100 dark:border-white/10">
@@ -228,10 +231,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
                 className="w-10 h-10 rounded-full object-cover border border-sage-300 shrink-0"
               />
               <div className="min-w-0 flex-1">
-                <span className="block text-xs font-bold text-charcoal truncate">
+                <span className="block text-xs font-bold text-charcoal dark:text-white truncate">
                   {currentUser.name}
                 </span>
-                <span className="block text-[11px] text-charcoal-muted truncate font-medium">
+                <span className="block text-[11px] text-charcoal-muted dark:text-cream-200 truncate font-medium">
                   {currentUser.email}
                 </span>
                 <span className={`inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full mt-1 ${
@@ -246,13 +249,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
 
             {/* Theme Toggle Button */}
             <div className="py-2.5 border-b border-sage-100 dark:border-white/10 flex items-center justify-between">
-              <span className="text-xs font-semibold text-charcoal flex items-center gap-1.5">
+              <span className="text-xs font-semibold text-charcoal dark:text-white flex items-center gap-1.5">
                 {theme === 'dark' ? <Moon className="w-3.5 h-3.5 text-sage-300" /> : <Sun className="w-3.5 h-3.5 text-amber-600" />}
                 <span>Theme Mode</span>
               </span>
               <button
                 onClick={toggleTheme}
-                className="px-2.5 py-1 rounded-xl bg-cream-100 dark:bg-white/10 hover:bg-cream-200 text-[11px] font-bold text-charcoal transition-colors flex items-center gap-1"
+                className="px-2.5 py-1 rounded-xl bg-cream-100 dark:bg-white/10 hover:bg-cream-200 dark:hover:bg-white/20 text-[11px] font-bold text-charcoal dark:text-white transition-colors flex items-center gap-1"
               >
                 <span>{theme === 'dark' ? 'Dark' : 'Light'}</span>
                 <span className="text-[10px] opacity-60">Switch</span>
@@ -264,7 +267,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
               <Link
                 href="/settings"
                 onClick={() => setShowProfileMenu(false)}
-                className="flex items-center gap-2 px-2.5 py-2 rounded-xl text-xs text-charcoal hover:bg-cream-50 dark:hover:bg-white/10 transition-colors font-medium"
+                className="flex items-center gap-2 px-2.5 py-2 rounded-xl text-xs text-charcoal dark:text-white/90 hover:bg-cream-50 dark:hover:bg-white/10 transition-colors font-medium"
               >
                 <Settings className="w-3.5 h-3.5 text-sage-700 dark:text-sage-400" />
                 <span>Account Settings</span>
@@ -273,7 +276,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
                 href={process.env.NEXT_PUBLIC_PUBLIC_SHOWCASE_URL || '#'}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-between px-2.5 py-2 rounded-xl text-xs text-charcoal hover:bg-cream-50 dark:hover:bg-white/10 transition-colors font-medium"
+                className="flex items-center justify-between px-2.5 py-2 rounded-xl text-xs text-charcoal dark:text-white/90 hover:bg-cream-50 dark:hover:bg-white/10 transition-colors font-medium"
               >
                 <div className="flex items-center gap-2">
                   <ExternalLink className="w-3.5 h-3.5 text-sage-700 dark:text-sage-400" />
@@ -283,7 +286,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
               <Link
                 href="/login"
                 onClick={() => setShowProfileMenu(false)}
-                className="flex items-center gap-2 px-2.5 py-2 rounded-xl text-xs text-charcoal hover:bg-cream-50 dark:hover:bg-white/10 transition-colors font-medium"
+                className="flex items-center gap-2 px-2.5 py-2 rounded-xl text-xs text-charcoal dark:text-white/90 hover:bg-cream-50 dark:hover:bg-white/10 transition-colors font-medium"
               >
                 <LogOut className="w-3.5 h-3.5 text-sage-700 dark:text-sage-400" />
                 <span>Switch / Sign In Page</span>

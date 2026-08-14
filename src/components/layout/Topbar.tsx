@@ -109,7 +109,10 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-[#14171E] rounded-3xl shadow-2xl border border-sage-200 dark:border-white/15 p-4 z-50 animate-fadeIn">
+            <div 
+              className="absolute right-0 mt-2 w-80 bg-white dark:bg-[#14171E] rounded-3xl shadow-2xl border border-sage-200 dark:border-white/15 p-4 z-50 animate-fadeIn"
+              style={{ backdropFilter: 'none', WebkitBackdropFilter: 'none' }}
+            >
               <div className="flex items-center justify-between pb-3 border-b border-sage-100 dark:border-white/10 mb-3">
                 <span className="text-xs font-bold text-charcoal dark:text-white uppercase tracking-wider">
                   Live Notifications
@@ -119,12 +122,12 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
                 </span>
               </div>
               <div className="space-y-2.5 text-xs">
-                <div className="p-3 rounded-2xl bg-cream-50 dark:bg-white/[0.04] hover:bg-sage-50 dark:hover:bg-white/[0.08] border border-sage-100 dark:border-white/10 transition-colors">
+                <div className="p-3 rounded-2xl bg-cream-50 dark:bg-[#1A1E27] hover:bg-sage-50 dark:hover:bg-[#202531] border border-sage-100 dark:border-white/10 transition-colors">
                   <span className="font-bold text-charcoal dark:text-white block">New Stall Request</span>
                   <span className="text-charcoal-muted dark:text-cream-200 text-[11px] block mt-0.5">Cuir Leather Goods applied for Stall B-02 (Lahore).</span>
                   <span className="text-[10px] text-sage-700 dark:text-sage-300 font-bold block mt-1">10 mins ago</span>
                 </div>
-                <div className="p-3 rounded-2xl bg-cream-50 dark:bg-white/[0.04] hover:bg-sage-50 dark:hover:bg-white/[0.08] border border-sage-100 dark:border-white/10 transition-colors">
+                <div className="p-3 rounded-2xl bg-cream-50 dark:bg-[#1A1E27] hover:bg-sage-50 dark:hover:bg-[#202531] border border-sage-100 dark:border-white/10 transition-colors">
                   <span className="font-bold text-charcoal dark:text-white block">Expense Logged for Approval</span>
                   <span className="text-charcoal-muted dark:text-cream-200 text-[11px] block mt-0.5">Hamza Tariq logged Rs. 150,000 for Security.</span>
                   <span className="text-[10px] text-sage-700 dark:text-sage-300 font-bold block mt-1">1 hour ago</span>
