@@ -53,16 +53,16 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
       <div className="flex items-center gap-4">
         <button
           onClick={onToggleMobileSidebar}
-          className="p-2 rounded-xl hover:bg-sage-100 text-charcoal lg:hidden"
+          className="p-2 rounded-xl hover:bg-sage-100 dark:hover:bg-white/10 text-charcoal dark:text-white lg:hidden"
         >
           <Menu className="w-5 h-5" />
         </button>
 
         <div>
-          <h1 className="font-sans text-xl sm:text-2xl font-bold text-charcoal tracking-tight">
+          <h1 className="font-sans text-xl sm:text-2xl font-bold text-charcoal dark:text-white tracking-tight">
             {pageInfo.title}
           </h1>
-          <p className="text-xs text-charcoal-muted hidden sm:block font-medium">
+          <p className="text-xs text-charcoal-muted dark:text-white/60 hidden sm:block font-medium">
             {pageInfo.subtitle}
           </p>
         </div>
@@ -101,17 +101,17 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
         <div className="relative" ref={notifRef}>
           <button
             onClick={() => setShowNotifications(!showNotifications)}
-            className="w-10 h-10 rounded-lg glass-pill hover:bg-white dark:hover:bg-white/10 flex items-center justify-center text-charcoal-light hover:text-charcoal relative transition-all glass-rise-btn"
+            className="w-10 h-10 rounded-lg glass-pill hover:bg-white dark:hover:bg-white/10 flex items-center justify-center text-charcoal-light hover:text-charcoal dark:text-white/70 dark:hover:text-white relative transition-all glass-rise-btn"
             aria-label="Notifications"
           >
             <Bell className="w-4 h-4" />
-            <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-cream" />
+            <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-cream dark:ring-[#14171E]" />
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-[#14171E] backdrop-blur-2xl rounded-3xl shadow-2xl border border-sage-200 dark:border-white/15 p-4 z-50 animate-fadeIn">
+            <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-[#14171E] rounded-3xl shadow-2xl border border-sage-200 dark:border-white/15 p-4 z-50 animate-fadeIn">
               <div className="flex items-center justify-between pb-3 border-b border-sage-100 dark:border-white/10 mb-3">
-                <span className="text-xs font-bold text-charcoal uppercase tracking-wider">
+                <span className="text-xs font-bold text-charcoal dark:text-white uppercase tracking-wider">
                   Live Notifications
                 </span>
                 <span className="text-[10px] bg-sage-100 dark:bg-emerald-950/80 text-sage-800 dark:text-emerald-300 border border-transparent dark:border-emerald-700/60 px-2 py-0.5 rounded-full font-bold">
@@ -120,13 +120,13 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
               </div>
               <div className="space-y-2.5 text-xs">
                 <div className="p-3 rounded-2xl bg-cream-50 dark:bg-white/[0.04] hover:bg-sage-50 dark:hover:bg-white/[0.08] border border-sage-100 dark:border-white/10 transition-colors">
-                  <span className="font-bold text-charcoal block">New Stall Request</span>
-                  <span className="text-charcoal-muted text-[11px] block mt-0.5">Cuir Leather Goods applied for Stall B-02 (Lahore).</span>
+                  <span className="font-bold text-charcoal dark:text-white block">New Stall Request</span>
+                  <span className="text-charcoal-muted dark:text-cream-200 text-[11px] block mt-0.5">Cuir Leather Goods applied for Stall B-02 (Lahore).</span>
                   <span className="text-[10px] text-sage-700 dark:text-sage-300 font-bold block mt-1">10 mins ago</span>
                 </div>
                 <div className="p-3 rounded-2xl bg-cream-50 dark:bg-white/[0.04] hover:bg-sage-50 dark:hover:bg-white/[0.08] border border-sage-100 dark:border-white/10 transition-colors">
-                  <span className="font-bold text-charcoal block">Expense Logged for Approval</span>
-                  <span className="text-charcoal-muted text-[11px] block mt-0.5">Hamza Tariq logged Rs. 150,000 for Security.</span>
+                  <span className="font-bold text-charcoal dark:text-white block">Expense Logged for Approval</span>
+                  <span className="text-charcoal-muted dark:text-cream-200 text-[11px] block mt-0.5">Hamza Tariq logged Rs. 150,000 for Security.</span>
                   <span className="text-[10px] text-sage-700 dark:text-sage-300 font-bold block mt-1">1 hour ago</span>
                 </div>
               </div>

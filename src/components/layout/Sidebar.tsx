@@ -119,31 +119,31 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
   return (
     <aside
       className={`fixed top-0 left-0 bottom-0 z-30 glass-sidebar flex flex-col justify-between transition-[width] duration-300 ease-in-out ${
-        collapsed ? 'w-20' : 'w-64'
+        collapsed ? 'w-20' : 'w-56'
       }`}
       style={{ overflow: 'visible' }}
     >
       {/* Top Section: Wordmark & Logo */}
       <div>
         <div className={`h-20 flex items-center border-b border-sage-200/40 dark:border-white/10 transition-all duration-300 ${
-          collapsed ? 'justify-center px-2 relative' : 'justify-between px-4'
+          collapsed ? 'justify-center px-2 relative' : 'justify-between px-3.5'
         }`}>
           <div className={`flex items-center ${collapsed ? 'justify-center w-full' : 'min-w-0'}`}>
             <Link href="/" className="flex items-center group focus:outline-none py-1">
               <div className="shrink-0 flex items-center justify-center">
                 <BrandLogo 
-                  size={32} 
+                  size={30} 
                   showText={false}
                 />
               </div>
               <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                collapsed ? 'max-w-0 opacity-0 ml-0 pointer-events-none' : 'max-w-[160px] opacity-100 ml-2.5'
+                collapsed ? 'max-w-0 opacity-0 ml-0 pointer-events-none' : 'max-w-[140px] opacity-100 ml-2'
               }`}>
                 <div className="flex flex-col whitespace-nowrap">
-                  <span className={`font-sans font-extrabold text-sm tracking-tight leading-tight ${theme === 'dark' ? 'text-white' : 'text-charcoal'}`}>
+                  <span className={`font-sans font-extrabold text-xs tracking-tight leading-tight ${theme === 'dark' ? 'text-white' : 'text-charcoal'}`}>
                     Exhibition Agency
                   </span>
-                  <span className={`font-sans text-[10px] font-semibold tracking-wider uppercase leading-tight ${theme === 'dark' ? 'text-sage-300' : 'text-sage-800'}`}>
+                  <span className={`font-sans text-[9px] font-semibold tracking-wider uppercase leading-tight ${theme === 'dark' ? 'text-sage-300' : 'text-sage-800'}`}>
                     Portal
                   </span>
                 </div>
@@ -156,16 +156,16 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
             className={`p-1.5 rounded-xl hover:bg-sage-100 dark:hover:bg-white/10 text-charcoal-muted hover:text-charcoal transition-all hidden lg:flex items-center justify-center shrink-0 ${
               collapsed 
                 ? 'absolute -right-2.5 top-7 bg-white dark:bg-[#1A1E26] shadow-md border border-sage-200 dark:border-white/15 rounded-full p-1 z-30 hover:scale-110' 
-                : 'ml-1'
+                : 'ml-0.5'
             }`}
             title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
-            {collapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-4 h-4" />}
+            {collapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
           </button>
         </div>
 
         {/* Navigation Items */}
-        <nav className="p-3 space-y-1.5">
+        <nav className="p-2.5 space-y-1">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             const Icon = item.icon;
@@ -174,7 +174,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-3 py-3 rounded-2xl text-xs font-medium transition-all duration-200 relative group sidebar-nav-item glass-rise-btn ${
+                className={`flex items-center gap-2.5 px-2.5 py-2.5 rounded-xl text-xs font-medium transition-all duration-200 relative group sidebar-nav-item glass-rise-btn ${
                   isActive
                     ? 'bg-sage-800 dark:bg-sage-700 text-cream shadow-soft font-bold'
                     : 'text-charcoal-light hover:bg-white dark:hover:bg-white/10 hover:text-charcoal hover:shadow-xs font-semibold'
@@ -184,15 +184,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
                 <Icon className={`w-4 h-4 shrink-0 transition-transform group-hover:scale-110 ${isActive ? 'text-cream' : 'text-sage-700 dark:text-sage-300'}`} />
                 
                 <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                  collapsed ? 'max-w-0 opacity-0 pointer-events-none' : 'max-w-[160px] opacity-100 flex-1'
+                  collapsed ? 'max-w-0 opacity-0 pointer-events-none' : 'max-w-[130px] opacity-100 flex-1'
                 }`}>
-                  <span className="truncate tracking-wide block whitespace-nowrap">
+                  <span className="truncate tracking-wide block whitespace-nowrap text-xs">
                     {item.label}
                   </span>
                 </div>
 
                 {!collapsed && item.badge !== null && (
-                  <span className={`text-[10px] px-2 py-0.5 rounded-full border font-bold shrink-0 ${
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded-full border font-bold shrink-0 ${
                     isActive ? 'bg-cream-100 text-sage-900 border-cream-200' : (item.badgeColor || 'bg-sage-100 text-sage-800')
                   }`}>
                     {item.badge}

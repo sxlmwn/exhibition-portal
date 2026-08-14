@@ -67,7 +67,7 @@ const AdminShellContent: React.FC<{ children: React.ReactNode }> = ({ children }
 
       {/* Main Content Area (Smooth Synchronized Transition, Natural Stacking Context) */}
       <div className={`flex-1 flex flex-col min-w-0 transition-[padding-left] duration-300 ease-in-out ${
-        collapsed ? 'lg:pl-20' : 'lg:pl-64'
+        collapsed ? 'lg:pl-20' : 'lg:pl-56'
       }`}>
         <Topbar onToggleMobileSidebar={() => setMobileOpen(!mobileOpen)} />
         
