@@ -121,9 +121,11 @@ export const mapVendorRequestFromDB = (row: any): VendorRequest => {
   const productCategory = row.category || row.product_category || 'Lifestyle & Craft';
   const status: RequestStatus = row.status || 'pending';
   const exhibitionName = row.exhibitions?.name || row.exhibition_name || (row.exhibition_id ? `Exhibition #${row.exhibition_id}` : 'Exhibition Edition');
+  const referenceId = row.reference_id || `REQ-${row.id}`;
 
   return {
     id: String(row.id),
+    referenceId,
     vendorName,
     brandName,
     email,
@@ -148,6 +150,9 @@ export const mapVendorRequestToDB = (req: Partial<VendorRequest>): any => {
   const payload: any = {};
   if (req.id !== undefined && !String(req.id).startsWith('vr-') && !String(req.id).startsWith('req-') && !isNaN(Number(req.id))) {
     payload.id = Number(req.id);
+  }
+  if (req.referenceId !== undefined) {
+    payload.reference_id = req.referenceId;
   }
   if (req.exhibitionId !== undefined && !isNaN(Number(req.exhibitionId))) {
     payload.exhibition_id = Number(req.exhibitionId);

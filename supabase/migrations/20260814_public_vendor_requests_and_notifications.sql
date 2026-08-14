@@ -6,6 +6,7 @@
 
 -- 1. Schema Enhancements on vendor_requests
 ALTER TABLE vendor_requests
+  ADD COLUMN IF NOT EXISTS reference_id TEXT,
   ADD COLUMN IF NOT EXISTS vendor_name TEXT,
   ADD COLUMN IF NOT EXISTS email TEXT,
   ADD COLUMN IF NOT EXISTS notes TEXT,

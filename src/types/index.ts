@@ -65,6 +65,7 @@ export type RequestStatus = 'pending' | 'approved' | 'rejected' | 'waitlisted';
 
 export interface VendorRequest {
   id: string;
+  referenceId?: string;
   vendorName: string;
   brandName: string;
   email: string;

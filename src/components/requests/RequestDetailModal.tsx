@@ -86,7 +86,12 @@ export const RequestDetailModal: React.FC<RequestDetailModalProps> = ({
               {request.brandName.slice(0, 2).toUpperCase()}
             </div>
             <div>
-              <div className="flex items-center gap-2 mb-1">
+              <div className="flex flex-wrap items-center gap-2 mb-1">
+                {request.referenceId && (
+                  <span className="text-[10px] font-mono font-bold tracking-wider px-2 py-0.5 rounded-full bg-cream-200 dark:bg-white/10 text-charcoal dark:text-white border border-sage-200 dark:border-white/15">
+                    {request.referenceId}
+                  </span>
+                )}
                 <span className="text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border border-sage-200 dark:border-white/10 text-sage-800 dark:text-sage-300">
                   {request.productCategory}
                 </span>
