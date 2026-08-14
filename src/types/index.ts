@@ -176,3 +176,17 @@ export interface AgencySettings {
   currency: string;
   logoUrl?: string;
 }
+
+export type NotificationType = 'stall_request' | 'expense_approval' | 'system' | 'info' | 'alert' | 'success';
+
+export interface Notification {
+  id: string;
+  userId: string;
+  type: NotificationType;
+  title: string;
+  message: string;
+  metadata?: Record<string, any>;
+  isRead: boolean;
+  createdAt: string;
+  updatedAt: string;
+}

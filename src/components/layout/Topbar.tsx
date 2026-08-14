@@ -5,18 +5,34 @@ import {
   Menu, 
   MessageSquare, 
   Sun, 
-  Moon 
+  Moon,
+  Plus
 } from 'lucide-react';
 import { useAdmin } from '../../context/AdminContext';
+import { supabase } from '../../lib/supabase';
+import { getTimeAgo } from '../../lib/notifications';
 
 interface TopbarProps {
   onToggleMobileSidebar: () => void;
+}
+
+interface Notification {
+  id: string;
+  type: string;
+  title: string;
+  message: string;
+  is_read: boolean;
+  created_at: string;
+  metadata?: Record<string, any>;
 }
 
 export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
   const pathname = usePathname();
   const { settings, theme, toggleTheme } = useAdmin();
   const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const notifRef = useRef<HTMLDivElement>(null);
 
@@ -29,6 +45,136 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Fetch notifications on mount and when notifications panel opens
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  // Mark notifications as read when panel opens
+  useEffect(() => {
+    if (showNotifications && unreadCount > 0) {
+      markNotificationsAsRead();
+    }
+  }, [showNotifications, unreadCount]);
+
+  const fetchNotifications = async () => {
+    try {
+      setLoading(true);
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      const { data: notifications, error } = await supabase
+        .from('notifications')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(10);
+
+      if (error) {
+        console.error('Error fetching notifications:', error);
+        setLoading(false);
+        return;
+      }
+
+      setNotifications(notifications || []);
+      setUnreadCount(notifications?.filter(n => !n.is_read).length || 0);
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const markNotificationsAsRead = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) return;
+
+      const { error } = await supabase
+        .from('notifications')
+        .update({ is_read: true, updated_at: new Date().toISOString() })
+        .eq('user_id', user.id)
+        .eq('is_read', false);
+
+      if (error) {
+        console.error('Error marking notifications as read:', error);
+        return;
+      }
+
+      setUnreadCount(0);
+      setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
+    } catch (error) {
+      console.error('Error marking notifications as read:', error);
+    }
+  };
+
+  const seedSampleNotifications = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        console.error('User not authenticated');
+        return;
+      }
+
+      // Sample stall request notification
+      await supabase
+        .from('notifications')
+        .insert([{
+          user_id: user.id,
+          type: 'stall_request',
+          title: 'New Stall Request',
+          message: 'Cuir Leather Goods applied for Stall B-02 (Lahore).',
+          metadata: {
+            vendorName: 'Cuir Leather Goods',
+            stallCode: 'B-02',
+            exhibitionName: 'Lahore Exhibition'
+          },
+          is_read: false
+        }]);
+
+      // Sample expense notification
+      await supabase
+        .from('notifications')
+        .insert([{
+          user_id: user.id,
+          type: 'expense_approval',
+          title: 'Expense Logged for Approval',
+          message: 'Hamza Tariq logged Rs. 150,000 for Security.',
+          metadata: {
+            amount: 150000,
+            category: 'Security',
+            enteredBy: 'Hamza Tariq'
+          },
+          is_read: false
+        }]);
+
+      // Sample system notification
+      await supabase
+        .from('notifications')
+        .insert([{
+          user_id: user.id,
+          type: 'system',
+          title: 'System Update',
+          message: 'Exhibition portal has been updated with new features.',
+          metadata: {
+            version: '2.0.0'
+          },
+          is_read: false
+        }]);
+
+      console.log('Sample notifications seeded successfully');
+      fetchNotifications(); // Refresh the notifications
+    } catch (error) {
+      console.error('Error seeding sample notifications:', error);
+    }
+  };
 
   const getPageTitle = () => {
     switch (pathname) {
@@ -105,34 +251,70 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
             aria-label="Notifications"
           >
             <Bell className="w-4 h-4" />
-            <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-cream dark:ring-[#14171E]" />
+            {unreadCount > 0 && (
+              <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-cream dark:ring-[#14171E]" />
+            )}
           </button>
 
           {showNotifications && (
             <div 
-              className="absolute right-0 mt-2 w-80 bg-white dark:bg-[#14171E] rounded-3xl shadow-2xl border border-sage-200 dark:border-white/15 p-4 z-50 animate-fadeIn"
-              style={{ backdropFilter: 'none', WebkitBackdropFilter: 'none' }}
+              className="absolute right-0 mt-2 w-80 rounded-3xl shadow-2xl border border-sage-200 dark:border-white/15 p-4 z-[9999] animate-fadeIn"
+              style={{ 
+                backdropFilter: 'none', 
+                WebkitBackdropFilter: 'none',
+                backgroundColor: theme === 'dark' ? '#14171E' : '#FFFFFF',
+                opacity: 1,
+                filter: 'none',
+                WebkitFilter: 'none',
+                boxShadow: theme === 'dark' ? '0 20px 40px -12px rgba(0, 0, 0, 0.8)' : '0 20px 40px -12px rgba(74, 93, 74, 0.15)'
+              }}
             >
               <div className="flex items-center justify-between pb-3 border-b border-sage-100 dark:border-white/10 mb-3">
                 <span className="text-xs font-bold text-charcoal dark:text-white uppercase tracking-wider">
                   Live Notifications
                 </span>
-                <span className="text-[10px] bg-sage-100 dark:bg-emerald-950/80 text-sage-800 dark:text-emerald-300 border border-transparent dark:border-emerald-700/60 px-2 py-0.5 rounded-full font-bold">
-                  3 New
-                </span>
+                {unreadCount > 0 && (
+                  <span className="text-[10px] bg-sage-100 dark:bg-emerald-900 text-sage-800 dark:text-emerald-300 border border-transparent dark:border-emerald-700 px-2 py-0.5 rounded-full font-bold" style={{ backgroundColor: theme === 'dark' ? '#064E3B' : '#EAEFE9' }}>
+                    {unreadCount} New
+                  </span>
+                )}
               </div>
-              <div className="space-y-2.5 text-xs">
-                <div className="p-3 rounded-2xl bg-cream-50 dark:bg-[#1A1E27] hover:bg-sage-50 dark:hover:bg-[#202531] border border-sage-100 dark:border-white/10 transition-colors">
-                  <span className="font-bold text-charcoal dark:text-white block">New Stall Request</span>
-                  <span className="text-charcoal-muted dark:text-cream-200 text-[11px] block mt-0.5">Cuir Leather Goods applied for Stall B-02 (Lahore).</span>
-                  <span className="text-[10px] text-sage-700 dark:text-sage-300 font-bold block mt-1">10 mins ago</span>
+              
+              {loading ? (
+                <div className="text-center py-4 text-xs text-charcoal-muted dark:text-white/60">
+                  Loading notifications...
                 </div>
-                <div className="p-3 rounded-2xl bg-cream-50 dark:bg-[#1A1E27] hover:bg-sage-50 dark:hover:bg-[#202531] border border-sage-100 dark:border-white/10 transition-colors">
-                  <span className="font-bold text-charcoal dark:text-white block">Expense Logged for Approval</span>
-                  <span className="text-charcoal-muted dark:text-cream-200 text-[11px] block mt-0.5">Hamza Tariq logged Rs. 150,000 for Security.</span>
-                  <span className="text-[10px] text-sage-700 dark:text-sage-300 font-bold block mt-1">1 hour ago</span>
+              ) : notifications.length === 0 ? (
+                <div className="text-center py-4">
+                  <p className="text-xs text-charcoal-muted dark:text-white/60 mb-3">
+                    No notifications yet
+                  </p>
+                  <button
+                    onClick={seedSampleNotifications}
+                    className="text-xs bg-sage-100 dark:bg-emerald-900/50 text-sage-800 dark:text-emerald-300 px-3 py-1.5 rounded-lg hover:bg-sage-200 dark:hover:bg-emerald-900/70 transition-colors flex items-center gap-1 mx-auto"
+                  >
+                    <Plus className="w-3 h-3" />
+                    Add Sample Notifications
+                  </button>
                 </div>
-              </div>
+              ) : (
+                <div className="space-y-2.5 text-xs max-h-80 overflow-y-auto">
+                  {notifications.map((notification) => (
+                    <div 
+                      key={notification.id} 
+                      className="p-3 rounded-2xl border border-sage-100 dark:border-white/10 transition-colors cursor-pointer" 
+                      style={{ 
+                        backgroundColor: theme === 'dark' ? '#1A1E27' : '#FCFBF9',
+                        opacity: notification.is_read ? 0.7 : 1
+                      }}
+                    >
+                      <span className="font-bold text-charcoal dark:text-white block">{notification.title}</span>
+                      <span className="text-charcoal-muted dark:text-white text-[11px] block mt-0.5">{notification.message}</span>
+                      <span className="text-[10px] text-sage-700 dark:text-emerald-300 font-bold block mt-1">{getTimeAgo(notification.created_at)}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>

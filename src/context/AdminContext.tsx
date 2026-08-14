@@ -22,6 +22,7 @@ import {
   INITIAL_AGENCY_SETTINGS 
 } from '../data/mockData';
 import { supabase } from '../lib/supabase';
+import { createExpenseNotification, createStallRequestNotification } from '../lib/notifications';
 
 // Helper mappers between Supabase Postgres columns and frontend Exhibition type
 export const mapExhibitionFromDB = (row: any): Exhibition => {
@@ -1228,6 +1229,17 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       if (!error && data) {
         const serverVR = mapVendorRequestFromDB(data);
         setVendorRequests(prev => prev.map(r => r.id === tempId ? serverVR : r));
+        
+        // Create notification for new stall request
+        const { data: { user: authUser } } = await supabase.auth.getUser();
+        if (authUser?.id) {
+          createStallRequestNotification({
+            userId: authUser.id,
+            vendorName: req.vendorName,
+            stallCode: req.preferredStallCode,
+            exhibitionName: req.exhibitionName
+          });
+        }
       }
     } catch (err) {
       console.error('Error inserting vendor request into Supabase:', err);
@@ -1331,6 +1343,17 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       if (!error && data) {
         const serverExpense = mapExpenseItemFromDB(data);
         setExpenses(prev => prev.map(e => e.id === tempId ? serverExpense : e));
+        
+        // Create notification for expense approval
+        const { data: { user: authUser } } = await supabase.auth.getUser();
+        if (authUser?.id) {
+          createExpenseNotification({
+            userId: authUser.id,
+            amount: expense.amount,
+            category: expense.category,
+            enteredBy: currentUser.name
+          });
+        }
       } else if (error) {
         console.error('Error inserting expense into Supabase:', error.message);
       }
