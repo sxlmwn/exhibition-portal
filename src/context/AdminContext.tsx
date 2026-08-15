@@ -253,6 +253,9 @@ export const mapVendorRequestToDB = (req: Partial<VendorRequest>): any => {
   if (req.stallTierPreference !== undefined) {
     payload.stall_tier_preference = req.stallTierPreference;
   }
+  if (req.allocatedStallCode !== undefined) {
+    payload.allocated_stall_code = req.allocatedStallCode || null;
+  }
   if (req.status !== undefined) {
     payload.status = req.status;
   }
@@ -1302,9 +1305,12 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       const numericStallId = Number(stallId);
       if (!isNaN(numericStallId)) {
         const numericRequestId = Number(vendorRequestId);
+        // Only set assigned_vendor_id if vendorRequestId is a valid positive number
+        const validVendorId = !isNaN(numericRequestId) && numericRequestId > 0 ? numericRequestId : null;
+
         const stallPayload: any = {
           status: 'booked',
-          assigned_vendor_id: !isNaN(numericRequestId) ? numericRequestId : null,
+          assigned_vendor_id: validVendorId,
           assigned_vendor_name: vendorName || null,
           assigned_brand_name: brandName || null,
           assigned_at: assignedAtIso
@@ -1315,21 +1321,66 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           .update(stallPayload)
           .eq('id', numericStallId);
 
-        // If assignment columns are pending in DB schema, gracefully fallback to status update only
-        if (stallErr && stallErr.message && stallErr.message.includes('assigned_')) {
-          await supabase
-            .from('stall_slots')
-            .update({ status: 'booked' })
-            .eq('id', numericStallId);
+        if (stallErr) {
+          console.error('[allocateStall] Error updating stall_slots with full payload:', stallErr);
+
+          // If foreign key constraint failed (e.g. key is not present in vendor_requests table, error 23503),
+          // retry saving the vendor & brand name with assigned_vendor_id as null
+          if (stallErr.code === '23503' || (stallErr.message && (stallErr.message.includes('foreign key constraint') || stallErr.message.includes('violates foreign key')))) {
+            console.warn('[allocateStall] Foreign key mismatch for assigned_vendor_id; retrying with null vendor ID while preserving brand and vendor name.');
+            const { error: retryErr } = await supabase
+              .from('stall_slots')
+              .update({
+                status: 'booked',
+                assigned_vendor_id: null,
+                assigned_vendor_name: vendorName || null,
+                assigned_brand_name: brandName || null,
+                assigned_at: assignedAtIso
+              })
+              .eq('id', numericStallId);
+
+            if (retryErr) {
+              console.error('[allocateStall] Retry update without FK failed:', retryErr);
+            }
+          } else if (stallErr.message && stallErr.message.includes('assigned_')) {
+            // Only if columns are completely missing in DB schema, fallback to status update only
+            console.warn('[allocateStall] Assignment columns missing from DB schema; falling back to status update.');
+            const { error: statusOnlyErr } = await supabase
+              .from('stall_slots')
+              .update({ status: 'booked' })
+              .eq('id', numericStallId);
+            if (statusOnlyErr) {
+              console.error('[allocateStall] Status-only fallback failed:', statusOnlyErr);
+            }
+          }
         }
       }
 
       const numericRequestId = Number(vendorRequestId);
       if (!isNaN(numericRequestId)) {
-        await supabase
+        const reqPayload: any = {
+          status: 'approved',
+          allocated_stall_code: stall.code
+        };
+
+        const { error: reqErr } = await supabase
           .from('vendor_requests')
-          .update({ status: 'approved' })
+          .update(reqPayload)
           .eq('id', numericRequestId);
+
+        if (reqErr) {
+          console.error('[allocateStall] Error updating vendor_requests with allocated_stall_code:', reqErr);
+          // If allocated_stall_code column is not yet in DB schema, fallback to status only
+          if (reqErr.message && reqErr.message.includes('allocated_stall_code')) {
+            const { error: reqFallbackErr } = await supabase
+              .from('vendor_requests')
+              .update({ status: 'approved' })
+              .eq('id', numericRequestId);
+            if (reqFallbackErr) {
+              console.error('[allocateStall] Status-only update on vendor_requests failed:', reqFallbackErr);
+            }
+          }
+        }
       }
     } catch (err) {
       console.error('Error syncing allocateStall to Supabase:', err);
@@ -1340,6 +1391,8 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     const stall = stalls.find(s => s.id === stallId);
     if (!stall || stall.status === 'available') return;
 
+    const previousVendorId = stall.assignedVendorId;
+
     setStalls(prev => prev.map(s => s.id === stallId ? {
       ...s,
       status: 'available',
@@ -1348,6 +1401,12 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       assignedBrandName: undefined,
       assignedAt: undefined
     } : s));
+
+    // Clear allocatedStallCode on the vendor request if it was allocated to this stall
+    setVendorRequests(prev => prev.map(r => (previousVendorId && r.id === previousVendorId) || r.allocatedStallCode === stall.code ? {
+      ...r,
+      allocatedStallCode: undefined
+    } : r));
 
     setExhibitions(prev => prev.map(e => e.id === stall.exhibitionId ? {
       ...e,
@@ -1371,12 +1430,28 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           .update(releasePayload)
           .eq('id', numericStallId);
 
-        // If assignment columns are pending in DB schema, gracefully fallback to status update only
-        if (releaseErr && releaseErr.message && releaseErr.message.includes('assigned_')) {
-          await supabase
-            .from('stall_slots')
-            .update({ status: 'available' })
-            .eq('id', numericStallId);
+        if (releaseErr) {
+          console.error('[releaseStall] Error clearing stall_slots assignment:', releaseErr);
+          if (releaseErr.message && releaseErr.message.includes('assigned_')) {
+            await supabase
+              .from('stall_slots')
+              .update({ status: 'available' })
+              .eq('id', numericStallId);
+          }
+        }
+      }
+
+      // If the vendor request was tracked in Supabase, clear allocated_stall_code
+      if (previousVendorId) {
+        const numericReqId = Number(previousVendorId);
+        if (!isNaN(numericReqId)) {
+          const { error: reqReleaseErr } = await supabase
+            .from('vendor_requests')
+            .update({ allocated_stall_code: null })
+            .eq('id', numericReqId);
+          if (reqReleaseErr && !reqReleaseErr.message?.includes('allocated_stall_code')) {
+            console.error('[releaseStall] Error clearing vendor_requests allocated_stall_code:', reqReleaseErr);
+          }
         }
       }
     } catch (err) {
@@ -1389,7 +1464,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setVendorRequests(prev => prev.map(r => r.id === requestId ? {
       ...r,
       status,
-      allocatedStallCode: allocatedStallCode || r.allocatedStallCode,
+      allocatedStallCode: allocatedStallCode !== undefined ? allocatedStallCode : r.allocatedStallCode,
       reviewedBy: currentUser.name,
       reviewedAt: new Date().toISOString().split('T')[0]
     } : r));
@@ -1397,10 +1472,25 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     try {
       const numericId = Number(requestId);
       if (!isNaN(numericId)) {
-        await supabase
+        const reqPayload: any = { status };
+        if (allocatedStallCode !== undefined) {
+          reqPayload.allocated_stall_code = allocatedStallCode || null;
+        }
+
+        const { error: reqErr } = await supabase
           .from('vendor_requests')
-          .update({ status })
+          .update(reqPayload)
           .eq('id', numericId);
+
+        if (reqErr) {
+          console.error('[updateRequestStatus] Error updating vendor request in Supabase:', reqErr);
+          if (reqErr.message && reqErr.message.includes('allocated_stall_code')) {
+            await supabase
+              .from('vendor_requests')
+              .update({ status })
+              .eq('id', numericId);
+          }
+        }
       }
     } catch (err) {
       console.error('Error updating vendor request status in Supabase:', err);
