@@ -52,9 +52,10 @@ export default function VendorRequestsPage() {
   const approvedCount = vendorRequests.filter((r) => r.status === 'approved').length;
   const waitlistedCount = vendorRequests.filter((r) => r.status === 'waitlisted').length;
   
-  // Allocation window exhibitions
+  // Allocation window exhibitions & active (non-completed) exhibitions
   const allocationWindowExhibitions = exhibitions.filter(isInAllocationWindow);
   const allocationWindowCount = allocationWindowExhibitions.length;
+  const activeExhibitions = exhibitions.filter(e => e.status !== 'completed');
 
   const filteredRequests = vendorRequests.filter((req) => {
     // If allocation window filter is on, only show requests for exhibitions in allocation window
@@ -243,9 +244,9 @@ export default function VendorRequestsPage() {
                 className="px-4 py-2.5 rounded-lg border border-sage-200 dark:border-white/10 bg-white/80 dark:bg-[#1A1D24] text-xs font-bold text-charcoal dark:text-white outline-none glass-select cursor-pointer"
               >
                 <option value="All">
-                  {showAllocationWindowOnly ? 'Allocation Window Exhibitions' : 'All Exhibitions'}
+                  {showAllocationWindowOnly ? 'Allocation Window Exhibitions' : 'All Active Exhibitions'}
                 </option>
-                {(showAllocationWindowOnly ? allocationWindowExhibitions : exhibitions).map((exh) => (
+                {(showAllocationWindowOnly ? allocationWindowExhibitions : activeExhibitions).map((exh) => (
                   <option key={exh.id} value={exh.id}>
                     {exh.title} ({exh.city})
                     {showAllocationWindowOnly && ` (${getAllocationWindowDaysRemaining(exh)}d left)`}

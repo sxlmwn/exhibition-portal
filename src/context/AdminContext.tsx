@@ -329,6 +329,18 @@ export const mapStallSlotToDB = (slot: Partial<StallSlot>): any => {
   if (slot.status !== undefined) {
     payload.status = slot.status;
   }
+  if (slot.assignedVendorId !== undefined) {
+    payload.assigned_vendor_id = slot.assignedVendorId && !isNaN(Number(slot.assignedVendorId)) ? Number(slot.assignedVendorId) : null;
+  }
+  if (slot.assignedVendorName !== undefined) {
+    payload.assigned_vendor_name = slot.assignedVendorName || null;
+  }
+  if (slot.assignedBrandName !== undefined) {
+    payload.assigned_brand_name = slot.assignedBrandName || null;
+  }
+  if (slot.assignedAt !== undefined) {
+    payload.assigned_at = slot.assignedAt || null;
+  }
   return payload;
 };
 
@@ -1286,12 +1298,30 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     // Sync to Supabase
     try {
+      const assignedAtIso = new Date().toISOString();
       const numericStallId = Number(stallId);
       if (!isNaN(numericStallId)) {
-        await supabase
+        const numericRequestId = Number(vendorRequestId);
+        const stallPayload: any = {
+          status: 'booked',
+          assigned_vendor_id: !isNaN(numericRequestId) ? numericRequestId : null,
+          assigned_vendor_name: vendorName || null,
+          assigned_brand_name: brandName || null,
+          assigned_at: assignedAtIso
+        };
+
+        const { error: stallErr } = await supabase
           .from('stall_slots')
-          .update({ status: 'booked' })
+          .update(stallPayload)
           .eq('id', numericStallId);
+
+        // If assignment columns are pending in DB schema, gracefully fallback to status update only
+        if (stallErr && stallErr.message && stallErr.message.includes('assigned_')) {
+          await supabase
+            .from('stall_slots')
+            .update({ status: 'booked' })
+            .eq('id', numericStallId);
+        }
       }
 
       const numericRequestId = Number(vendorRequestId);
@@ -1328,10 +1358,26 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     try {
       const numericStallId = Number(stallId);
       if (!isNaN(numericStallId)) {
-        await supabase
+        const releasePayload: any = {
+          status: 'available',
+          assigned_vendor_id: null,
+          assigned_vendor_name: null,
+          assigned_brand_name: null,
+          assigned_at: null
+        };
+
+        const { error: releaseErr } = await supabase
           .from('stall_slots')
-          .update({ status: 'available' })
+          .update(releasePayload)
           .eq('id', numericStallId);
+
+        // If assignment columns are pending in DB schema, gracefully fallback to status update only
+        if (releaseErr && releaseErr.message && releaseErr.message.includes('assigned_')) {
+          await supabase
+            .from('stall_slots')
+            .update({ status: 'available' })
+            .eq('id', numericStallId);
+        }
       }
     } catch (err) {
       console.error('Error syncing releaseStall to Supabase:', err);
