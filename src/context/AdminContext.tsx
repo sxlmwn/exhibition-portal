@@ -58,7 +58,7 @@ export const isInAllocationWindow = (exhibition: Exhibition): boolean => {
  * @returns number of days remaining in allocation window, or 0 if not in window
  */
 export const getAllocationWindowDaysRemaining = (exhibition: Exhibition): number => {
-  if (!isInAllocationWindow(exhibition)) {
+  if (!exhibition.stallRegistrationDeadline || !isInAllocationWindow(exhibition)) {
     return 0;
   }
 
