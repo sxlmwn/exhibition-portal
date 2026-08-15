@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 import { seedSampleNotifications } from '@/lib/seedNotifications';
 
+export const dynamic = 'force-dynamic';
+
 // POST /api/notifications/seed - Seed sample notifications for testing
 export async function POST(req: Request) {
   try {

@@ -151,6 +151,27 @@ export const PastEventDetailModal: React.FC<PastEventDetailModalProps> = ({
             </p>
           </div>
 
+          {/* Testimonial Quote */}
+          {event.quoteText && (
+            <div className="p-4 sm:p-5 rounded-2xl bg-cream-50/80 dark:bg-white/5 border border-sage-200/80 dark:border-white/10">
+              <div className="flex gap-3">
+                <Quote className="w-5 h-5 text-sage-600 dark:text-sage-400 shrink-0 mt-0.5 rotate-180" />
+                <div>
+                  <p className="text-xs sm:text-sm text-charcoal dark:text-cream-100 italic font-medium leading-relaxed mb-2">
+                    &ldquo;{event.quoteText}&rdquo;
+                  </p>
+                  {(event.quoteAuthor || event.quoteBrand) && (
+                    <div className="text-xs text-charcoal-muted dark:text-cream-200/80">
+                      {event.quoteAuthor && <strong className="text-charcoal dark:text-white font-semibold">{event.quoteAuthor}</strong>}
+                      {event.quoteAuthor && event.quoteBrand && ' • '}
+                      {event.quoteBrand && <span>{event.quoteBrand}</span>}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Photo Gallery */}
           {event.photos && event.photos.length > 0 && (
             <div>

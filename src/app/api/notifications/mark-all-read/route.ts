@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
+export const dynamic = 'force-dynamic';
+
 // POST /api/notifications/mark-all-read - Mark all notifications as read for current user
 export async function POST(req: Request) {
   try {

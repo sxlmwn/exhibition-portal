@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
 
+export const dynamic = 'force-dynamic';
+
 // PATCH /api/notifications/[id] - Update notification (mark as read, etc.)
 export async function PATCH(
   req: Request,

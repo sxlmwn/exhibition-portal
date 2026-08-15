@@ -21,6 +21,9 @@ const pastEventSchema = z.object({
   coverImage: z.string().min(1, 'Cover image is required'),
   tagsInput: z.string(),
   isPublished: z.boolean().default(false),
+  quoteText: z.string().optional(),
+  quoteAuthor: z.string().optional(),
+  quoteBrand: z.string().optional(),
 });
 
 type PastEventFormData = z.infer<typeof pastEventSchema>;
@@ -66,6 +69,9 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
       coverImage: '/images/1.jpg',
       tagsInput: 'Artisan Craft, Festive Edition',
       isPublished: false,
+      quoteText: '',
+      quoteAuthor: '',
+      quoteBrand: '',
     }
   });
 
@@ -86,6 +92,9 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
         coverImage: eventToEdit.coverImage,
         tagsInput: eventToEdit.tags ? eventToEdit.tags.join(', ') : '',
         isPublished: eventToEdit.isPublished || false,
+        quoteText: eventToEdit.quoteText || '',
+        quoteAuthor: eventToEdit.quoteAuthor || '',
+        quoteBrand: eventToEdit.quoteBrand || '',
       });
       if (eventToEdit.coverImage && (eventToEdit.coverImage.startsWith('http') || eventToEdit.coverImage.startsWith('data:'))) {
         setCoverMode('upload');
@@ -106,6 +115,9 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
         coverImage: '/images/1.jpg',
         tagsInput: 'Artisan Craft, Festive Edition',
         isPublished: false,
+        quoteText: '',
+        quoteAuthor: '',
+        quoteBrand: '',
       });
       setCoverMode('preset');
     }
@@ -186,6 +198,9 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
         photos: updatedPhotos,
         tags: parsedTags,
         isPublished: data.isPublished,
+        quoteText: data.quoteText || '',
+        quoteAuthor: data.quoteAuthor || '',
+        quoteBrand: data.quoteBrand || '',
       });
     } else {
       addPastEvent({
@@ -202,6 +217,9 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
         photos: updatedPhotos,
         tags: parsedTags,
         isPublished: data.isPublished,
+        quoteText: data.quoteText || '',
+        quoteAuthor: data.quoteAuthor || '',
+        quoteBrand: data.quoteBrand || '',
       });
     }
     onClose();
@@ -505,6 +523,54 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
               placeholder="e.g. Couture, Handcrafted, Festive"
               className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 bg-white/80 dark:bg-white/5"
             />
+          </div>
+
+          {/* Testimonial Quote Section */}
+          <div className="p-4 rounded-2xl bg-cream-50/70 dark:bg-white/5 border border-sage-200 dark:border-white/10 space-y-3">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-sage-600 dark:text-sage-300" />
+              <span className="text-xs font-bold uppercase tracking-wider text-charcoal dark:text-cream-100">
+                Exhibitor Testimonial Quote (Optional)
+              </span>
+            </div>
+            <p className="text-[11px] text-charcoal-muted dark:text-cream-200/70">
+              This quote will appear in the highlighted testimonial box on the public marketing site.
+            </p>
+            <div>
+              <label className="block text-[11px] font-semibold uppercase tracking-wider text-charcoal dark:text-cream-200 mb-1">
+                Quote Text
+              </label>
+              <textarea
+                {...register('quoteText')}
+                rows={2}
+                placeholder="e.g. We sold out 80% of our stock on Day 1. Footfall conversion was exceptional."
+                className="w-full px-3.5 py-2 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white outline-none focus:border-sage-500 bg-white/90 dark:bg-white/5"
+              />
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-[11px] font-semibold uppercase tracking-wider text-charcoal dark:text-cream-200 mb-1">
+                  Exhibitor / Author Name
+                </label>
+                <input
+                  type="text"
+                  {...register('quoteAuthor')}
+                  placeholder="e.g. Ayla Siddiqui"
+                  className="w-full px-3.5 py-2 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white outline-none focus:border-sage-500 bg-white/90 dark:bg-white/5"
+                />
+              </div>
+              <div>
+                <label className="block text-[11px] font-semibold uppercase tracking-wider text-charcoal dark:text-cream-200 mb-1">
+                  Brand / Studio Role
+                </label>
+                <input
+                  type="text"
+                  {...register('quoteBrand')}
+                  placeholder="e.g. Founder, Terra Clayworks"
+                  className="w-full px-3.5 py-2 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white outline-none focus:border-sage-500 bg-white/90 dark:bg-white/5"
+                />
+              </div>
+            </div>
           </div>
 
           <div className="pt-4 border-t border-sage-100 dark:border-white/10 flex items-center justify-end gap-3">

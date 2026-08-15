@@ -171,6 +171,9 @@ export interface PastEventStory {
   photos: string[];
   tags: string[];
   isPublished?: boolean; // Controls visibility on public landing page
+  quoteText?: string;
+  quoteAuthor?: string;
+  quoteBrand?: string;
 }
 
 export interface AgencySettings {

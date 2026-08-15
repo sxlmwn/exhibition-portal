@@ -579,6 +579,9 @@ export const mapPastEventFromDB = (row: any): PastEventStory => {
   const narrativeExcerpt = row.narrative || row.narrativeExcerpt || 'A celebrated showcase featuring leading artisans, designers, and craft houses.';
   const tags = row.tags || ['Artisan Craft', 'Curated Runway', city];
   const isPublished = row.is_published !== undefined ? Boolean(row.is_published) : false;
+  const quoteText = row.quote_text || row.quoteText || '';
+  const quoteAuthor = row.quote_author || row.quoteAuthor || '';
+  const quoteBrand = row.quote_brand || row.quoteBrand || '';
 
   return {
     id,
@@ -595,6 +598,9 @@ export const mapPastEventFromDB = (row: any): PastEventStory => {
     photos,
     tags,
     isPublished,
+    quoteText,
+    quoteAuthor,
+    quoteBrand,
   };
 };
 
@@ -643,6 +649,16 @@ export const mapPastEventToDB = (story: Partial<PastEventStory>): any => {
 
   if (story.isPublished !== undefined) {
     payload.is_published = Boolean(story.isPublished);
+  }
+
+  if (story.quoteText !== undefined) {
+    payload.quote_text = story.quoteText;
+  }
+  if (story.quoteAuthor !== undefined) {
+    payload.quote_author = story.quoteAuthor;
+  }
+  if (story.quoteBrand !== undefined) {
+    payload.quote_brand = story.quoteBrand;
   }
 
   return payload;
