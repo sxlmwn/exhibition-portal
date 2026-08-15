@@ -50,7 +50,7 @@ export const ExhibitionCard: React.FC<ExhibitionCardProps> = ({
   return (
     <div 
       onClick={() => onViewDetails(exhibition)}
-      className="glass-card glass-card-hover rounded-3xl overflow-hidden flex flex-col justify-between cursor-pointer group border border-sage-200/80 dark:border-white/10 hover:-translate-y-2 hover:shadow-soft-xl transition-all duration-300"
+      className="glass-card rounded-2xl overflow-hidden flex flex-col justify-between cursor-pointer group border border-sage-200/80 dark:border-white/10 hover:border-sage-400 dark:hover:border-white/25 hover:shadow-soft-md transition-all duration-200"
     >
       <div>
         {/* Cover Image with Badges */}

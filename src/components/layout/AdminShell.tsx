@@ -16,8 +16,8 @@ const AdminShellContent: React.FC<{ children: React.ReactNode }> = ({ children }
   // Standalone Login Page without Shell chrome
   if (isLoginPage) {
     return (
-      <div className={`min-h-screen transition-colors duration-500 ${
-        theme === 'dark' ? 'dark bg-[#0B0C0E] text-[#F3F4F6]' : 'bg-[#F7F5F0] text-charcoal'
+      <div className={`min-h-screen transition-colors duration-200 ${
+        theme === 'dark' ? 'dark bg-[#0D0F13] text-[#F3F4F6]' : 'bg-[#F8F7F4] text-charcoal'
       }`}>
         {children}
       </div>
@@ -25,10 +25,10 @@ const AdminShellContent: React.FC<{ children: React.ReactNode }> = ({ children }
   }
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 flex relative overflow-x-hidden ${
+    <div className={`min-h-screen transition-colors duration-200 flex relative overflow-x-hidden ${
       theme === 'dark' 
-        ? 'dark bg-[#0B0C0E] text-[#F3F4F6]' 
-        : 'bg-[#F7F5F0] text-charcoal'
+        ? 'dark bg-[#0D0F13] text-[#F3F4F6]' 
+        : 'bg-[#F8F7F4] text-charcoal'
     }`}>
       
       {/* Subtle Ambient Background Photo */}
@@ -36,14 +36,14 @@ const AdminShellContent: React.FC<{ children: React.ReactNode }> = ({ children }
         <img
           src="/images/Exhibition Agency BG.png"
           alt=""
-          className={`w-full h-full object-cover object-center grayscale contrast-125 transition-opacity duration-500 ${
-            theme === 'dark' ? 'opacity-[0.04] mix-blend-screen' : 'opacity-[0.038] mix-blend-multiply'
+          className={`w-full h-full object-cover object-center grayscale contrast-125 transition-opacity duration-300 ${
+            theme === 'dark' ? 'opacity-[0.03] mix-blend-screen' : 'opacity-[0.025] mix-blend-multiply'
           }`}
         />
-        <div className={`absolute inset-0 transition-colors duration-500 ${
+        <div className={`absolute inset-0 transition-colors duration-300 ${
           theme === 'dark'
-            ? 'bg-gradient-to-b from-[#0B0C0E]/96 via-[#0E1013]/90 to-[#0B0C0E]/98'
-            : 'bg-gradient-to-b from-[#F7F5F0]/90 via-[#F7F5F0]/75 to-[#F7F5F0]/95'
+            ? 'bg-gradient-to-b from-[#0D0F13]/98 via-[#0D0F13]/92 to-[#0D0F13]/98'
+            : 'bg-gradient-to-b from-[#F8F7F4]/94 via-[#F8F7F4]/85 to-[#F8F7F4]/96'
         }`} />
       </div>
 

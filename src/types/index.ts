@@ -41,6 +41,7 @@ export interface Exhibition {
   totalExpensesLogged: number;
   description: string;
   daysLeft?: number;
+  stallRegistrationDeadline?: string; // ISO date string (YYYY-MM-DD)
 }
 
 export type StallTier = 'small' | 'medium' | 'premium' | 'corner';
@@ -75,6 +76,8 @@ export interface VendorRequest {
   stallsWanted: number;
   stallTierPreference: StallTier;
   preferredStallCode?: string;
+  requestedStallId?: string;
+  requestedStallCode?: string;
   allocatedStallCode?: string;
   productCategory: string;
   budgetRange: string;
@@ -83,6 +86,7 @@ export interface VendorRequest {
   status: RequestStatus;
   reviewedBy?: string;
   reviewedAt?: string;
+  createdAt?: string;
 }
 
 export type ContactStatus = 'booked' | 'enquired' | 'waitlisted' | 'past-client' | 'referral';
@@ -166,6 +170,7 @@ export interface PastEventStory {
   coverImage: string;
   photos: string[];
   tags: string[];
+  isPublished?: boolean; // Controls visibility on public landing page
 }
 
 export interface AgencySettings {

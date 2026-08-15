@@ -371,6 +371,21 @@ export const INITIAL_CRM_CONTACTS: CRMContact[] = [
     totalSpend: 310000,
     lastActivityDate: '2026-02-20',
     notes: 'Referred Cuir Leather Goods. Eligible for 10% credit discount.'
+  },
+  {
+    id: 'cnt-7',
+    name: 'Amber Malik',
+    businessName: 'Terra Clayworks ➔ Amber Jewelry',
+    phone: '+92 301 555 7890',
+    email: 'amber@amberjewelry.pk',
+    category: 'Fine Jewelry',
+    tags: ['Referral', '10% Discount Eligible', 'Referred: Amber Jewelry', 'Status: pending'],
+    exhibitionIds: ['exh-1'],
+    status: 'referral',
+    source: 'referral',
+    totalSpend: 0,
+    lastActivityDate: '2026-03-10',
+    notes: '[Referral Program — 10% Mutual Credit]\n• Referring Brand: Terra Clayworks (+92 300 0000000)\n• Referred Brand: Amber Jewelry — Contact: Amber Malik (+92 301 555 7890)\n• Linked Exhibition: Spring Artisan Showcase 2026\n• Status: pending'
   }
 ];
 

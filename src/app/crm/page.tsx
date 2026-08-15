@@ -18,13 +18,16 @@ import {
   Tag,
   Send,
   HelpCircle,
-  ExternalLink
+  ExternalLink,
+  Gift,
+  Mail
 } from 'lucide-react';
 import { useAdmin } from '../../context/AdminContext';
 import { CRMContact, ContactStatus } from '../../types';
 import { ContactDrawer } from '../../components/crm/ContactDrawer';
 import { ContactFormModal } from '../../components/crm/ContactFormModal';
 import { BulkWhatsAppModal } from '../../components/crm/BulkWhatsAppModal';
+import { BulkEmailModal } from '../../components/crm/BulkEmailModal';
 import { buildWhatsAppUrl, formatWhatsAppNumber } from '../../lib/whatsapp';
 
 export default function CRMPage() {
@@ -33,6 +36,7 @@ export default function CRMPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedExhibitionId, setSelectedExhibitionId] = useState('All');
   const [selectedStatus, setSelectedStatus] = useState('All');
+  const [selectedSource, setSelectedSource] = useState('All');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedContactIds, setSelectedContactIds] = useState<string[]>([]);
 
@@ -46,6 +50,7 @@ export default function CRMPage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [contactToEdit, setContactToEdit] = useState<CRMContact | null>(null);
   const [isBulkWAOpen, setIsBulkWAOpen] = useState(false);
+  const [isBulkEmailOpen, setIsBulkEmailOpen] = useState(false);
 
   const categories = [
     'All',
@@ -56,7 +61,8 @@ export default function CRMPage() {
     'Textile & Apparel',
     'Studio Ceramics',
     'Beauty & Skincare',
-    'Leather & Accessories'
+    'Leather & Accessories',
+    'Referral Partner'
   ];
 
   const statuses: { label: string; value: string }[] = [
@@ -65,7 +71,15 @@ export default function CRMPage() {
     { label: 'Enquiry / Lead', value: 'enquired' },
     { label: 'Waitlisted', value: 'waitlisted' },
     { label: 'Past Client', value: 'past-client' },
-    { label: 'Referral Partner', value: 'referral' }
+    { label: 'Referral Partner (10% Credit)', value: 'referral' }
+  ];
+
+  const sources: { label: string; value: string }[] = [
+    { label: 'All Sources', value: 'All' },
+    { label: 'Referral Program (10% Credit)', value: 'referral' },
+    { label: 'Exhibitor Application', value: 'Exhibitor Application' },
+    { label: 'Website Lead', value: 'Website Lead' },
+    { label: 'Direct / Manual Entry', value: 'Direct' }
   ];
 
   const filteredContacts = contacts.filter((c) => {
@@ -75,12 +89,18 @@ export default function CRMPage() {
                           (c.businessName || '').toLowerCase().includes(q) ||
                           (c.email || '').toLowerCase().includes(q) ||
                           (c.phone || '').includes(q) ||
-                          (c.source || '').toLowerCase().includes(q);
+                          (c.source || '').toLowerCase().includes(q) ||
+                          (c.tags || []).some(t => t.toLowerCase().includes(q));
     const matchesExh = selectedExhibitionId === 'All' || c.exhibitionId === selectedExhibitionId;
     const matchesStatus = selectedStatus === 'All' || c.status === selectedStatus;
+    const matchesSource = selectedSource === 'All' ||
+                          (c.source || '').toLowerCase().includes(selectedSource.toLowerCase()) ||
+                          (selectedSource === 'referral' && (c.status === 'referral' || (c.source || '').toLowerCase() === 'referral' || (c.tags || []).some(t => t.toLowerCase().includes('referral'))));
     const matchesCategory = selectedCategory === 'All' || (c.category || '').toLowerCase().includes(selectedCategory.toLowerCase());
-    return matchesSearch && matchesExh && matchesStatus && matchesCategory;
+    return matchesSearch && matchesExh && matchesStatus && matchesSource && matchesCategory;
   });
+
+  const referralCount = contacts.filter(c => c.status === 'referral' || (c.source || '').toLowerCase() === 'referral').length;
 
   const isAllSelected = selectedContactIds.length === filteredContacts.length && filteredContacts.length > 0;
 
@@ -130,7 +150,7 @@ export default function CRMPage() {
       return;
     }
 
-    const headers = ['Full Name', 'Phone', 'Email', 'Category', 'Status', 'Source', 'Linked Exhibition'];
+    const headers = ['Full Name', 'Phone', 'Email', 'Category', 'Status', 'Source', 'Linked Exhibition', 'Notes'];
     const rows = targetList.map(c => [
       `"${c.fullName || c.name || ''}"`,
       `"${c.phone || ''}"`,
@@ -138,7 +158,8 @@ export default function CRMPage() {
       `"${c.category || ''}"`,
       `"${c.status || ''}"`,
       `"${c.source || ''}"`,
-      `"${c.exhibitionName || ''}"`
+      `"${c.exhibitionName || ''}"`,
+      `"${(c.notes || '').replace(/"/g, '""')}"`
     ]);
 
     const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map(e => e.join(','))].join('\n');
@@ -152,7 +173,7 @@ export default function CRMPage() {
   };
 
   const handleDelete = (contact: CRMContact) => {
-    if (confirm(`Are you sure you want to delete "${contact.fullName}" from the CRM directory?`)) {
+    if (confirm(`Are you sure you want to delete "${contact.fullName || contact.name}" from the CRM directory?`)) {
       deleteContact(contact.id);
       setSelectedContactIds(prev => prev.filter(id => id !== contact.id));
     }
@@ -164,7 +185,7 @@ export default function CRMPage() {
       case 'enquired': return 'bg-amber-100 dark:bg-amber-900/30 text-amber-900 dark:text-amber-300 border-amber-300 dark:border-amber-700/40';
       case 'waitlisted': return 'bg-purple-100 dark:bg-purple-900/30 text-purple-900 dark:text-purple-300 border-purple-300 dark:border-purple-700/40';
       case 'past-client': return 'bg-cream-200 dark:bg-white/10 text-charcoal dark:text-white/80 border-sage-300 dark:border-white/15';
-      case 'referral': return 'bg-blue-100 dark:bg-blue-900/30 text-blue-900 dark:text-blue-300 border-blue-300 dark:border-blue-700/40';
+      case 'referral': return 'bg-sage-100 dark:bg-sage-900/40 text-sage-900 dark:text-sage-200 border-sage-300 dark:border-sage-700/50';
     }
   };
 
@@ -182,16 +203,18 @@ export default function CRMPage() {
           </h2>
         </div>
 
-        <button
-          onClick={() => {
-            setContactToEdit(null);
-            setIsFormOpen(true);
-          }}
-          className="btn-primary glass-rise-btn px-6 py-3 text-xs font-bold uppercase tracking-wider flex items-center gap-2 self-start sm:self-auto shadow-soft"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Add Contact</span>
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => {
+              setContactToEdit(null);
+              setIsFormOpen(true);
+            }}
+            className="btn-primary glass-rise-btn px-6 py-3 text-xs font-bold uppercase tracking-wider flex items-center gap-2 self-start sm:self-auto shadow-soft"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Add Contact</span>
+          </button>
+        </div>
       </div>
 
       {/* Shared WhatsApp Template Banner */}
@@ -215,6 +238,66 @@ export default function CRMPage() {
         />
       </div>
 
+      {/* Quick Filter Pills */}
+      <div className="flex flex-wrap items-center gap-2">
+        <button
+          onClick={() => {
+            setSelectedStatus('All');
+            setSelectedSource('All');
+          }}
+          className={`px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+            selectedStatus === 'All' && selectedSource === 'All'
+              ? 'bg-sage-800 text-cream dark:bg-sage-600 dark:text-white shadow-xs'
+              : 'bg-white/80 dark:bg-white/5 text-charcoal-muted dark:text-white/70 hover:bg-cream-100 dark:hover:bg-white/10 border border-sage-200 dark:border-white/10'
+          }`}
+        >
+          All Contacts ({contacts.length})
+        </button>
+
+        <button
+          onClick={() => {
+            setSelectedSource('referral');
+            setSelectedStatus('All');
+          }}
+          className={`px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 ${
+            selectedSource === 'referral'
+              ? 'bg-sage-800 text-cream dark:bg-sage-600 dark:text-white shadow-xs'
+              : 'bg-white/80 dark:bg-white/5 text-sage-800 dark:text-sage-300 hover:bg-sage-50 dark:hover:bg-white/10 border border-sage-200 dark:border-white/10'
+          }`}
+        >
+          <Gift className="w-3.5 h-3.5" />
+          <span>Source: Referral Program ({referralCount})</span>
+        </button>
+
+        <button
+          onClick={() => {
+            setSelectedStatus('booked');
+            setSelectedSource('All');
+          }}
+          className={`px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+            selectedStatus === 'booked' && selectedSource === 'All'
+              ? 'bg-emerald-800 text-white shadow-xs'
+              : 'bg-white/80 dark:bg-white/5 text-charcoal-muted dark:text-white/70 hover:bg-cream-100 dark:hover:bg-white/10 border border-sage-200 dark:border-white/10'
+          }`}
+        >
+          Booked ({contacts.filter(c => c.status === 'booked').length})
+        </button>
+
+        <button
+          onClick={() => {
+            setSelectedStatus('waitlisted');
+            setSelectedSource('All');
+          }}
+          className={`px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-all ${
+            selectedStatus === 'waitlisted' && selectedSource === 'All'
+              ? 'bg-purple-800 text-white shadow-xs'
+              : 'bg-white/80 dark:bg-white/5 text-charcoal-muted dark:text-white/70 hover:bg-cream-100 dark:hover:bg-white/10 border border-sage-200 dark:border-white/10'
+          }`}
+        >
+          Waitlisted ({contacts.filter(c => c.status === 'waitlisted').length})
+        </button>
+      </div>
+
       {/* Filter Bar, Search & Bulk Actions */}
       <div className="glass-card p-4 sm:p-5 rounded-2xl flex flex-col lg:flex-row items-center justify-between gap-4 border border-sage-200/80 dark:border-white/10">
         
@@ -225,7 +308,7 @@ export default function CRMPage() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search name, phone, email..."
+            placeholder="Search name, brand, phone, referral tag..."
             className="w-full pl-11 pr-4 py-2.5 rounded-lg border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white bg-white/80 dark:bg-white/5 outline-none focus:border-sage-500 font-medium"
           />
         </div>
@@ -233,6 +316,19 @@ export default function CRMPage() {
         {/* Filters and Actions */}
         <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-start lg:justify-end">
           
+          {/* Source Filter */}
+          <select
+            value={selectedSource}
+            onChange={(e) => setSelectedSource(e.target.value)}
+            className="px-4 py-2.5 rounded-lg border border-sage-200 dark:border-white/10 text-xs text-charcoal dark:text-white bg-white/80 dark:bg-[#1A1D24] outline-none focus:border-sage-500 font-bold glass-select cursor-pointer"
+          >
+            {sources.map((s) => (
+              <option key={s.value} value={s.value}>
+                {s.label}
+              </option>
+            ))}
+          </select>
+
           {/* Exhibition Filter */}
           <select
             value={selectedExhibitionId}
@@ -283,6 +379,16 @@ export default function CRMPage() {
             <span>Send WhatsApp ({selectedContactIds.length > 0 ? selectedContactIds.length : filteredContacts.length})</span>
           </button>
 
+          {/* Bulk Email Action */}
+          <button
+            onClick={() => setIsBulkEmailOpen(true)}
+            className="px-4 py-2.5 rounded-lg bg-sage-800 dark:bg-sage-700 hover:bg-sage-900 text-cream text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs transition-all glass-rise-btn"
+            title="Compose and send bulk email blast via Gmail SMTP"
+          >
+            <Mail className="w-3.5 h-3.5" />
+            <span>Send Email ({activeDispatchList.filter(c => c.email && c.email.includes('@')).length})</span>
+          </button>
+
           {/* Export CSV Action */}
           <button
             onClick={handleExportCSV}
@@ -317,9 +423,9 @@ export default function CRMPage() {
                 </th>
                 <th className="py-4 px-4">Contact / Brand</th>
                 <th className="py-4 px-4">Category</th>
-                <th className="py-4 px-4">Event</th>
+                <th className="py-4 px-4">Event / Program</th>
                 <th className="py-4 px-4">Phone / WhatsApp</th>
-                <th className="py-4 px-4">Status</th>
+                <th className="py-4 px-4">Status & Source</th>
                 <th className="py-4 px-5 text-right">Actions</th>
               </tr>
             </thead>
@@ -335,7 +441,7 @@ export default function CRMPage() {
               ) : (
                 filteredContacts.map((contact) => {
                   const isSelected = selectedContactIds.includes(contact.id);
-                  const cleanPhone = formatWhatsAppNumber(contact.phone);
+                  const isReferral = contact.status === 'referral' || (contact.source || '').toLowerCase() === 'referral';
 
                   return (
                     <tr
@@ -366,8 +472,14 @@ export default function CRMPage() {
                         </span>
                         <span className="text-charcoal-muted dark:text-white/60 text-[11px] font-normal block">
                           {contact.businessName && contact.businessName !== contact.fullName ? contact.businessName : 'Exhibitor Contact'}
-                          {contact.source && ` • via ${contact.source}`}
+                          {contact.source && ` • source: ${contact.source}`}
                         </span>
+                        {isReferral && (
+                          <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider text-sage-800 dark:text-sage-300 bg-sage-100/90 dark:bg-sage-900/40 px-2 py-0.5 rounded border border-sage-300/80 dark:border-sage-700/50 mt-1">
+                            <Sparkles className="w-3 h-3 text-sage-700 dark:text-sage-400" />
+                            10% Credit Eligible
+                          </span>
+                        )}
                       </td>
 
                       {/* Category */}
@@ -381,7 +493,7 @@ export default function CRMPage() {
                           {contact.exhibitionName || 'General / All Exhibitions'}
                         </span>
                         <span className="text-[10px] text-charcoal-muted dark:text-white/50 font-light">
-                          ID #{contact.exhibitionId || '—'}
+                          {contact.exhibitionId ? `ID #${contact.exhibitionId}` : 'Program Wide'}
                         </span>
                       </td>
 
@@ -402,7 +514,7 @@ export default function CRMPage() {
                         )}
                       </td>
 
-                      {/* Status */}
+                      {/* Status & Tag */}
                       <td className="py-4 px-4">
                         <span className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${getStatusBadge(contact.status)}`}>
                           {contact.status}
@@ -473,6 +585,14 @@ export default function CRMPage() {
           contacts={activeDispatchList}
           initialTemplate={waTemplate}
           onClose={() => setIsBulkWAOpen(false)}
+        />
+      )}
+
+      {/* Bulk Email Modal */}
+      {isBulkEmailOpen && (
+        <BulkEmailModal
+          contacts={activeDispatchList}
+          onClose={() => setIsBulkEmailOpen(false)}
         />
       )}
 

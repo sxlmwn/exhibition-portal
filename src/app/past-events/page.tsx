@@ -11,7 +11,9 @@ import {
   Edit3, 
   Trash2, 
   CalendarDays,
-  Award
+  Award,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 import { useAdmin } from '../../context/AdminContext';
 import { PastEventStory } from '../../types';
@@ -82,6 +84,23 @@ export default function PastEventsPage() {
                   </span>
                   <span className="bg-charcoal/70 backdrop-blur-md text-white text-[11px] font-medium px-3 py-1 rounded-full">
                     {event.city}
+                  </span>
+                  <span className={`flex items-center gap-1 text-[11px] font-medium px-3 py-1 rounded-full backdrop-blur-md ${
+                    event.isPublished 
+                      ? 'bg-emerald-500/80 text-white' 
+                      : 'bg-slate-500/60 text-white'
+                  }`}>
+                    {event.isPublished ? (
+                      <>
+                        <Eye className="w-3 h-3" />
+                        <span>Published</span>
+                      </>
+                    ) : (
+                      <>
+                        <EyeOff className="w-3 h-3" />
+                        <span>Draft</span>
+                      </>
+                    )}
                   </span>
                 </div>
 

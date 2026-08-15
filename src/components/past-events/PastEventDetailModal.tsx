@@ -12,7 +12,9 @@ import {
   Edit3, 
   Sparkles,
   Store,
-  Award
+  Award,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 import { PastEventStory } from '../../types';
 import { useAdmin } from '../../context/AdminContext';
@@ -64,6 +66,23 @@ export const PastEventDetailModal: React.FC<PastEventDetailModalProps> = ({
               </span>
               <span className="bg-white/20 backdrop-blur-md text-white text-[11px] font-medium tracking-wider px-3 py-1 rounded-full">
                 {event.city} &bull; {event.dateRange}
+              </span>
+              <span className={`flex items-center gap-1 text-[11px] font-medium tracking-wider px-3 py-1 rounded-full backdrop-blur-md ${
+                event.isPublished 
+                  ? 'bg-emerald-500/80 text-white' 
+                  : 'bg-slate-500/60 text-white'
+              }`}>
+                {event.isPublished ? (
+                  <>
+                    <Eye className="w-3 h-3" />
+                    <span>Published</span>
+                  </>
+                ) : (
+                  <>
+                    <EyeOff className="w-3 h-3" />
+                    <span>Draft</span>
+                  </>
+                )}
               </span>
             </div>
             <div className="inline-block dark:bg-white/10 dark:backdrop-blur-xl dark:border dark:border-white/15 rounded-2xl px-4 py-2.5 -ml-4 dark:shadow-lg">

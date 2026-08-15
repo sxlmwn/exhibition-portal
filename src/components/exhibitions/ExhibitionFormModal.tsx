@@ -23,6 +23,7 @@ const exhibitionSchema = z.object({
   venue: z.string().min(3, 'Venue name is required'),
   startDate: z.string().min(1, 'Start date is required'),
   endDate: z.string().min(1, 'End date is required'),
+  stallRegistrationDeadline: z.string().optional(),
   category: z.string().min(2, 'Category is required'),
   totalStallCapacity: z.number().min(10, 'Capacity must be at least 10 stalls').max(500, 'Capacity cannot exceed 500'),
   budgetAllocated: z.number().min(100000, 'Budget must be at least Rs. 100,000'),
@@ -35,6 +36,12 @@ const exhibitionSchema = z.object({
 }, {
   message: 'End date cannot be earlier than start date',
   path: ['endDate'],
+}).refine((data) => {
+  if (!data.stallRegistrationDeadline || !data.startDate) return true;
+  return new Date(data.stallRegistrationDeadline) <= new Date(data.startDate);
+}, {
+  message: 'Registration deadline must be on or before the start date',
+  path: ['stallRegistrationDeadline'],
 });
 
 type ExhibitionFormData = z.infer<typeof exhibitionSchema>;
@@ -95,6 +102,7 @@ export const ExhibitionFormModal: React.FC<ExhibitionFormModalProps> = ({
         venue: exhibitionToEdit.venue,
         startDate: exhibitionToEdit.startDate,
         endDate: exhibitionToEdit.endDate,
+        stallRegistrationDeadline: exhibitionToEdit.stallRegistrationDeadline || '',
         category: exhibitionToEdit.category,
         totalStallCapacity: exhibitionToEdit.totalStallCapacity,
         budgetAllocated: exhibitionToEdit.budgetAllocated,
@@ -355,6 +363,22 @@ export const ExhibitionFormModal: React.FC<ExhibitionFormModalProps> = ({
               />
               {errors.endDate && <p className="text-rose-600 text-xs mt-1">{errors.endDate.message}</p>}
             </div>
+          </div>
+
+          {/* Stall Registration Deadline */}
+          <div>
+            <label className="block text-sm font-semibold text-charcoal dark:text-white mb-1.5">
+              Stall Registration Deadline
+            </label>
+            <input
+              type="date"
+              {...register('stallRegistrationDeadline')}
+              className="w-full px-4 py-3 rounded-2xl border border-sage-200 dark:border-white/10 focus:border-sage-500 focus:ring-2 focus:ring-sage-200 outline-none text-sm text-charcoal dark:text-white bg-cream-50/50 dark:bg-white/5"
+            />
+            <p className="text-xs text-charcoal-muted dark:text-white/50 mt-1">
+              Deadline after which public stall booking closes. Admin allocation window runs for 3 days after this date.
+            </p>
+            {errors.stallRegistrationDeadline && <p className="text-rose-600 text-xs mt-1">{errors.stallRegistrationDeadline.message}</p>}
           </div>
 
           {/* Description */}

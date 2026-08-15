@@ -22,6 +22,9 @@ import { VendorRequest, RequestStatus } from '../../types';
 import { useAdmin } from '../../context/AdminContext';
 import { ModalPortal } from '../common/ModalPortal';
 
+import { isFollowUpNeeded, getPendingDays, FOLLOW_UP_THRESHOLD_DAYS } from '../../lib/followUp';
+import { AlternativeStallsModal } from './AlternativeStallsModal';
+
 interface RequestDetailModalProps {
   request: VendorRequest | null;
   onClose: () => void;
@@ -35,12 +38,26 @@ export const RequestDetailModal: React.FC<RequestDetailModalProps> = ({
   onOpenAction,
   onAllocateStallClick
 }) => {
-  const { updateRequestStatus, exhibitions, currentUser } = useAdmin();
+  const { updateRequestStatus, exhibitions, stalls, allocateStall, currentUser } = useAdmin();
   const isOwner = currentUser.permissions.canApproveRequests || currentUser.role === 'owner';
+  const [isAlternativesOpen, setIsAlternativesOpen] = React.useState(false);
 
   if (!request) return null;
 
   const targetExhibition = exhibitions.find(e => e.id === request.exhibitionId);
+
+  // Look up specifically requested stall if applicable
+  const requestedStall = stalls.find(
+    s => (request.requestedStallId && s.id === request.requestedStallId) ||
+         (request.preferredStallCode && s.code === request.preferredStallCode)
+  );
+  const isRequestedStallAvailable = requestedStall ? requestedStall.status === 'available' : false;
+
+  const handleAssignRequestedStall = () => {
+    if (!requestedStall || !isRequestedStallAvailable) return;
+    allocateStall(requestedStall.id, request.id, request.vendorName, request.brandName);
+    updateRequestStatus(request.id, 'approved');
+  };
 
   const handleStatusChange = (status: RequestStatus) => {
     if (!isOwner) return;
@@ -145,6 +162,80 @@ export const RequestDetailModal: React.FC<RequestDetailModalProps> = ({
               </span>
             )}
           </div>
+
+          {/* Specific Requested Stall Decision Banner */}
+          {requestedStall && !request.allocatedStallCode && (
+            <div className={`p-4 rounded-3xl border flex flex-col sm:flex-row sm:items-center justify-between gap-4 ${
+              isRequestedStallAvailable
+                ? 'bg-emerald-50/80 dark:bg-emerald-950/30 border-emerald-300 dark:border-emerald-700/60'
+                : 'bg-amber-50/80 dark:bg-amber-950/30 border-amber-300 dark:border-amber-700/60'
+            }`}>
+              <div className="flex items-start gap-3">
+                <Store className={`w-5 h-5 shrink-0 mt-0.5 ${
+                  isRequestedStallAvailable ? 'text-emerald-700 dark:text-emerald-400' : 'text-amber-700 dark:text-amber-400'
+                }`} />
+                <div>
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted dark:text-white/60">
+                      Applicant Specifically Requested:
+                    </span>
+                    <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full border ${
+                      isRequestedStallAvailable
+                        ? 'bg-emerald-100 dark:bg-emerald-900/60 text-emerald-900 dark:text-emerald-300 border-emerald-300'
+                        : 'bg-rose-100 dark:bg-rose-900/60 text-rose-900 dark:text-rose-300 border-rose-300'
+                    }`}>
+                      {isRequestedStallAvailable ? 'Available' : 'Already Booked'}
+                    </span>
+                  </div>
+                  <h4 className="font-sans text-base font-bold text-charcoal dark:text-white">
+                    Stall {requestedStall.code} ({requestedStall.tierName} &bull; {requestedStall.dimensions} &bull; Rs. {requestedStall.price.toLocaleString()})
+                  </h4>
+                  <p className="text-xs text-charcoal-muted dark:text-white/60 font-light mt-0.5">
+                    {isRequestedStallAvailable
+                      ? 'This exact stall is free and ready for 1-click confirmation.'
+                      : 'This stall is already occupied. Propose 1-3 available alternatives via WhatsApp or Email.'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="shrink-0 flex items-center gap-2">
+                {isRequestedStallAvailable ? (
+                  isOwner && (
+                    <button
+                      onClick={handleAssignRequestedStall}
+                      className="btn-primary px-4 py-2 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm"
+                    >
+                      <CheckCircle2 className="w-3.5 h-3.5" />
+                      <span>Assign Stall {requestedStall.code}</span>
+                    </button>
+                  )
+                ) : (
+                  <button
+                    onClick={() => setIsAlternativesOpen(true)}
+                    className="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
+                  >
+                    <Store className="w-3.5 h-3.5" />
+                    <span>Send Alternatives</span>
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Follow-up Reminder Flag */}
+          {isFollowUpNeeded(request) && (
+            <div className="p-4 rounded-3xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 flex items-start gap-3 text-xs text-amber-900 dark:text-amber-300">
+              <Clock className="w-4 h-4 text-amber-700 dark:text-amber-400 shrink-0 mt-0.5" />
+              <div>
+                <span className="font-bold uppercase tracking-wider block text-[11px]">
+                  Staff Follow-up Reminder ({getPendingDays(request)} Days Pending)
+                </span>
+                <p className="mt-0.5 text-amber-800 dark:text-amber-300/80 leading-relaxed font-medium">
+                  This enquiry was submitted on <strong>{request.submittedDate}</strong> and has remained unconfirmed for over {FOLLOW_UP_THRESHOLD_DAYS} days. Reach out to the vendor via WhatsApp to assist them in locking their stall.
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* Details Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -300,6 +391,14 @@ export const RequestDetailModal: React.FC<RequestDetailModalProps> = ({
 
         </div>
       </div>
+
+      {isAlternativesOpen && (
+        <AlternativeStallsModal
+          request={request}
+          exhibition={targetExhibition}
+          onClose={() => setIsAlternativesOpen(false)}
+        />
+      )}
     </ModalPortal>
   );
 };

@@ -5,307 +5,250 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", system-ui, -apple-system, sans-serif;
-    color: #111411;
-    background-color: #F7F5F0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #141714;
+    background-color: #F8F7F4;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", system-ui, -apple-system, sans-serif;
-    color: #111411;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #141714;
+    background-color: #F8F7F4;
+    min-height: 100vh;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", system-ui, -apple-system, sans-serif;
-    font-weight: 800;
-    letter-spacing: -0.025em;
-    color: #111411;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #141714;
   }
 
   .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
     color: #FFFFFF !important;
   }
 
-  .font-serif {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", system-ui, -apple-system, sans-serif !important;
+  /* Custom scrollbars */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(143, 166, 142, 0.35);
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(143, 166, 142, 0.6);
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
   }
 }
 
 @layer utilities {
   /* =========================================================================
-     HIGH-CONTRAST TYPOGRAPHY SYSTEM (Light & Dark)
+     CLEAN TYPOGRAPHY SYSTEM
      ========================================================================= */
   .eyebrow-label {
     font-size: 0.6875rem;
     line-height: 1rem;
-    font-weight: 800;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: #243524;
+    color: #2E452E;
     display: block;
     margin-bottom: 0.25rem;
   }
 
   .dark .eyebrow-label {
-    color: #A4C2A3 !important;
+    color: #A3C5A2 !important;
   }
 
   .text-charcoal {
-    color: #111411;
+    color: #141714;
   }
 
   .text-charcoal-muted {
-    color: #4A544A;
+    color: #556055;
   }
 
   .text-charcoal-light {
-    color: #2C352C;
+    color: #323A32;
   }
 
   .text-sage-800 {
-    color: #243524;
+    color: #2E452E;
   }
 
   .text-sage-900 {
-    color: #142014;
+    color: #182818;
   }
 
   .text-sage-deep {
-    color: #243524;
+    color: #243824;
   }
 
   /* =========================================================================
-     UNIVERSAL GLASSY RISE ON HOVER SYSTEM (Light & Dark)
+     CLEAN CARDS & SURFACES (Zero Jitter, Elegant Depth)
      ========================================================================= */
-
-  /* Glass Card Base & Hover Elevation */
   .glass-card {
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(143, 166, 142, 0.26);
-    box-shadow: 0 4px 24px -2px rgba(74, 93, 74, 0.06), 0 2px 6px -1px rgba(74, 93, 74, 0.03);
-    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.22s ease;
-    -webkit-mask-image: -webkit-radial-gradient(circle, white 100%, black 100%);
-    mask-image: radial-gradient(circle, white 100%, black 100%);
+    background-color: #FFFFFF;
+    border: 1px solid rgba(143, 166, 142, 0.28);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 4px 14px -2px rgba(74, 93, 74, 0.05);
+    border-radius: 1.25rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
   }
 
-  .glass-card-hover,
-  .glass-rise-card {
-    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.22s ease, background-color 0.22s ease;
-    will-change: transform, box-shadow;
+  .glass-card:hover {
+    border-color: rgba(143, 166, 142, 0.45);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04), 0 8px 20px -2px rgba(74, 93, 74, 0.08);
   }
 
-  .glass-card-hover:hover,
-  .glass-rise-card:hover {
-    transform: translateY(-3px) !important;
-    background-color: rgba(255, 255, 255, 0.98) !important;
-    box-shadow: 0 16px 36px -6px rgba(74, 93, 74, 0.16), 0 6px 14px -2px rgba(74, 93, 74, 0.08) !important;
-    border-color: rgba(143, 166, 142, 0.52) !important;
-    position: relative;
-    z-index: 5;
-  }
-
-  /* Stat & KPI Tiles Hover Rise */
   .stat-tile,
   .kpi-card {
-    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.22s ease, background-color 0.22s ease;
-    will-change: transform, box-shadow;
+    background-color: #FFFFFF;
+    border: 1px solid rgba(143, 166, 142, 0.28);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 0 4px 14px -2px rgba(74, 93, 74, 0.05);
+    border-radius: 1.25rem;
+    transition: all 0.2s ease;
   }
 
   .stat-tile:hover,
   .kpi-card:hover {
-    transform: translateY(-3px) !important;
-    background-color: #FFFFFF !important;
-    box-shadow: 0 12px 28px -4px rgba(74, 93, 74, 0.15), 0 4px 10px -2px rgba(74, 93, 74, 0.08) !important;
-    border-color: rgba(143, 166, 142, 0.55) !important;
-    position: relative;
-    z-index: 10;
+    border-color: rgba(143, 166, 142, 0.5);
+    box-shadow: 0 4px 16px -2px rgba(74, 93, 74, 0.1);
   }
 
-  /* Frosted Sidebar & Navigation */
+  /* Sidebar & Topbar */
   .glass-sidebar {
-    background: rgba(247, 245, 240, 0.96);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border-right: 1px solid rgba(143, 166, 142, 0.28);
+    background-color: #F3EFE6;
+    border-right: 1px solid rgba(143, 166, 142, 0.3);
   }
 
   .glass-topbar {
-    background: rgba(247, 245, 240, 0.9);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(143, 166, 142, 0.22);
+    background-color: rgba(248, 247, 244, 0.94);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(143, 166, 142, 0.25);
   }
 
-  /* Universal Buttons Rise on Hover */
+  /* =========================================================================
+     BUTTONS & ACTIONS
+     ========================================================================= */
   .btn-primary {
-    background-color: #243524;
-    color: #F7F5F0;
-    font-weight: 800;
+    background-color: #243824;
+    color: #FFFFFF;
+    font-weight: 700;
     letter-spacing: -0.01em;
-    border-radius: 0.5rem;
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease;
-    will-change: transform, box-shadow;
+    border-radius: 0.625rem;
+    transition: all 0.18s ease;
   }
 
   .btn-primary:hover {
-    background-color: #172417;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 24px -2px rgba(36, 53, 36, 0.4), 0 4px 8px -2px rgba(36, 53, 36, 0.2);
+    background-color: #172817;
+    box-shadow: 0 4px 12px rgba(36, 56, 36, 0.25);
   }
 
   .btn-primary:active {
-    transform: translateY(0);
+    transform: scale(0.98);
   }
 
   .btn-secondary {
-    background-color: rgba(255, 255, 255, 0.95);
-    color: #111411;
-    font-weight: 800;
+    background-color: #FFFFFF;
+    color: #141714;
+    font-weight: 700;
     letter-spacing: -0.01em;
-    border-radius: 0.5rem;
+    border-radius: 0.625rem;
     border: 1px solid rgba(143, 166, 142, 0.4);
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease;
-    will-change: transform, box-shadow;
+    transition: all 0.18s ease;
   }
 
   .btn-secondary:hover {
-    background-color: #FFFFFF;
+    background-color: #F7F9F7;
     border-color: #5C755B;
-    transform: translateY(-2px);
-    box-shadow: 0 10px 24px -2px rgba(74, 93, 74, 0.16), 0 4px 8px -2px rgba(74, 93, 74, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   }
 
   .btn-secondary:active {
-    transform: translateY(0);
+    transform: scale(0.98);
   }
 
-  /* Glassy Rise on Hover for Table Rows and List Items */
-  .glass-rise-row {
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease;
-    will-change: transform, box-shadow;
-  }
-
-  .glass-rise-row:hover {
-    transform: translateY(-2px);
-    background-color: rgba(255, 255, 255, 0.98) !important;
-    box-shadow: 0 10px 24px -4px rgba(74, 93, 74, 0.14), 0 4px 8px -2px rgba(74, 93, 74, 0.06);
-    z-index: 10;
-    position: relative;
-  }
-
-  /* Glassy Button & Action Pills */
   .glass-rise-btn {
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease;
-    will-change: transform, box-shadow;
-  }
-
-  .glass-rise-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px -2px rgba(74, 93, 74, 0.22), 0 3px 6px -1px rgba(74, 93, 74, 0.1);
-  }
-
-  .glass-rise-btn:active {
-    transform: translateY(0);
-  }
-
-  /* Selects & Dropdown Inputs Hover Rise */
-  .glass-select,
-  select {
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, background-color 0.2s ease;
+    transition: all 0.18s ease;
     cursor: pointer;
   }
 
-  .glass-select:hover,
-  select:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px -3px rgba(74, 93, 74, 0.16);
-    border-color: #5C755B !important;
+  .glass-rise-btn:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   }
 
-  .glass-select:focus,
-  select:focus {
-    border-color: #243524 !important;
-    box-shadow: 0 0 0 3px rgba(143, 166, 142, 0.25) !important;
+  .glass-rise-btn:active {
+    transform: scale(0.98);
   }
 
-  /* Input fields glassy hover */
+  /* =========================================================================
+     FORM INPUTS & SELECTS (Stable, Zero-Jitter)
+     ========================================================================= */
   .glass-input,
+  .glass-select,
   input[type="text"],
   input[type="email"],
   input[type="number"],
   input[type="date"],
   input[type="password"],
+  select,
   textarea {
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
-  }
-
-  .glass-input:hover,
-  input[type="text"]:hover,
-  input[type="email"]:hover,
-  input[type="number"]:hover,
-  input[type="date"]:hover,
-  input[type="password"]:hover,
-  textarea:hover {
-    border-color: #5C755B;
-    box-shadow: 0 4px 12px -2px rgba(74, 93, 74, 0.1);
+    background-color: #FFFFFF;
+    border: 1px solid rgba(143, 166, 142, 0.4);
+    color: #141714;
+    border-radius: 0.625rem;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
   }
 
   .glass-input:focus,
-  input[type="text"]:focus,
-  input[type="email"]:focus,
-  input[type="number"]:focus,
-  input[type="date"]:focus,
-  input[type="password"]:focus,
+  .glass-select:focus,
+  input:focus,
+  select:focus,
   textarea:focus {
-    border-color: #243524;
-    box-shadow: 0 0 0 3px rgba(143, 166, 142, 0.25);
+    border-color: #2E452E !important;
+    box-shadow: 0 0 0 3px rgba(143, 166, 142, 0.25) !important;
+    outline: none;
   }
 
-  /* Floor Plan Stall Interactive Elements */
-  .stall-interactive-slot {
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, background-color 0.2s ease;
-    will-change: transform, box-shadow;
+  /* =========================================================================
+     TABLE ROWS (Smooth Tint, Zero Layout Shift)
+     ========================================================================= */
+  .glass-rise-row {
+    transition: background-color 0.15s ease;
   }
 
-  .stall-interactive-slot:hover {
-    transform: translateY(-3px) scale(1.02) !important;
-    box-shadow: 0 12px 28px -4px rgba(74, 93, 74, 0.22), 0 4px 8px -2px rgba(74, 93, 74, 0.1) !important;
-    z-index: 20;
+  .glass-rise-row:hover {
+    background-color: rgba(234, 239, 233, 0.5) !important;
   }
 
-  /* Exhibition Card Specific */
-  .exhibition-grid-card {
-    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
-    will-change: transform, box-shadow;
-  }
-
-  .exhibition-grid-card:hover {
-    transform: translateY(-4px) !important;
-    box-shadow: 0 20px 40px -8px rgba(74, 93, 74, 0.18), 0 8px 16px -4px rgba(74, 93, 74, 0.08) !important;
-  }
-
-  /* Badge and Tag Rise */
-  .glass-badge {
-    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .glass-badge:hover {
-    transform: translateY(-1.5px);
-    box-shadow: 0 6px 14px -2px rgba(74, 93, 74, 0.16);
-  }
-
-  /* Full Screen Frosted Glass Modal Backdrop & Container */
+  /* =========================================================================
+     MODALS & BACKDROPS
+     ========================================================================= */
   .modal-backdrop-blur {
     position: fixed;
     inset: 0;
     z-index: 100;
-    background: rgba(0, 0, 0, 0.65);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(10, 12, 10, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -314,21 +257,14 @@
   }
 
   .modal-glass-container {
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(28px);
-    -webkit-backdrop-filter: blur(28px);
-    border: none;
-    box-shadow: 0 28px 70px -12px rgba(0, 0, 0, 0.35), 0 10px 24px -4px rgba(74, 93, 74, 0.15);
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .modal-glass-container::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, newer Edge */
+    background-color: #FFFFFF;
+    border: 1px solid rgba(143, 166, 142, 0.3);
+    box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.25);
+    border-radius: 1.5rem;
   }
 
   /* =========================================================================
-     NEUTRAL BLACK DARK THEME (Black Surface with Crisp Green Accents)
+     DARK THEME (Neutral Slate Carbon, High Legibility)
      ========================================================================= */
   .dark {
     color-scheme: dark;
@@ -336,128 +272,52 @@
 
   .dark html,
   .dark body {
-    background-color: #0B0C0E !important;
+    background-color: #0D0F13 !important;
     color: #F3F4F6 !important;
   }
 
-  /* Dark Cards - True Neutral Charcoal-Black */
   .dark .glass-card {
-    background: rgba(18, 20, 24, 0.88) !important;
+    background-color: #15181E !important;
     border-color: rgba(255, 255, 255, 0.08) !important;
-    box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.6), 0 2px 6px -1px rgba(0, 0, 0, 0.4) !important;
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.6) !important;
     color: #F3F4F6;
   }
 
-  .dark .glass-card-hover:hover,
-  .dark .glass-rise-card:hover {
-    background-color: rgba(24, 27, 32, 0.98) !important;
-    box-shadow: 0 18px 42px -6px rgba(0, 0, 0, 0.8), 0 0 18px rgba(74, 93, 74, 0.25) !important;
-    border-color: rgba(143, 166, 142, 0.45) !important;
+  .dark .glass-card:hover {
+    border-color: rgba(255, 255, 255, 0.15) !important;
   }
 
   .dark .stat-tile,
   .dark .kpi-card {
-    background-color: rgba(18, 20, 24, 0.85) !important;
+    background-color: #15181E !important;
     border-color: rgba(255, 255, 255, 0.08) !important;
+    color: #F3F4F6;
   }
 
   .dark .stat-tile:hover,
   .dark .kpi-card:hover {
-    background-color: rgba(24, 27, 32, 0.98) !important;
-    box-shadow: 0 16px 36px -6px rgba(0, 0, 0, 0.8), 0 0 20px rgba(74, 93, 74, 0.25) !important;
-    border-color: rgba(143, 166, 142, 0.5) !important;
+    border-color: rgba(143, 166, 142, 0.4) !important;
   }
 
-  /* Dark Sidebar & Topbar - Neutral Black Glass */
   .dark .glass-sidebar {
-    background: rgba(13, 15, 18, 0.96) !important;
+    background-color: #111317 !important;
     border-right-color: rgba(255, 255, 255, 0.08) !important;
   }
 
   .dark .glass-topbar {
-    background: rgba(13, 15, 18, 0.92) !important;
+    background-color: rgba(13, 15, 19, 0.94) !important;
     border-bottom-color: rgba(255, 255, 255, 0.08) !important;
   }
 
-  /* Dark Modals - Soft Glass Surface (not harsh black) */
   .dark .modal-glass-container {
-    background: rgba(20, 23, 30, 0.97) !important;
-    border-color: rgba(255, 255, 255, 0.10) !important;
-    box-shadow: 0 32px 80px -12px rgba(0, 0, 0, 0.85), 0 0 30px rgba(0, 0, 0, 0.4) !important;
-    color: #E8EAE8 !important;
-  }
-
-  /* Body & paragraph text inside dark glass panels — lift from grey to readable near-white */
-  .dark .modal-glass-container p,
-  .dark .modal-glass-container span,
-  .dark .modal-glass-container li,
-  .dark .glass-card p,
-  .dark .glass-card span {
-    color: inherit;
-  }
-
-  /* Ensure descriptive body text (text-charcoal-muted) is comfortably legible in dark mode */
-  .dark .text-charcoal-muted {
-    color: #B0B9B0 !important;
-  }
-
-  .dark .glass-rise-row:hover {
-    background-color: rgba(28, 31, 38, 0.9) !important;
-    box-shadow: 0 10px 24px -4px rgba(0, 0, 0, 0.7) !important;
-  }
-
-  /* Dark Buttons - Green Accent & Neutral Secondary */
-  .dark .btn-primary {
-    background-color: #2E482E;
-    color: #F7F5F0;
-  }
-
-  .dark .btn-primary:hover {
-    background-color: #3D603D;
-    box-shadow: 0 10px 24px -2px rgba(46, 72, 46, 0.5), 0 0 20px rgba(143, 166, 142, 0.3);
-  }
-
-  .dark .btn-secondary {
-    background-color: rgba(24, 27, 32, 0.9) !important;
-    color: #F3F4F6 !important;
-    border-color: rgba(255, 255, 255, 0.14) !important;
-  }
-
-  .dark .btn-secondary:hover {
-    background-color: rgba(32, 36, 44, 1) !important;
-    border-color: rgba(143, 166, 142, 0.5) !important;
-    box-shadow: 0 10px 24px -2px rgba(0, 0, 0, 0.6) !important;
-  }
-
-  /* Dark Inputs & Selects */
-  .dark .glass-select,
-  .dark select,
-  .dark .glass-input,
-  .dark input,
-  .dark textarea {
-    background-color: rgba(20, 23, 28, 0.92) !important;
+    background-color: #161920 !important;
     border-color: rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 25px 60px -10px rgba(0, 0, 0, 0.8) !important;
     color: #F3F4F6 !important;
   }
 
-  .dark .glass-select:focus,
-  .dark select:focus,
-  .dark .glass-input:focus,
-  .dark input:focus,
-  .dark textarea:focus {
-    border-color: #8FA68E !important;
-    box-shadow: 0 0 0 3px rgba(143, 166, 142, 0.25) !important;
-  }
-
-  .dark thead {
-    background-color: rgba(18, 20, 24, 0.95) !important;
-    border-color: rgba(255, 255, 255, 0.08) !important;
-    color: #9CA3AF !important;
-  }
-
-  /* High-Contrast Typography Tokens for Dark Mode */
   .dark .text-charcoal {
-    color: #FFFFFF !important;
+    color: #F3F4F6 !important;
   }
 
   .dark .text-charcoal-muted {
@@ -469,7 +329,7 @@
   }
 
   .dark .text-sage-800 {
-    color: #A4C2A3 !important;
+    color: #A3C5A2 !important;
   }
 
   .dark .text-sage-900 {
@@ -480,193 +340,106 @@
     color: #8FA68E !important;
   }
 
-  /* Neutral Insets in Dark Mode (No grey haze!) */
-  .dark .bg-white\/70,
-  .dark .bg-white\/75,
-  .dark .bg-white\/80,
-  .dark .bg-white\/90,
-  .dark .bg-white\/95,
-  .dark .bg-white {
-    background-color: rgba(255, 255, 255, 0.04) !important;
+  .dark .btn-primary {
+    background-color: #2E4C2E !important;
+    color: #FFFFFF !important;
   }
 
-  .dark .bg-cream-50,
-  .dark .bg-cream-100 {
-    background-color: rgba(255, 255, 255, 0.04) !important;
+  .dark .btn-primary:hover {
+    background-color: #3B613B !important;
+    box-shadow: 0 4px 12px rgba(46, 76, 46, 0.4) !important;
   }
 
-  .dark .bg-cream-200 {
-    background-color: rgba(255, 255, 255, 0.08) !important;
+  .dark .btn-secondary {
+    background-color: #1B1E26 !important;
+    color: #F3F4F6 !important;
+    border-color: rgba(255, 255, 255, 0.14) !important;
   }
 
-  .dark .border-sage-200,
-  .dark .border-sage-100 {
+  .dark .btn-secondary:hover {
+    background-color: #232732 !important;
+    border-color: rgba(143, 166, 142, 0.4) !important;
+  }
+
+  .dark .glass-input,
+  .dark .glass-select,
+  .dark input,
+  .dark select,
+  .dark textarea {
+    background-color: #181C23 !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    color: #F3F4F6 !important;
+  }
+
+  .dark .glass-input:focus,
+  .dark .glass-select:focus,
+  .dark input:focus,
+  .dark select:focus,
+  .dark textarea:focus {
+    border-color: #8FA68E !important;
+    box-shadow: 0 0 0 3px rgba(143, 166, 142, 0.25) !important;
+  }
+
+  .dark thead {
+    background-color: rgba(255, 255, 255, 0.03) !important;
     border-color: rgba(255, 255, 255, 0.08) !important;
+    color: #9CA3AF !important;
   }
 
-  /* =========================================================================
-     DARK MODE STATUS BADGE & TAG OVERRIDES
-     — covers every status combo used across Vendor Requests, CRM, Finance,
-       Overview stat cards, and the Upcoming Schedule widget.
-     ========================================================================= */
+  .dark .glass-rise-row:hover {
+    background-color: rgba(255, 255, 255, 0.04) !important;
+  }
 
-  /* Emerald badges: Approved, Booked, Active */
-  .dark .bg-emerald-100 {
+  /* Status Badges Dark Theme Support */
+  .dark .bg-emerald-100,
+  .dark .bg-emerald-50 {
     background-color: rgba(16, 185, 129, 0.15) !important;
   }
-  .dark .text-emerald-900 {
-    color: #6EE7B7 !important;
-  }
-  .dark .border-emerald-300 {
-    border-color: rgba(52, 211, 153, 0.25) !important;
-  }
+  .dark .text-emerald-900,
   .dark .text-emerald-800 {
     color: #6EE7B7 !important;
   }
+  .dark .border-emerald-300,
   .dark .border-emerald-200 {
-    border-color: rgba(52, 211, 153, 0.2) !important;
-  }
-  .dark .bg-emerald-50 {
-    background-color: rgba(16, 185, 129, 0.10) !important;
+    border-color: rgba(52, 211, 153, 0.3) !important;
   }
 
-  /* Amber badges: Pending, Corner slot, Alert */
-  .dark .bg-amber-100 {
+  .dark .bg-amber-100,
+  .dark .bg-amber-50 {
     background-color: rgba(245, 158, 11, 0.15) !important;
   }
-  .dark .text-amber-900 {
-    color: #FCD34D !important;
-  }
-  .dark .border-amber-300 {
-    border-color: rgba(251, 191, 36, 0.25) !important;
-  }
+  .dark .text-amber-900,
   .dark .text-amber-800 {
     color: #FCD34D !important;
   }
-  .dark .bg-amber-50 {
-    background-color: rgba(245, 158, 11, 0.10) !important;
-  }
-  .dark .bg-amber-200 {
-    background-color: rgba(245, 158, 11, 0.20) !important;
-  }
+  .dark .border-amber-300,
   .dark .border-amber-200 {
-    border-color: rgba(251, 191, 36, 0.20) !important;
+    border-color: rgba(251, 191, 36, 0.3) !important;
   }
 
-  /* Rose badges: Rejected, Overbudget */
-  .dark .bg-rose-100 {
+  .dark .bg-rose-100,
+  .dark .bg-rose-50 {
     background-color: rgba(244, 63, 94, 0.15) !important;
   }
+  .dark .text-rose-900,
   .dark .text-rose-800 {
     color: #FDA4AF !important;
   }
-  .dark .text-rose-700 {
-    color: #FB7185 !important;
-  }
+  .dark .border-rose-300,
   .dark .border-rose-200 {
-    border-color: rgba(251, 113, 133, 0.22) !important;
-  }
-  .dark .border-rose-300 {
-    border-color: rgba(251, 113, 133, 0.28) !important;
-  }
-  .dark .bg-rose-50 {
-    background-color: rgba(244, 63, 94, 0.10) !important;
+    border-color: rgba(251, 113, 133, 0.3) !important;
   }
 
-  /* Purple badges: Waitlisted, Premium */
-  .dark .bg-purple-100 {
+  .dark .bg-purple-100,
+  .dark .bg-purple-50 {
     background-color: rgba(139, 92, 246, 0.15) !important;
   }
-  .dark .text-purple-900 {
-    color: #C4B5FD !important;
-  }
+  .dark .text-purple-900,
   .dark .text-purple-800 {
     color: #C4B5FD !important;
   }
-  .dark .border-purple-300 {
-    border-color: rgba(196, 181, 253, 0.25) !important;
-  }
+  .dark .border-purple-300,
   .dark .border-purple-200 {
-    border-color: rgba(196, 181, 253, 0.20) !important;
-  }
-  .dark .bg-purple-50 {
-    background-color: rgba(139, 92, 246, 0.10) !important;
-  }
-
-  /* Blue badges: Referral, Info */
-  .dark .bg-blue-100 {
-    background-color: rgba(59, 130, 246, 0.15) !important;
-  }
-  .dark .text-blue-900 {
-    color: #93C5FD !important;
-  }
-  .dark .border-blue-300 {
-    border-color: rgba(147, 197, 253, 0.25) !important;
-  }
-
-  /* CRM tag badges (bg-sage-50 + text-sage-900) */
-  .dark .bg-sage-50 {
-    background-color: rgba(143, 166, 142, 0.18) !important;
-  }
-  .dark .text-sage-900 {
-    color: #D6E8D5 !important;
-  }
-  .dark .bg-sage-100 {
-    background-color: rgba(143, 166, 142, 0.20) !important;
-  }
-  .dark .border-sage-300 {
-    border-color: rgba(143, 166, 142, 0.25) !important;
-  }
-
-  /* Cream/past-client tag background */
-  .dark .bg-cream-200 {
-    background-color: rgba(255, 255, 255, 0.08) !important;
-  }
-
-  /* White tinted background overrides (tags, insets) */
-  .dark .bg-white\/70,
-  .dark .bg-white\/75,
-  .dark .bg-white\/80,
-  .dark .bg-white\/90,
-  .dark .bg-white\/95,
-  .dark .bg-white {
-    background-color: rgba(255, 255, 255, 0.04) !important;
-  }
-
-  .dark .bg-cream-50,
-  .dark .bg-cream-100 {
-    background-color: rgba(255, 255, 255, 0.04) !important;
-  }
-
-  .dark .border-sage-200,
-  .dark .border-sage-100 {
-    border-color: rgba(255, 255, 255, 0.08) !important;
-  }
-
-  .dark .divide-sage-100 > :not([hidden]) ~ :not([hidden]),
-  .dark .divide-sage-200 > :not([hidden]) ~ :not([hidden]) {
-    border-color: rgba(255, 255, 255, 0.06) !important;
-  }
-
-  /* High-contrast muted text in dark */
-  .dark .text-charcoal-muted {
-    color: #B0B9B0 !important;
-  }
-
-  /* Inset detail blocks inside modals (bg-cream-50, bg-white used for description boxes) */
-  .dark .modal-glass-container .bg-cream-50,
-  .dark .modal-glass-container .bg-white {
-    background-color: rgba(255, 255, 255, 0.06) !important;
-    border-color: rgba(255, 255, 255, 0.08) !important;
-  }
-
-  /* Body text inside description/detail blocks in dark mode */
-  .dark .modal-glass-container .text-charcoal-muted {
-    color: #B8C4B8 !important;
-  }
-
-  /* p text inside dark modals should be near-white, not washed grey */
-  .dark .modal-glass-container p {
-    color: #CBD5CB !important;
+    border-color: rgba(196, 181, 253, 0.3) !important;
   }
 }

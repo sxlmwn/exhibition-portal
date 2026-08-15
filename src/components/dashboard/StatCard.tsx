@@ -21,11 +21,11 @@ export const StatCard: React.FC<StatCardProps> = ({
   subvalue,
   trend,
   icon: Icon,
-  iconBgColor = 'bg-sage-100',
-  iconColor = 'text-sage-800'
+  iconBgColor = 'bg-sage-100 dark:bg-sage-900/40',
+  iconColor = 'text-sage-800 dark:text-sage-300'
 }) => {
   return (
-    <div className="glass-card kpi-card stat-tile glass-rise-card p-6 rounded-3xl relative overflow-hidden flex flex-col justify-between cursor-pointer">
+    <div className="glass-card p-6 rounded-2xl relative overflow-hidden flex flex-col justify-between cursor-pointer">
       {/* Top row: Title and Icon */}
       <div className="flex items-start justify-between gap-4 mb-4">
         <div>

@@ -20,6 +20,7 @@ const pastEventSchema = z.object({
   narrativeExcerpt: z.string().min(10, 'Narrative excerpt is required'),
   coverImage: z.string().min(1, 'Cover image is required'),
   tagsInput: z.string(),
+  isPublished: z.boolean().default(false),
 });
 
 type PastEventFormData = z.infer<typeof pastEventSchema>;
@@ -64,6 +65,7 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
       narrativeExcerpt: '',
       coverImage: '/images/1.jpg',
       tagsInput: 'Artisan Craft, Festive Edition',
+      isPublished: false,
     }
   });
 
@@ -83,6 +85,7 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
         narrativeExcerpt: eventToEdit.narrativeExcerpt,
         coverImage: eventToEdit.coverImage,
         tagsInput: eventToEdit.tags ? eventToEdit.tags.join(', ') : '',
+        isPublished: eventToEdit.isPublished || false,
       });
       if (eventToEdit.coverImage && (eventToEdit.coverImage.startsWith('http') || eventToEdit.coverImage.startsWith('data:'))) {
         setCoverMode('upload');
@@ -102,6 +105,7 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
         narrativeExcerpt: '',
         coverImage: '/images/1.jpg',
         tagsInput: 'Artisan Craft, Festive Edition',
+        isPublished: false,
       });
       setCoverMode('preset');
     }
@@ -181,6 +185,7 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
         coverImage: data.coverImage,
         photos: updatedPhotos,
         tags: parsedTags,
+        isPublished: data.isPublished,
       });
     } else {
       addPastEvent({
@@ -196,6 +201,7 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
         coverImage: data.coverImage,
         photos: updatedPhotos,
         tags: parsedTags,
+        isPublished: data.isPublished,
       });
     }
     onClose();
@@ -349,6 +355,26 @@ export const PastEventFormModal: React.FC<PastEventFormModalProps> = ({
               placeholder="Describe the atmosphere, attendee engagement, and vendor feedback..."
               className="w-full px-4 py-2.5 rounded-xl border border-sage-200 dark:border-white/10 text-xs text-charcoal outline-none focus:border-sage-500 font-sans bg-white/80 dark:bg-white/5"
             />
+          </div>
+
+          {/* Visibility Toggle */}
+          <div className="flex items-center justify-between p-4 rounded-xl bg-cream-50 dark:bg-white/5 border border-sage-200 dark:border-white/10">
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal mb-1">
+                Show on Public Site
+              </label>
+              <p className="text-[11px] text-charcoal-muted dark:text-white/50">
+                When enabled, this past event will appear on the public landing page portfolio.
+              </p>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                {...register('isPublished')}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-sage-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-sage-300 dark:peer-focus:ring-sage-800 rounded-full peer dark:bg-white/10 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-sage-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-sage-600 peer-checked:bg-emerald-600"></div>
+            </label>
           </div>
 
           <div>

@@ -24,6 +24,59 @@ import {
 import { supabase } from '../lib/supabase';
 import { createExpenseNotification, createStallRequestNotification } from '../lib/notifications';
 
+// Admin allocation window: number of days after deadline when staff can finalize allocations
+export const ALLOCATION_WINDOW_DAYS = 3;
+
+/**
+ * Checks if an exhibition is currently in the admin allocation window.
+ * The allocation window runs from the day after the deadline until deadline + ALLOCATION_WINDOW_DAYS.
+ * @param exhibition - Exhibition object with optional stallRegistrationDeadline
+ * @returns true if in allocation window, false otherwise
+ */
+export const isInAllocationWindow = (exhibition: Exhibition): boolean => {
+  if (!exhibition.stallRegistrationDeadline) {
+    return false; // No deadline set, not in allocation window
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const deadline = new Date(exhibition.stallRegistrationDeadline);
+  deadline.setHours(0, 0, 0, 0);
+
+  const windowEnd = new Date(deadline);
+  windowEnd.setDate(windowEnd.getDate() + ALLOCATION_WINDOW_DAYS);
+  windowEnd.setHours(0, 0, 0, 0);
+
+  // Allocation window: deadline < today <= deadline + ALLOCATION_WINDOW_DAYS
+  return today > deadline && today <= windowEnd;
+};
+
+/**
+ * Calculates remaining days in the allocation window.
+ * @param exhibition - Exhibition object with optional stallRegistrationDeadline
+ * @returns number of days remaining in allocation window, or 0 if not in window
+ */
+export const getAllocationWindowDaysRemaining = (exhibition: Exhibition): number => {
+  if (!isInAllocationWindow(exhibition)) {
+    return 0;
+  }
+
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const deadline = new Date(exhibition.stallRegistrationDeadline);
+  deadline.setHours(0, 0, 0, 0);
+
+  const windowEnd = new Date(deadline);
+  windowEnd.setDate(windowEnd.getDate() + ALLOCATION_WINDOW_DAYS);
+  windowEnd.setHours(0, 0, 0, 0);
+
+  const diffTime = windowEnd.getTime() - today.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return Math.max(0, diffDays);
+};
+
 // Helper mappers between Supabase Postgres columns and frontend Exhibition type
 export const mapExhibitionFromDB = (row: any): Exhibition => {
   let venue = row.venue || row.location || 'Exhibition Grounds';
@@ -65,6 +118,7 @@ export const mapExhibitionFromDB = (row: any): Exhibition => {
     totalExpensesLogged: expenses,
     description: row.description || '',
     daysLeft: row.days_left ?? row.daysLeft,
+    stallRegistrationDeadline: row.stall_registration_deadline || undefined,
   };
 };
 
@@ -91,6 +145,9 @@ export const mapExhibitionToDB = (exh: Partial<Exhibition>): any => {
   }
   if (exh.endDate !== undefined) {
     payload.end_date = exh.endDate;
+  }
+  if (exh.stallRegistrationDeadline !== undefined) {
+    payload.stall_registration_deadline = exh.stallRegistrationDeadline;
   }
   if (exh.status !== undefined) {
     payload.status = exh.status;
@@ -122,6 +179,7 @@ export const mapVendorRequestFromDB = (row: any): VendorRequest => {
   const status: RequestStatus = row.status || 'pending';
   const exhibitionName = row.exhibitions?.name || row.exhibition_name || (row.exhibition_id ? `Exhibition #${row.exhibition_id}` : 'Exhibition Edition');
   const referenceId = row.reference_id || `REQ-${row.id}`;
+  const requestedStallId = row.requested_stall_id ? String(row.requested_stall_id) : undefined;
 
   return {
     id: String(row.id),
@@ -135,6 +193,7 @@ export const mapVendorRequestFromDB = (row: any): VendorRequest => {
     stallsWanted,
     stallTierPreference: (row.stall_tier_preference as StallTier) || 'medium',
     preferredStallCode: row.preferred_stall_code || undefined,
+    requestedStallId,
     allocatedStallCode: row.allocated_stall_code || undefined,
     productCategory,
     budgetRange,
@@ -143,6 +202,7 @@ export const mapVendorRequestFromDB = (row: any): VendorRequest => {
     status,
     reviewedBy: row.reviewed_by || undefined,
     reviewedAt: row.reviewed_at || undefined,
+    createdAt: row.created_at || row.submitted_date || undefined,
   };
 };
 
@@ -156,6 +216,9 @@ export const mapVendorRequestToDB = (req: Partial<VendorRequest>): any => {
   }
   if (req.exhibitionId !== undefined && !isNaN(Number(req.exhibitionId))) {
     payload.exhibition_id = Number(req.exhibitionId);
+  }
+  if (req.requestedStallId !== undefined && req.requestedStallId !== null && !isNaN(Number(req.requestedStallId))) {
+    payload.requested_stall_id = Number(req.requestedStallId);
   }
   if (req.brandName !== undefined) {
     payload.business_name = req.brandName;
@@ -198,12 +261,35 @@ export const mapVendorRequestToDB = (req: Partial<VendorRequest>): any => {
 
 // Helper mappers for Stall Slots
 export const mapStallSlotFromDB = (row: any): StallSlot => {
-  const code = row.stall_number || row.code || `S-${row.id}`;
+  const code = (row.stall_number || row.code || `S-${row.id}`).toUpperCase();
   const rowLetter = code.includes('-') ? `Row ${code.split('-')[0]}` : 'Row A';
-  const tier: StallTier = (row.size_category as StallTier) || (code.endsWith('01') || code.endsWith('06') ? 'corner' : 'medium');
-  const tierName = tier === 'corner' ? 'Corner Boulevard' : tier === 'premium' ? 'Premium Pavilion' : tier === 'medium' ? 'Standard Medium' : 'Artisan Stall';
-  const dimensions = tier === 'corner' ? '12x12 ft' : tier === 'premium' ? '10x10 ft' : '9x9 ft';
-  const price = Number(row.price || (tier === 'corner' ? 145000 : tier === 'premium' ? 110000 : 78000));
+  
+  let tier: StallTier = 'medium';
+  if (row.size_category && ['small', 'medium', 'premium', 'corner'].includes(row.size_category)) {
+    tier = row.size_category as StallTier;
+  } else if (code.endsWith('01') || code.endsWith('06')) {
+    tier = 'corner';
+  } else if (code.startsWith('B')) {
+    tier = 'premium';
+  } else if (code.endsWith('03') || code.endsWith('05')) {
+    tier = 'small';
+  }
+
+  const tierNames: Record<StallTier, string> = {
+    corner: 'Corner Boulevard',
+    premium: 'Premium Stall',
+    medium: 'Medium Stall',
+    small: 'Small Stall'
+  };
+
+  const dimensionsMap: Record<StallTier, string> = {
+    corner: '12x12 ft',
+    premium: '12x10 ft',
+    medium: '9x9 ft',
+    small: '6x6 ft'
+  };
+
+  const price = Number(row.price || 85000);
   const status = (row.status as 'available' | 'booked' | 'reserved') || 'available';
 
   return {
@@ -211,8 +297,8 @@ export const mapStallSlotFromDB = (row: any): StallSlot => {
     code,
     exhibitionId: String(row.exhibition_id || ''),
     tier,
-    tierName,
-    dimensions,
+    tierName: tierNames[tier] || 'Medium Stall',
+    dimensions: dimensionsMap[tier] || '9x9 ft',
     price,
     status,
     assignedVendorId: row.assigned_vendor_id ? String(row.assigned_vendor_id) : undefined,
@@ -492,6 +578,7 @@ export const mapPastEventFromDB = (row: any): PastEventStory => {
   const satisfactionRate = row.satisfaction_rate || '98%';
   const narrativeExcerpt = row.narrative || row.narrativeExcerpt || 'A celebrated showcase featuring leading artisans, designers, and craft houses.';
   const tags = row.tags || ['Artisan Craft', 'Curated Runway', city];
+  const isPublished = row.is_published !== undefined ? Boolean(row.is_published) : false;
 
   return {
     id,
@@ -507,6 +594,7 @@ export const mapPastEventFromDB = (row: any): PastEventStory => {
     coverImage,
     photos,
     tags,
+    isPublished,
   };
 };
 
@@ -551,6 +639,10 @@ export const mapPastEventToDB = (story: Partial<PastEventStory>): any => {
     payload.photo_urls = JSON.stringify(story.photos);
   } else if (story.coverImage !== undefined) {
     payload.photo_urls = JSON.stringify([story.coverImage]);
+  }
+
+  if (story.isPublished !== undefined) {
+    payload.is_published = Boolean(story.isPublished);
   }
 
   return payload;
@@ -736,10 +828,16 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const fetchStalls = async () => {
     try {
+      console.log('[AdminContext] fetchStalls called - fetching ALL stalls (no exhibition filter)');
       const { data, error } = await supabase
         .from('stall_slots')
         .select('*')
         .order('id', { ascending: true });
+
+      console.log('[AdminContext] fetchStalls result - error:', error, 'data length:', data?.length);
+      if (data && data.length > 0) {
+        console.log('[AdminContext] Sample stall:', data[0]);
+      }
 
       if (!error && data) {
         setStalls(data.map(mapStallSlotFromDB));
@@ -758,10 +856,48 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         .select('*, exhibitions(id, name, location)')
         .order('id', { ascending: false });
 
+      let loadedContacts: CRMContact[] = [];
       if (!error && data) {
-        setContacts(data.map(mapCRMContactFromDB));
+        loadedContacts = data.map(mapCRMContactFromDB);
       } else if (error) {
         console.error('Failed to load crm_contacts from Supabase:', error.message);
+      }
+
+      // Also query referrals table so referral partner leads appear seamlessly in CRM
+      try {
+        const { data: refData, error: refError } = await supabase
+          .from('referrals')
+          .select('*, exhibitions(id, name, location)')
+          .order('id', { ascending: false });
+
+        if (!refError && refData && refData.length > 0) {
+          const mappedReferrals: CRMContact[] = refData.map((row: any) => ({
+            id: `ref-${row.id}`,
+            fullName: row.referrer_name || row.referred_business_name || 'Referral Partner',
+            name: row.referrer_name || 'Referral Partner',
+            businessName: `${row.referrer_name} ➔ ${row.referred_business_name}`,
+            phone: row.referrer_contact || row.referred_contact || '',
+            email: '',
+            category: 'Referral Partner',
+            status: 'referral' as ContactStatus,
+            source: 'referral',
+            exhibitionId: String(row.exhibition_id || ''),
+            exhibitionName: row.exhibitions?.name || (row.exhibition_id ? `Exhibition #${row.exhibition_id}` : 'General Referral Program'),
+            tags: ['Referral', '10% Discount Eligible', `Referred: ${row.referred_business_name}`, `Status: ${row.status || 'pending'}`],
+            exhibitionIds: row.exhibition_id ? [String(row.exhibition_id)] : [],
+            totalSpend: 0,
+            lastActivityDate: row.created_at ? row.created_at.split('T')[0] : '2026-03-01',
+            notes: `[Referral Program — 10% Mutual Credit]\n• Referring Brand: ${row.referrer_name} (${row.referrer_contact})\n• Referred Brand: ${row.referred_business_name}\n• Referred Contact: ${row.referred_contact}\n• Linked Exhibition: ${row.exhibitions?.name || 'General'}\n• Status: ${row.status || 'pending'}`
+          }));
+
+          loadedContacts = [...mappedReferrals, ...loadedContacts];
+        }
+      } catch (refErr) {
+        console.warn('Notice loading referrals in CRM:', refErr);
+      }
+
+      if (loadedContacts.length > 0) {
+        setContacts(loadedContacts);
       }
     } catch (err) {
       console.error('Error fetching crm_contacts from Supabase:', err);

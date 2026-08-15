@@ -43,12 +43,12 @@ export default function DashboardPage() {
     <div className="space-y-8 animate-fadeIn">
       
       {/* Editorial Welcome Banner */}
-      <div className="glass-card p-8 rounded-4xl relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <div className="glass-card p-6 sm:p-8 rounded-3xl relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6 border border-sage-200/80 dark:border-white/10">
         <div className="relative z-10 max-w-2xl">
-          <h2 className="font-sans text-2xl sm:text-3xl lg:text-4xl font-bold text-charcoal leading-tight tracking-tight">
+          <h2 className="font-sans text-2xl sm:text-3xl font-bold text-charcoal dark:text-white leading-tight tracking-tight">
             Curated Exhibition Management
           </h2>
-          <p className="text-sm text-charcoal-muted mt-2 font-medium leading-relaxed">
+          <p className="text-sm text-charcoal-muted dark:text-white/70 mt-2 font-medium leading-relaxed">
             Manage live vendor allocations, inspect venue floor plans, and track expenditures with complete financial transparency.
           </p>
         </div>
@@ -57,22 +57,22 @@ export default function DashboardPage() {
         <div className="relative z-10 flex flex-wrap items-center gap-3 shrink-0">
           <Link
             href="/exhibitions"
-            className="btn-primary glass-rise-btn px-6 py-3 text-xs uppercase tracking-wider font-bold flex items-center gap-2"
+            className="btn-primary px-5 py-2.5 text-xs uppercase tracking-wider font-bold flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
             <span>Add Exhibition</span>
           </Link>
           <Link
             href="/requests"
-            className="btn-secondary glass-rise-btn px-6 py-3 text-xs uppercase tracking-wider font-bold flex items-center gap-2"
+            className="btn-secondary px-5 py-2.5 text-xs uppercase tracking-wider font-bold flex items-center gap-2"
           >
-            <Store className="w-4 h-4 text-sage-700" />
+            <Store className="w-4 h-4 text-sage-700 dark:text-sage-300" />
             <span>Allocate Stalls</span>
           </Link>
         </div>
 
         {/* Subtle background decorative glow */}
-        <div className="absolute right-0 bottom-0 w-80 h-80 bg-sage-200/40 rounded-full blur-3xl pointer-events-none -mr-20 -mb-20" />
+        <div className="absolute right-0 bottom-0 w-80 h-80 bg-sage-200/30 dark:bg-sage-800/10 rounded-full blur-3xl pointer-events-none -mr-20 -mb-20" />
       </div>
 
       {/* 4 KPI Frosted Stat Cards */}
@@ -83,8 +83,8 @@ export default function DashboardPage() {
           subvalue="Lahore, Islamabad & Karachi"
           trend={{ value: '+1 Edition', isPositive: true, label: 'vs last season' }}
           icon={CalendarDays}
-          iconBgColor="bg-sage-100"
-          iconColor="text-sage-800"
+          iconBgColor="bg-sage-100 dark:bg-sage-900/40"
+          iconColor="text-sage-800 dark:text-sage-300"
         />
 
         <StatCard
@@ -93,8 +93,8 @@ export default function DashboardPage() {
           subvalue={`${Math.round((totalBookedStalls / (totalCapacity || 1)) * 100)}% overall capacity locked`}
           trend={{ value: '+18 Stalls', isPositive: true, label: 'this week' }}
           icon={Store}
-          iconBgColor="bg-emerald-50"
-          iconColor="text-emerald-800"
+          iconBgColor="bg-emerald-50 dark:bg-emerald-950/40"
+          iconColor="text-emerald-800 dark:text-emerald-300"
         />
 
         <StatCard
@@ -103,8 +103,8 @@ export default function DashboardPage() {
           subvalue={`Logged Costs: Rs. ${(totalExpenses / 100000).toFixed(1)}L`}
           trend={{ value: `Net +Rs. ${((totalRevenue - totalExpenses) / 100000).toFixed(1)}L`, isPositive: true, label: 'margin' }}
           icon={Receipt}
-          iconBgColor="bg-cream-200"
-          iconColor="text-sage-900"
+          iconBgColor="bg-purple-50 dark:bg-purple-950/40"
+          iconColor="text-purple-800 dark:text-purple-300"
         />
 
         <StatCard
@@ -113,8 +113,8 @@ export default function DashboardPage() {
           subvalue="Awaiting portfolio review"
           trend={{ value: `${pendingRequestsCount} Actionable`, isPositive: pendingRequestsCount > 0, label: 'in queue' }}
           icon={Users}
-          iconBgColor="bg-amber-100"
-          iconColor="text-amber-900"
+          iconBgColor="bg-amber-50 dark:bg-amber-950/40"
+          iconColor="text-amber-800 dark:text-amber-300"
         />
       </div>
 
