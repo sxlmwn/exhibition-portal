@@ -193,7 +193,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
 
                 {!collapsed && item.badge !== null && (
                   <span className={`status-badge text-[10px] px-1.5 py-0.5 rounded-full border font-bold shrink-0 ${
-                    isActive ? 'bg-cream-100 text-sage-900 border-cream-200' : (item.badgeColor || 'bg-sage-100 text-sage-800')
+                    isActive 
+                      ? 'bg-charcoal text-white border-charcoal/40 dark:bg-[#0B0D10] dark:text-white dark:border-white/20 shadow-xs' 
+                      : (item.badgeColor || 'bg-sage-100 text-sage-800 border-sage-200 dark:bg-sage-900/60 dark:text-sage-300 dark:border-sage-700/60')
                   }`}>
                     {item.badge}
                   </span>
