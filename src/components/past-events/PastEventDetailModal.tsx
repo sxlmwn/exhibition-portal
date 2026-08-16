@@ -39,7 +39,7 @@ export const PastEventDetailModal: React.FC<PastEventDetailModalProps> = ({
   return (
     <ModalPortal isOpen={!!event} onClose={onClose} maxWidthClass="max-w-4xl">
       {/* Elevated Modal Container */}
-      <div className="modal-glass-container dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full max-h-[90vh] overflow-y-auto shadow-soft-2xl">
+      <div className="modal-glass-container modal-glass-container--cover dark:bg-[#121418] dark:text-[#F3F4F6] rounded-4xl w-full max-h-[90vh] overflow-y-auto shadow-soft-2xl">
         
         {/* Cover Photo Banner */}
         <div className="relative h-64 sm:h-72 overflow-hidden bg-sage-900 rounded-t-4xl">
