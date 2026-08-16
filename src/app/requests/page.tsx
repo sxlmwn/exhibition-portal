@@ -47,18 +47,24 @@ export default function VendorRequestsPage() {
   const [alternativesRequest, setAlternativesRequest] = useState<VendorRequest | null>(null);
   const [targetAlternativeVendor, setTargetAlternativeVendor] = useState<VendorRequest | null>(null);
 
-  // Dynamic counts for quick filter pills (computed reactively on re-render)
-  const followUpCount = vendorRequests.filter((r) => isFollowUpNeeded(r)).length;
-  const pendingCount = vendorRequests.filter((r) => r.status === 'pending').length;
-  const approvedCount = vendorRequests.filter((r) => r.status === 'approved').length;
-  const waitlistedCount = vendorRequests.filter((r) => r.status === 'waitlisted').length;
-  
   // Allocation window exhibitions & active (non-completed) exhibitions
   const allocationWindowExhibitions = exhibitions.filter(isInAllocationWindow);
   const allocationWindowCount = allocationWindowExhibitions.length;
   const activeExhibitions = exhibitions.filter(e => e.status !== 'completed');
 
-  const filteredRequests = vendorRequests.filter((req) => {
+  // Exclude requests tied to completed exhibitions unconditionally
+  const activeVendorRequests = vendorRequests.filter((req) => {
+    const parentExh = exhibitions.find(e => e.id === req.exhibitionId);
+    return parentExh ? parentExh.status !== 'completed' : true;
+  });
+
+  // Dynamic counts for quick filter pills (computed reactively from active requests)
+  const followUpCount = activeVendorRequests.filter((r) => isFollowUpNeeded(r)).length;
+  const pendingCount = activeVendorRequests.filter((r) => r.status === 'pending').length;
+  const approvedCount = activeVendorRequests.filter((r) => r.status === 'approved').length;
+  const waitlistedCount = activeVendorRequests.filter((r) => r.status === 'waitlisted').length;
+
+  const filteredRequests = activeVendorRequests.filter((req) => {
     // If allocation window filter is on, only show requests for exhibitions in allocation window
     if (showAllocationWindowOnly) {
       const reqExhibition = exhibitions.find(e => e.id === req.exhibitionId);
@@ -162,7 +168,7 @@ export default function VendorRequestsPage() {
                   : 'bg-white/80 dark:bg-white/5 text-charcoal-muted dark:text-white/70 hover:bg-cream-100 dark:hover:bg-white/10 border border-sage-200 dark:border-white/10'
               }`}
             >
-              All Applications ({vendorRequests.length})
+              All Applications ({activeVendorRequests.length})
             </button>
 
             <button
