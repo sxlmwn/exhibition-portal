@@ -22,15 +22,19 @@ interface StallAllocationGridProps {
   onSelectExhibition: (id: string) => void;
   allocationWindowExhibitions?: any[];
   showAllocationWindowOnly?: boolean;
+  targetAlternativeVendor?: VendorRequest | null;
+  onClearTargetAlternativeVendor?: () => void;
 }
 
 export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
   selectedExhibitionId,
   onSelectExhibition,
   allocationWindowExhibitions = [],
-  showAllocationWindowOnly = false
+  showAllocationWindowOnly = false,
+  targetAlternativeVendor = null,
+  onClearTargetAlternativeVendor
 }) => {
-  const { exhibitions, stalls, vendorRequests, allocateStall, releaseStall, currentUser } = useAdmin();
+  const { exhibitions, stalls, vendorRequests, allocateStall, releaseStall, updateRequestStatus, currentUser } = useAdmin();
   const isOwner = currentUser.permissions.canApproveRequests || currentUser.role === 'owner';
 
   const [selectedStall, setSelectedStall] = useState<StallSlot | null>(null);
@@ -40,42 +44,51 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
   const currentExhibition = displayExhibitions.find(e => e.id === selectedExhibitionId) || displayExhibitions[0];
   const exhibitionStalls = stalls.filter(s => s.exhibitionId === (currentExhibition ? currentExhibition.id : selectedExhibitionId));
 
-  // Eligible vendors for assignment sorted with specific stall applicants first
-  const eligibleRequests = vendorRequests
-    .filter(r => 
-      r.exhibitionId === (currentExhibition ? currentExhibition.id : selectedExhibitionId) && 
-      (r.status === 'pending' || r.status === 'approved' || r.status === 'waitlisted') &&
-      !r.allocatedStallCode
-    )
-    .sort((a, b) => {
-      const aMatches = selectedStall && (a.requestedStallId === selectedStall.id || a.preferredStallCode === selectedStall.code) ? -1 : 0;
-      const bMatches = selectedStall && (b.requestedStallId === selectedStall.id || b.preferredStallCode === selectedStall.code) ? -1 : 0;
-      return aMatches - bMatches;
-    });
+  // Direct applicants for selected stall (matching requestedStallId or preferredStallCode)
+  const directApplicants = selectedStall ? vendorRequests.filter(r =>
+    r.exhibitionId === (currentExhibition ? currentExhibition.id : selectedExhibitionId) &&
+    (r.status === 'pending' || r.status === 'approved' || r.status === 'waitlisted') &&
+    !r.allocatedStallCode &&
+    ((r.requestedStallId && String(r.requestedStallId) === String(selectedStall.id)) ||
+     (r.preferredStallCode && r.preferredStallCode.trim().toUpperCase() === selectedStall.code.trim().toUpperCase()))
+  ) : [];
 
   const handleStallClick = (stall: StallSlot) => {
     setSelectedStall(stall);
-    const matchingReq = eligibleRequests.find(
-      r => (r.requestedStallId && r.requestedStallId === stall.id) || (r.preferredStallCode && r.preferredStallCode === stall.code)
-    );
-    if (matchingReq) {
-      setVendorToAssignId(matchingReq.id);
-    } else if (eligibleRequests.length > 0) {
-      setVendorToAssignId(eligibleRequests[0].id);
+    if (targetAlternativeVendor) {
+      setVendorToAssignId(targetAlternativeVendor.id);
+    } else {
+      const applicants = vendorRequests.filter(r =>
+        r.exhibitionId === (currentExhibition ? currentExhibition.id : selectedExhibitionId) &&
+        (r.status === 'pending' || r.status === 'approved' || r.status === 'waitlisted') &&
+        !r.allocatedStallCode &&
+        ((r.requestedStallId && String(r.requestedStallId) === String(stall.id)) ||
+         (r.preferredStallCode && r.preferredStallCode.trim().toUpperCase() === stall.code.trim().toUpperCase()))
+      );
+      if (applicants.length > 0) {
+        setVendorToAssignId(applicants[0].id);
+      } else {
+        setVendorToAssignId('');
+      }
     }
   };
 
   const handleConfirmAllocation = () => {
-    if (!selectedStall || !vendorToAssignId) return;
+    if (!selectedStall) return;
     if (selectedStall.status === 'booked') {
       alert('This stall is already booked.');
       return;
     }
-    const req = vendorRequests.find(r => r.id === vendorToAssignId);
-    if (!req) return;
 
-    allocateStall(selectedStall.id, req.id, req.vendorName, req.brandName);
+    const targetReq = targetAlternativeVendor || vendorRequests.find(r => r.id === vendorToAssignId);
+    if (!targetReq) return;
+
+    allocateStall(selectedStall.id, targetReq.id, targetReq.vendorName, targetReq.brandName);
+    updateRequestStatus(targetReq.id, 'approved', selectedStall.code);
     setSelectedStall(null);
+    if (targetAlternativeVendor && onClearTargetAlternativeVendor) {
+      onClearTargetAlternativeVendor();
+    }
   };
 
   const handleRelease = (stallId: string) => {
@@ -142,6 +155,36 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Alternative Candidate Banner (When activated from Requests table "Assign Alternative") */}
+      {targetAlternativeVendor && (
+        <div className="p-4 sm:p-5 rounded-2xl bg-amber-50/90 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700/60 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-soft-xs animate-fadeIn">
+          <div className="flex items-start sm:items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center text-amber-800 dark:text-amber-300 shrink-0">
+              <Sparkles className="w-5 h-5" />
+            </div>
+            <div>
+              <span className="text-[10px] uppercase tracking-wider font-bold text-amber-900 dark:text-amber-300 block">
+                Assigning Alternative Stall
+              </span>
+              <h3 className="font-sans text-base sm:text-lg font-bold text-charcoal dark:text-white">
+                {targetAlternativeVendor.brandName} <span className="font-normal text-xs text-charcoal-muted dark:text-white/60">({targetAlternativeVendor.vendorName} &bull; {targetAlternativeVendor.productCategory})</span>
+              </h3>
+              <p className="text-xs text-charcoal-muted dark:text-white/60">
+                Click any available stall on the grid below to assign it as an alternative.
+              </p>
+            </div>
+          </div>
+          {onClearTargetAlternativeVendor && (
+            <button
+              onClick={onClearTargetAlternativeVendor}
+              className="self-start sm:self-auto px-3.5 py-1.5 rounded-lg border border-amber-300 dark:border-amber-700 bg-white/80 dark:bg-white/5 text-xs font-bold text-amber-900 dark:text-amber-300 hover:bg-amber-100 dark:hover:bg-white/10 transition-colors cursor-pointer"
+            >
+              Cancel Alternative Mode
+            </button>
+          )}
+        </div>
+      )}
 
       {/* Main Floor Grid + Detail Assignment Sidebar */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
@@ -391,45 +434,91 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
                     </button>
                   )}
                 </div>
-              ) : (
-                /* If available: Show dropdown to assign to an applicant */
+              ) : targetAlternativeVendor ? (
+                /* Mode A: Assigning Alternative Stall for target vendor */
                 <div className="space-y-4 pt-2">
-                  <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal dark:text-white mb-1.5">
-                      Assign to Vendor Applicant *
-                    </label>
-                    
-                    {eligibleRequests.length > 0 ? (
-                      <select
-                        value={vendorToAssignId}
-                        onChange={(e) => setVendorToAssignId(e.target.value)}
-                        className="w-full px-4 py-3 rounded-lg border border-sage-200 dark:border-white/10 bg-white dark:bg-[#1A1D24] text-xs font-medium text-charcoal dark:text-white outline-none focus:border-sage-500 focus:ring-2 focus:ring-sage-200 cursor-pointer"
-                      >
-                        {eligibleRequests.map((req) => {
-                          const isSpecificallyRequested = selectedStall && (req.requestedStallId === selectedStall.id || req.preferredStallCode === selectedStall.code);
-                          return (
-                            <option key={req.id} value={req.id}>
-                              {isSpecificallyRequested ? '★ [Requested This Stall] ' : ''}
-                              {req.brandName} — {req.vendorName} ({req.productCategory})
-                            </option>
-                          );
-                        })}
-                      </select>
-                    ) : (
-                      <p className="text-xs text-charcoal-muted dark:text-white/60 p-3 rounded-lg bg-cream-50 dark:bg-white/5 border border-sage-200 dark:border-white/10">
-                        No pending vendor applications available for this edition.
-                      </p>
-                    )}
+                  <div className="p-4 rounded-xl bg-amber-50/80 dark:bg-amber-950/30 border border-amber-300 dark:border-amber-700/60 space-y-1">
+                    <span className="text-[10px] uppercase tracking-wider font-bold text-amber-900 dark:text-amber-300 block">
+                      Target Alternative Candidate
+                    </span>
+                    <h4 className="font-sans text-base font-bold text-charcoal dark:text-white">
+                      {targetAlternativeVendor.brandName}
+                    </h4>
+                    <p className="text-xs text-charcoal-muted dark:text-white/60">
+                      Contact: {targetAlternativeVendor.vendorName} &bull; {targetAlternativeVendor.phone}
+                    </p>
+                    <p className="text-[11px] text-charcoal-muted dark:text-white/60 pt-0.5">
+                      Category: {targetAlternativeVendor.productCategory} &bull; Budget: {targetAlternativeVendor.budgetRange}
+                    </p>
                   </div>
 
                   <button
                     onClick={handleConfirmAllocation}
-                    disabled={eligibleRequests.length === 0}
-                    className="w-full btn-primary py-3.5 text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+                    className="w-full btn-primary py-3.5 text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-sm"
                   >
                     <UserCheck className="w-4 h-4" />
-                    <span>Assign Stall</span>
+                    <span>Assign Stall {selectedStall.code} to {targetAlternativeVendor.brandName}</span>
                   </button>
+                </div>
+              ) : (
+                /* Mode B: General Floor Map Browsing (Restricted to Direct Applicants Only) */
+                <div className="space-y-4 pt-2">
+                  {directApplicants.length > 0 ? (
+                    <>
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-charcoal dark:text-white mb-1.5">
+                          Direct Applicant for Stall {selectedStall.code} *
+                        </label>
+                        
+                        {directApplicants.length > 1 ? (
+                          <select
+                            value={vendorToAssignId}
+                            onChange={(e) => setVendorToAssignId(e.target.value)}
+                            className="w-full px-4 py-3 rounded-lg border border-sage-200 dark:border-white/10 bg-white dark:bg-[#1A1D24] text-xs font-medium text-charcoal dark:text-white outline-none focus:border-sage-500 focus:ring-2 focus:ring-sage-200 cursor-pointer"
+                          >
+                            {directApplicants.map((req) => (
+                              <option key={req.id} value={req.id}>
+                                {req.brandName} — {req.vendorName} ({req.productCategory})
+                              </option>
+                            ))}
+                          </select>
+                        ) : (
+                          <div className="p-3.5 rounded-xl bg-cream-50 dark:bg-white/5 border border-sage-200 dark:border-white/10">
+                            <h4 className="font-sans text-sm font-bold text-charcoal dark:text-white">
+                              {directApplicants[0].brandName}
+                            </h4>
+                            <p className="text-xs text-charcoal-muted dark:text-white/60">
+                              {directApplicants[0].vendorName} &bull; {directApplicants[0].phone}
+                            </p>
+                            <p className="text-[11px] text-charcoal-muted dark:text-white/60 mt-1">
+                              Category: {directApplicants[0].productCategory} &bull; Stalls Wanted: {directApplicants[0].stallsWanted}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+
+                      <button
+                        onClick={handleConfirmAllocation}
+                        className="w-full btn-primary py-3.5 text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer shadow-sm"
+                      >
+                        <UserCheck className="w-4 h-4" />
+                        <span>Assign Stall {selectedStall.code}</span>
+                      </button>
+                    </>
+                  ) : (
+                    <div className="p-4 rounded-xl bg-cream-50 dark:bg-white/5 border border-sage-200 dark:border-white/10 text-center space-y-2">
+                      <Store className="w-6 h-6 text-sage-400 mx-auto opacity-70" />
+                      <p className="text-xs font-bold text-charcoal dark:text-white">
+                        No Direct Applicants
+                      </p>
+                      <p className="text-[11px] text-charcoal-muted dark:text-white/60 font-light leading-relaxed">
+                        No vendor specifically requested Stall {selectedStall.code}.
+                      </p>
+                      <p className="text-[10px] text-sage-700 dark:text-sage-300 font-medium pt-1 border-t border-sage-200/50 dark:border-white/5">
+                        To assign this stall to a vendor who requested a different stall, use the <span className="font-bold">Assign Alternative</span> button in the Applications list.
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
 

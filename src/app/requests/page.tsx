@@ -45,6 +45,7 @@ export default function VendorRequestsPage() {
   const [targetStatus, setTargetStatus] = useState<RequestStatus | null>(null);
   const [detailRequest, setDetailRequest] = useState<VendorRequest | null>(null);
   const [alternativesRequest, setAlternativesRequest] = useState<VendorRequest | null>(null);
+  const [targetAlternativeVendor, setTargetAlternativeVendor] = useState<VendorRequest | null>(null);
 
   // Dynamic counts for quick filter pills (computed reactively on re-render)
   const followUpCount = vendorRequests.filter((r) => isFollowUpNeeded(r)).length;
@@ -119,7 +120,10 @@ export default function VendorRequestsPage() {
         {/* View Switcher Tabs */}
         <div className="flex items-center gap-1.5 bg-white/80 dark:bg-white/[0.06] p-1.5 rounded-lg border border-sage-200/60 dark:border-white/10 self-start sm:self-auto shadow-soft-xs backdrop-blur-sm">
           <button
-            onClick={() => setActiveTab('table')}
+            onClick={() => {
+              setActiveTab('table');
+              setTargetAlternativeVendor(null);
+            }}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold transition-all glass-rise-btn ${
               activeTab === 'table'
                 ? 'bg-sage-800 dark:bg-sage-700 text-cream shadow-xs'
@@ -371,10 +375,7 @@ export default function VendorRequestsPage() {
                                   );
                                 }
 
-                                // If pending and unallocated, allow approve/reject modal actions
-                                const showApprovalActions = canApprove && req.status === 'pending';
-
-                                // Fix 2: Unallocated requests - match requested stall if available
+                                // Match requested stall if available
                                 const reqStall = stalls.find(
                                   s => (req.requestedStallId && s.id === req.requestedStallId) ||
                                        (req.preferredStallCode && s.code === req.preferredStallCode)
@@ -384,26 +385,16 @@ export default function VendorRequestsPage() {
 
                                 return (
                                   <>
-                                    {showApprovalActions && (
-                                      <>
-                                        <button
-                                          onClick={() => handleOpenAction(req, 'approved')}
-                                          className="px-2.5 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800 text-[11px] font-bold transition-colors glass-rise-btn flex items-center gap-1"
-                                          title="Approve Applicant"
-                                        >
-                                          <CheckCircle2 className="w-3.5 h-3.5" />
-                                          <span>Approve</span>
-                                        </button>
-
-                                        <button
-                                          onClick={() => handleOpenAction(req, 'rejected')}
-                                          className="px-2 py-1.5 rounded-lg bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800 text-[11px] font-bold transition-colors glass-rise-btn flex items-center gap-1"
-                                          title="Reject Application"
-                                        >
-                                          <XCircle className="w-3.5 h-3.5" />
-                                          <span>Reject</span>
-                                        </button>
-                                      </>
+                                    {/* Reject Button (Only for pending requests) */}
+                                    {canApprove && req.status === 'pending' && (
+                                      <button
+                                        onClick={() => handleOpenAction(req, 'rejected')}
+                                        className="px-2.5 py-1.5 rounded-lg bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800 text-[11px] font-bold transition-colors glass-rise-btn flex items-center gap-1"
+                                        title="Reject Application"
+                                      >
+                                        <XCircle className="w-3.5 h-3.5" />
+                                        <span>Reject</span>
+                                      </button>
                                     )}
 
                                     {isRequestedStallAvailable ? (
@@ -426,6 +417,7 @@ export default function VendorRequestsPage() {
                                           if (req.exhibitionId) {
                                             setSelectedExhibitionId(req.exhibitionId);
                                           }
+                                          setTargetAlternativeVendor(req);
                                           setActiveTab('floor-plan');
                                         }}
                                         className="px-3 py-1.5 rounded-lg bg-sage-800 dark:bg-sage-700 hover:bg-sage-900 text-cream text-[11px] font-bold transition-colors glass-rise-btn flex items-center gap-1 shadow-2xs"
@@ -475,6 +467,8 @@ export default function VendorRequestsPage() {
             onSelectExhibition={setSelectedExhibitionId}
             allocationWindowExhibitions={allocationWindowExhibitions}
             showAllocationWindowOnly={showAllocationWindowOnly}
+            targetAlternativeVendor={targetAlternativeVendor}
+            onClearTargetAlternativeVendor={() => setTargetAlternativeVendor(null)}
           />
         )
       )}

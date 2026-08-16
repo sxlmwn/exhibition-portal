@@ -56,7 +56,7 @@ export const RequestDetailModal: React.FC<RequestDetailModalProps> = ({
   const handleAssignRequestedStall = () => {
     if (!requestedStall || !isRequestedStallAvailable) return;
     allocateStall(requestedStall.id, request.id, request.vendorName, request.brandName);
-    updateRequestStatus(request.id, 'approved');
+    updateRequestStatus(request.id, 'approved', requestedStall.code);
   };
 
   const handleStatusChange = (status: RequestStatus) => {
