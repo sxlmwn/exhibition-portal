@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { 
   CalendarDays, 
   Store, 
@@ -23,6 +24,7 @@ import { ExhibitionDetailModal } from '../components/exhibitions/ExhibitionDetai
 import { RequestDetailModal } from '../components/requests/RequestDetailModal';
 
 export default function DashboardPage() {
+  const router = useRouter();
   const { exhibitions, stalls, vendorRequests, expenses } = useAdmin();
   const [selectedExhibition, setSelectedExhibition] = React.useState<Exhibition | null>(null);
   const [selectedRequest, setSelectedRequest] = React.useState<VendorRequest | null>(null);
@@ -145,6 +147,10 @@ export default function DashboardPage() {
       <RequestDetailModal
         request={selectedRequest}
         onClose={() => setSelectedRequest(null)}
+        onAllocateStallClick={() => {
+          setSelectedRequest(null);
+          router.push('/requests');
+        }}
       />
 
     </div>

@@ -193,29 +193,77 @@ export const RequestDetailModal: React.FC<RequestDetailModalProps> = ({
                   <p className="text-xs text-charcoal-muted dark:text-white/60 font-light mt-0.5">
                     {isRequestedStallAvailable
                       ? 'This exact stall is free and ready for 1-click confirmation.'
-                      : 'This stall is already occupied. Propose 1-3 available alternatives via WhatsApp or Email.'}
+                      : 'This stall is already occupied. Propose alternative stalls via Floor Map or suggest via WhatsApp.'}
                   </p>
                 </div>
               </div>
 
-              <div className="shrink-0 flex items-center gap-2">
+              <div className="shrink-0 flex flex-wrap items-center gap-2">
                 {isRequestedStallAvailable ? (
                   isOwner && (
                     <button
                       onClick={handleAssignRequestedStall}
-                      className="btn-primary px-4 py-2 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm"
+                      className="btn-primary px-4 py-2 text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm glass-rise-btn cursor-pointer"
                     >
                       <CheckCircle2 className="w-3.5 h-3.5" />
                       <span>Assign Stall {requestedStall.code}</span>
                     </button>
                   )
                 ) : (
+                  <>
+                    <button
+                      onClick={() => {
+                        onAllocateStallClick?.(request);
+                        onClose();
+                      }}
+                      className="px-4 py-2 rounded-lg bg-sage-800 dark:bg-sage-700 hover:bg-sage-900 text-cream text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs transition-all glass-rise-btn cursor-pointer"
+                    >
+                      <Store className="w-3.5 h-3.5" />
+                      <span>Assign Alternative</span>
+                    </button>
+                    <button
+                      onClick={() => setIsAlternativesOpen(true)}
+                      className="px-3 py-2 rounded-lg border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-950/40 hover:bg-amber-100 text-amber-900 dark:text-amber-300 text-xs font-semibold flex items-center gap-1 transition-colors cursor-pointer"
+                      title="Suggest alternative stalls via WhatsApp"
+                    >
+                      <MessageSquare className="w-3.5 h-3.5" />
+                      <span>Suggest via WhatsApp</span>
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Unassigned Request Without Specific Stall Preference */}
+          {!requestedStall && !request.allocatedStallCode && (
+            <div className="p-4 rounded-3xl border border-sage-200/80 dark:border-white/10 bg-sage-50/60 dark:bg-white/[0.03] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <Store className="w-5 h-5 text-sage-700 dark:text-sage-400 shrink-0 mt-0.5" />
+                <div>
+                  <span className="text-[10px] uppercase tracking-wider font-bold text-charcoal-muted dark:text-white/60 block mb-0.5">
+                    Stall Assignment
+                  </span>
+                  <h4 className="font-sans text-base font-bold text-charcoal dark:text-white">
+                    No Specific Stall Pre-Selected
+                  </h4>
+                  <p className="text-xs text-charcoal-muted dark:text-white/60 font-light mt-0.5">
+                    Select and assign any available stall for this vendor from the interactive floor plan.
+                  </p>
+                </div>
+              </div>
+
+              <div className="shrink-0 flex items-center gap-2">
+                {isOwner && (
                   <button
-                    onClick={() => setIsAlternativesOpen(true)}
-                    className="px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
+                    onClick={() => {
+                      onAllocateStallClick?.(request);
+                      onClose();
+                    }}
+                    className="px-4 py-2 rounded-lg bg-sage-800 dark:bg-sage-700 hover:bg-sage-900 text-cream text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs transition-all glass-rise-btn cursor-pointer"
                   >
                     <Store className="w-3.5 h-3.5" />
-                    <span>Send Alternatives</span>
+                    <span>Assign Alternative</span>
                   </button>
                 )}
               </div>
@@ -321,13 +369,9 @@ export const RequestDetailModal: React.FC<RequestDetailModalProps> = ({
             </div>
           )}
 
-          {/* Status Changer Actions */}
-          <div className="pt-4 border-t border-sage-100 dark:border-white/10">
-            <span className="text-xs uppercase tracking-wider font-bold text-charcoal-muted dark:text-white/60 block mb-3">
-              Application Decision & Status
-            </span>
-
-            {!isOwner ? (
+          {/* Status Actions: Single Reject button for unassigned/non-rejected requests, or Owner Permission Notice */}
+          {!isOwner ? (
+            <div className="pt-4 border-t border-sage-100 dark:border-white/10">
               <div className="p-3.5 rounded-2xl bg-sage-50 dark:bg-white/5 border border-sage-200 dark:border-white/10 flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2 text-charcoal-muted dark:text-white/60">
                   <ShieldCheck className="w-4 h-4 text-sage-600 dark:text-sage-400" />
@@ -337,57 +381,37 @@ export const RequestDetailModal: React.FC<RequestDetailModalProps> = ({
                   {statusBadge.label}
                 </span>
               </div>
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            </div>
+          ) : (
+            request.status !== 'rejected' && !request.allocatedStallCode ? (
+              <div className="pt-4 border-t border-sage-100 dark:border-white/10 flex items-center justify-between gap-4">
+                <div className="text-xs text-charcoal-muted dark:text-white/60">
+                  Current Status: <span className={`status-badge ml-1 text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${statusBadge.bg}`}>{statusBadge.label}</span>
+                </div>
                 <button
-                  onClick={() => handleStatusChange('approved')}
-                  className={`px-3 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 glass-rise-btn ${
-                    request.status === 'approved'
-                      ? 'bg-emerald-700 text-white shadow-soft'
-                      : 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-300 hover:bg-emerald-100 border border-emerald-200 dark:border-emerald-800'
-                  }`}
+                  onClick={() => {
+                    if (onOpenAction) {
+                      onOpenAction('rejected');
+                      onClose();
+                    } else {
+                      handleStatusChange('rejected');
+                    }
+                  }}
+                  className="px-3.5 py-2 rounded-lg bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-800 text-xs font-bold transition-all glass-rise-btn flex items-center gap-1.5 shadow-2xs cursor-pointer"
                 >
-                  <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>Approve</span>
-                </button>
-
-                <button
-                  onClick={() => handleStatusChange('waitlisted')}
-                  className={`px-3 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 glass-rise-btn ${
-                    request.status === 'waitlisted'
-                      ? 'bg-purple-700 text-white shadow-soft'
-                      : 'bg-purple-50 dark:bg-purple-950/40 text-purple-900 dark:text-purple-300 hover:bg-purple-100 border border-purple-200 dark:border-purple-800'
-                  }`}
-                >
-                  <Clock className="w-3.5 h-3.5" />
-                  <span>Waitlist</span>
-                </button>
-
-                <button
-                  onClick={() => handleStatusChange('rejected')}
-                  className={`px-3 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 glass-rise-btn ${
-                    request.status === 'rejected'
-                      ? 'bg-rose-700 text-white shadow-soft'
-                      : 'bg-rose-50 dark:bg-rose-950/40 text-rose-900 dark:text-rose-300 hover:bg-rose-100 border border-rose-200 dark:border-rose-800'
-                  }`}
-                >
-                  <XCircle className="w-3.5 h-3.5" />
-                  <span>Reject</span>
-                </button>
-
-                <button
-                  onClick={() => handleStatusChange('pending')}
-                  className={`px-3 py-2.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 glass-rise-btn ${
-                    request.status === 'pending'
-                      ? 'bg-amber-600 text-white shadow-soft'
-                      : 'bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300 hover:bg-amber-100 border border-amber-200 dark:border-amber-800'
-                  }`}
-                >
-                  <span>Pending</span>
+                  <XCircle className="w-4 h-4" />
+                  <span>Reject Application</span>
                 </button>
               </div>
-            )}
-          </div>
+            ) : (
+              <div className="pt-4 border-t border-sage-100 dark:border-white/10 flex items-center justify-between text-xs text-charcoal-muted dark:text-white/60">
+                <span>Current Application Status:</span>
+                <span className={`status-badge text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${statusBadge.bg}`}>
+                  {statusBadge.label}
+                </span>
+              </div>
+            )
+          )}
 
         </div>
       </div>

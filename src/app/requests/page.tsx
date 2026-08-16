@@ -482,6 +482,14 @@ export default function VendorRequestsPage() {
             handleOpenAction(detailRequest, status);
           }
         }}
+        onAllocateStallClick={(req) => {
+          if (req.exhibitionId) {
+            setSelectedExhibitionId(req.exhibitionId);
+          }
+          setTargetAlternativeVendor(req);
+          setActiveTab('floor-plan');
+          setDetailRequest(null);
+        }}
       />
 
       {/* Action Confirmation Modal */}
