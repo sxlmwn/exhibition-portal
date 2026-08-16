@@ -70,10 +70,10 @@ export const CampaignDetailModal: React.FC<CampaignDetailModalProps> = ({
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${getPlatformBadge(campaign.platform)}`}>
+                <span className={`status-badge text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${getPlatformBadge(campaign.platform)}`}>
                   {campaign.platform}
                 </span>
-                <span className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${getStatusBadge(campaign.status)}`}>
+                <span className={`status-badge text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${getStatusBadge(campaign.status)}`}>
                   {campaign.status}
                 </span>
               </div>

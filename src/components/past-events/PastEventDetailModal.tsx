@@ -61,13 +61,13 @@ export const PastEventDetailModal: React.FC<PastEventDetailModalProps> = ({
           {/* Overlaid Meta */}
           <div className="absolute bottom-6 left-6 right-6 text-white">
             <div className="flex items-center gap-2 mb-2">
-              <span className="bg-cream-50 dark:bg-white/15 dark:backdrop-blur-md dark:border dark:border-white/20 text-[#2b3a26] dark:text-white text-[11px] font-bold uppercase tracking-wider px-3.5 py-1 rounded-full shadow-md dark:shadow-none">
+              <span className="status-badge bg-cream-50 dark:bg-white/15 dark:backdrop-blur-md dark:border dark:border-white/20 text-[#2b3a26] dark:text-white text-[11px] font-bold uppercase tracking-wider px-3.5 py-1 rounded-full shadow-md dark:shadow-none">
                 {event.edition}
               </span>
-              <span className="bg-white/20 backdrop-blur-md text-white text-[11px] font-medium tracking-wider px-3 py-1 rounded-full">
+              <span className="status-badge bg-white/20 backdrop-blur-md text-white text-[11px] font-medium tracking-wider px-3 py-1 rounded-full">
                 {event.city} &bull; {event.dateRange}
               </span>
-              <span className={`flex items-center gap-1 text-[11px] font-medium tracking-wider px-3 py-1 rounded-full backdrop-blur-md ${
+              <span className={`status-badge flex items-center gap-1 text-[11px] font-medium tracking-wider px-3 py-1 rounded-full backdrop-blur-md ${
                 event.isPublished 
                   ? 'bg-emerald-500/80 text-white' 
                   : 'bg-slate-500/60 text-white'

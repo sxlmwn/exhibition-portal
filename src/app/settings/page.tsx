@@ -138,7 +138,7 @@ export default function SettingsPage() {
 
                   {/* Role badge */}
                   <td className="py-4 px-4">
-                    <span className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${getRoleBadge(user.role)}`}>
+                    <span className={`status-badge text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${getRoleBadge(user.role)}`}>
                       {user.role}
                     </span>
                   </td>

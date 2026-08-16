@@ -249,7 +249,7 @@ export default function FinancePage() {
           </div>
 
           {!isOwner && (
-            <div className="flex items-center gap-2 text-xs bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-800 px-3.5 py-1.5 rounded-full font-semibold">
+            <div className="status-badge flex items-center gap-2 text-xs bg-amber-50 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300 border border-amber-200 dark:border-amber-800 px-3.5 py-1.5 rounded-full font-semibold">
               <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
               <span>Staff Role: Can log expenses. Editing / Deleting ledgers is restricted to Owner.</span>
             </div>

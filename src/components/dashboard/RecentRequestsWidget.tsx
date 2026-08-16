@@ -60,11 +60,11 @@ export const RecentRequestsWidget: React.FC<RecentRequestsWidgetProps> = ({ requ
                   <h4 className="text-xs font-extrabold text-charcoal dark:text-white truncate">
                     {req.brandName}
                   </h4>
-                  <span className={`text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full border ${getStatusBadge(req.status)}`}>
+                  <span className={`status-badge text-[9px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full border ${getStatusBadge(req.status)}`}>
                     {req.status}
                   </span>
                   {isFollowUpNeeded(req) && (
-                    <span className="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700/60">
+                    <span className="status-badge text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border border-amber-300 dark:border-amber-700/60">
                       Follow Up
                     </span>
                   )}

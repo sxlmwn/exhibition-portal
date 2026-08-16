@@ -49,7 +49,7 @@ export const StatCard: React.FC<StatCardProps> = ({
       {/* Bottom row: Trend indicator badge */}
       {trend && (
         <div className="pt-3 border-t border-sage-100 dark:border-white/8 flex items-center gap-2 text-xs">
-          <span className={`inline-flex items-center gap-1 font-semibold px-2 py-0.5 rounded-full ${
+          <span className={`status-badge inline-flex items-center gap-1 font-semibold px-2 py-0.5 rounded-full ${
             trend.isPositive 
               ? 'bg-emerald-50 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700/40' 
               : 'bg-rose-50 dark:bg-rose-900/30 text-rose-800 dark:text-rose-300 border border-rose-200 dark:border-rose-700/40'

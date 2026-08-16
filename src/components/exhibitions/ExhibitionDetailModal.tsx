@@ -64,10 +64,10 @@ export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
           {/* Overlaid Title & Meta */}
           <div className="absolute bottom-6 left-6 right-6 text-white">
             <div className="flex items-center gap-2 mb-2">
-              <span className="bg-cream-50 dark:bg-white/15 dark:backdrop-blur-md dark:border dark:border-white/20 text-[#33422f] dark:text-white text-[11px] font-bold uppercase tracking-wider px-3.5 py-1 rounded-full shadow-md dark:shadow-none">
+              <span className="status-badge bg-cream-50 dark:bg-white/15 dark:backdrop-blur-md dark:border dark:border-white/20 text-[#33422f] dark:text-white text-[11px] font-bold uppercase tracking-wider px-3.5 py-1 rounded-full shadow-md dark:shadow-none">
                 {exhibition.category}
               </span>
-              <span className="bg-white/20 backdrop-blur-md text-white text-[11px] font-medium tracking-wider px-3 py-1 rounded-full">
+              <span className="status-badge bg-white/20 backdrop-blur-md text-white text-[11px] font-medium tracking-wider px-3 py-1 rounded-full">
                 {exhibition.city}
               </span>
             </div>
@@ -181,7 +181,7 @@ export const ExhibitionDetailModal: React.FC<ExhibitionDetailModalProps> = ({
                       <span className="block text-[11px] text-sage-800 mt-0.5">{req.productCategory}</span>
                     </div>
                     <div className="text-right">
-                      <span className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${
+                      <span className={`status-badge text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${
                         req.status === 'approved' 
                           ? 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-900 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700/40' 
                           : 'bg-amber-100 dark:bg-amber-900/30 text-amber-900 dark:text-amber-300 border-amber-300 dark:border-amber-700/40'

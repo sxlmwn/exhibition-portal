@@ -64,13 +64,13 @@ export const ExhibitionCard: React.FC<ExhibitionCardProps> = ({
 
           {/* Status Badge */}
           <div className="absolute top-4 left-4">
-            <span className={`text-[10px] uppercase font-bold tracking-wider px-3 py-1 rounded-full border backdrop-blur-md shadow-xs ${getStatusBadge(exhibition.status)}`}>
+            <span className={`status-badge text-[10px] uppercase font-bold tracking-wider px-3 py-1 rounded-full border backdrop-blur-md shadow-xs ${getStatusBadge(exhibition.status)}`}>
               {exhibition.status}
             </span>
           </div>
 
           {/* City Pill */}
-          <div className="absolute top-4 right-4 bg-white/95 dark:bg-black/80 backdrop-blur-md text-charcoal dark:text-white text-[11px] font-bold px-3 py-1 rounded-full border border-sage-200 dark:border-white/10 shadow-xs flex items-center gap-1">
+          <div className="status-badge absolute top-4 right-4 bg-white/95 dark:bg-black/80 backdrop-blur-md text-charcoal dark:text-white text-[11px] font-bold px-3 py-1 rounded-full border border-sage-200 dark:border-white/10 shadow-xs flex items-center gap-1">
             <MapPin className="w-3 h-3 text-sage-600 dark:text-sage-400" />
             <span>{exhibition.city}</span>
           </div>

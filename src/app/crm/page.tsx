@@ -516,7 +516,7 @@ export default function CRMPage() {
 
                       {/* Status & Tag */}
                       <td className="py-4 px-4">
-                        <span className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${getStatusBadge(contact.status)}`}>
+                        <span className={`status-badge text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${getStatusBadge(contact.status)}`}>
                           {contact.status}
                         </span>
                       </td>

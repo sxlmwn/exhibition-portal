@@ -130,7 +130,7 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
               ))}
             </select>
             {showAllocationWindowOnly && currentExhibition?.stallRegistrationDeadline && (
-              <span className="text-xs font-bold text-rose-700 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/30 px-3 py-1 rounded-full border border-rose-200 dark:border-rose-800/60">
+              <span className="status-badge text-xs font-bold text-rose-700 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/30 px-3 py-1 rounded-full border border-rose-200 dark:border-rose-800/60">
                 {getAllocationWindowDaysRemaining(currentExhibition)} days remaining
               </span>
             )}
@@ -198,7 +198,7 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
               <DoorOpen className="w-4 h-4 text-sage-600 dark:text-sage-400" />
               <span className="font-bold uppercase tracking-wider text-charcoal dark:text-white">Main Entrance</span>
             </div>
-            <span className="text-[11px] bg-sage-100 dark:bg-sage-900/60 text-sage-800 dark:text-sage-300 px-3 py-1 rounded-full font-semibold">
+            <span className="status-badge text-[11px] bg-sage-100 dark:bg-sage-900/60 text-sage-800 dark:text-sage-300 px-3 py-1 rounded-full font-semibold">
               Entry Gate
             </span>
           </div>
@@ -363,7 +363,7 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
           {/* Bottom Stage Marker */}
           <div className="w-full mt-8 pt-4 border-t border-dashed border-sage-200 dark:border-white/10 flex items-center justify-between text-xs text-charcoal-muted dark:text-white/60">
             <span className="font-bold uppercase tracking-wider text-charcoal dark:text-white">Back Stage Area</span>
-            <span className="text-[11px] bg-cream-200 dark:bg-white/10 text-charcoal-muted dark:text-white/60 px-3 py-1 rounded-full">
+            <span className="status-badge text-[11px] bg-cream-200 dark:bg-white/10 text-charcoal-muted dark:text-white/60 px-3 py-1 rounded-full">
               Exit
             </span>
           </div>
@@ -385,7 +385,7 @@ export const StallAllocationGrid: React.FC<StallAllocationGridProps> = ({
                     Stall {selectedStall.code}
                   </h3>
                 </div>
-                <span className="text-xs uppercase font-bold tracking-wider px-3 py-1 rounded-full border border-sage-200 dark:border-white/10 bg-cream-100 dark:bg-white/5 text-charcoal dark:text-white">
+                <span className="status-badge text-xs uppercase font-bold tracking-wider px-3 py-1 rounded-full border border-sage-200 dark:border-white/10 bg-cream-100 dark:bg-white/5 text-charcoal dark:text-white">
                   {selectedStall.tierName}
                 </span>
               </div>

@@ -274,7 +274,7 @@ export const Topbar: React.FC<TopbarProps> = ({ onToggleMobileSidebar }) => {
                   Live Notifications
                 </span>
                 {unreadCount > 0 && (
-                  <span className="text-[10px] bg-sage-100 dark:bg-emerald-900 text-sage-800 dark:text-emerald-300 border border-transparent dark:border-emerald-700 px-2 py-0.5 rounded-full font-bold" style={{ backgroundColor: theme === 'dark' ? '#064E3B' : '#EAEFE9' }}>
+                  <span className="status-badge text-[10px] bg-sage-100 dark:bg-emerald-900 text-sage-800 dark:text-emerald-300 border border-transparent dark:border-emerald-700 px-2 py-0.5 rounded-full font-bold" style={{ backgroundColor: theme === 'dark' ? '#064E3B' : '#EAEFE9' }}>
                     {unreadCount} New
                   </span>
                 )}

@@ -192,7 +192,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
                 </div>
 
                 {!collapsed && item.badge !== null && (
-                  <span className={`text-[10px] px-1.5 py-0.5 rounded-full border font-bold shrink-0 ${
+                  <span className={`status-badge text-[10px] px-1.5 py-0.5 rounded-full border font-bold shrink-0 ${
                     isActive ? 'bg-cream-100 text-sage-900 border-cream-200' : (item.badgeColor || 'bg-sage-100 text-sage-800')
                   }`}>
                     {item.badge}
@@ -237,7 +237,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ collapsed, setCollapsed }) => 
                 <span className="block text-[11px] text-charcoal-muted dark:text-cream-200 truncate font-medium">
                   {currentUser.email}
                 </span>
-                <span className={`inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full mt-1 ${
+                <span className={`status-badge inline-flex items-center gap-1 text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full mt-1 ${
                   currentRole === 'owner' ? 'bg-emerald-50 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800' :
                   'bg-amber-50 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-800'
                 }`}>

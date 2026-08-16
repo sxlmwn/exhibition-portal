@@ -79,13 +79,13 @@ export default function PastEventsPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
 
                 <div className="absolute top-4 left-4 flex items-center gap-2">
-                  <span className="bg-cream-50 dark:bg-white/15 dark:backdrop-blur-md dark:border dark:border-white/20 text-[#33422f] dark:text-white text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-xs dark:shadow-none">
+                  <span className="status-badge bg-cream-50 dark:bg-white/15 dark:backdrop-blur-md dark:border dark:border-white/20 text-[#33422f] dark:text-white text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-xs dark:shadow-none">
                     {event.edition}
                   </span>
-                  <span className="bg-charcoal/70 backdrop-blur-md text-white text-[11px] font-medium px-3 py-1 rounded-full">
+                  <span className="status-badge bg-charcoal/70 backdrop-blur-md text-white text-[11px] font-medium px-3 py-1 rounded-full">
                     {event.city}
                   </span>
-                  <span className={`flex items-center gap-1 text-[11px] font-medium px-3 py-1 rounded-full backdrop-blur-md ${
+                  <span className={`status-badge flex items-center gap-1 text-[11px] font-medium px-3 py-1 rounded-full backdrop-blur-md ${
                     event.isPublished 
                       ? 'bg-emerald-500/80 text-white' 
                       : 'bg-slate-500/60 text-white'

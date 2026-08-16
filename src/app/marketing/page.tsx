@@ -193,7 +193,7 @@ export default function MarketingPage() {
 
                     {/* Status */}
                     <td className="py-4 px-4">
-                      <span className={`text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${
+                      <span className={`status-badge text-[10px] uppercase font-bold tracking-wider px-2.5 py-0.5 rounded-full border ${
                         cmp.status === 'active' 
                           ? 'bg-emerald-100 dark:bg-emerald-950/60 text-emerald-900 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700' 
                           : 'bg-cream-200 dark:bg-white/10 text-charcoal dark:text-white/80 border-sage-300 dark:border-white/10'
