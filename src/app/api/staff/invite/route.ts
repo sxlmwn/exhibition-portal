@@ -1,10 +1,17 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { verifyAuthUser } from '@/lib/serverAuth';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
   try {
+    // 0. Verify authenticated user
+    const caller = await verifyAuthUser(req);
+    if (!caller) {
+      return NextResponse.json({ error: 'Unauthorized: Valid session required' }, { status: 401 });
+    }
+
     const body = await req.json();
     const { name, email, role, phone } = body;
 

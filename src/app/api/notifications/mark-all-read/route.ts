@@ -1,15 +1,16 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { verifyAuthUser } from '@/lib/serverAuth';
 
 export const dynamic = 'force-dynamic';
 
 // POST /api/notifications/mark-all-read - Mark all notifications as read for current user
 export async function POST(req: Request) {
   try {
-    // Get the current user from the session
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    // Get the current user from the session token
+    const user = await verifyAuthUser(req);
     
-    if (authError || !user) {
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

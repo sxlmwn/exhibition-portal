@@ -1,17 +1,66 @@
 'use client';
 
-import React, { useState } from 'react';
-import { usePathname } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
 import { AdminProvider, useAdmin } from '../../context/AdminContext';
+import { supabase } from '../../lib/supabase';
 
 const AdminShellContent: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const { theme } = useAdmin();
   const pathname = usePathname();
+  const router = useRouter();
   const isLoginPage = pathname === '/login';
+
+  // Client-side authentication session verification
+  useEffect(() => {
+    let isMounted = true;
+
+    if (isLoginPage) {
+      setIsAuthenticated(true);
+      return;
+    }
+
+    const checkAuthSession = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!isMounted) return;
+
+        if (!session?.user) {
+          setIsAuthenticated(false);
+          router.replace('/login');
+        } else {
+          setIsAuthenticated(true);
+        }
+      } catch (err) {
+        if (!isMounted) return;
+        setIsAuthenticated(false);
+        router.replace('/login');
+      }
+    };
+
+    checkAuthSession();
+
+    // Listen to real-time auth changes (sign-out, expiry, etc.)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!isMounted) return;
+      if (!session?.user && !isLoginPage) {
+        setIsAuthenticated(false);
+        router.replace('/login');
+      } else if (session?.user) {
+        setIsAuthenticated(true);
+      }
+    });
+
+    return () => {
+      isMounted = false;
+      subscription.unsubscribe();
+    };
+  }, [isLoginPage, router]);
 
   // Standalone Login Page without Shell chrome
   if (isLoginPage) {
@@ -20,6 +69,22 @@ const AdminShellContent: React.FC<{ children: React.ReactNode }> = ({ children }
         theme === 'dark' ? 'dark bg-[#0D0F13] text-[#F3F4F6]' : 'bg-[#F8F7F4] text-charcoal'
       }`}>
         {children}
+      </div>
+    );
+  }
+
+  // Loading state while verifying authentication session (prevents protected UI flash)
+  if (!isAuthenticated) {
+    return (
+      <div className={`min-h-screen flex items-center justify-center transition-colors duration-200 ${
+        theme === 'dark' ? 'dark bg-[#0D0F13] text-[#F3F4F6]' : 'bg-[#F8F7F4] text-charcoal'
+      }`}>
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-10 h-10 rounded-full border-2 border-sage-400/30 border-t-sage-600 dark:border-t-sage-400 animate-spin" />
+          <span className="text-xs uppercase tracking-widest font-semibold text-charcoal-muted dark:text-white/40">
+            Verifying Session...
+          </span>
+        </div>
       </div>
     );
   }

@@ -1095,9 +1095,15 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   // Staff Management
   const inviteStaffUser = async (user: Omit<StaffUser, 'id' | 'joinedDate' | 'lastActive'>) => {
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (session?.access_token) {
+        headers['Authorization'] = `Bearer ${session.access_token}`;
+      }
+
       const response = await fetch('/api/staff/invite', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify(user)
       });
       const res = await response.json();

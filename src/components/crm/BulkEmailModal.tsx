@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { CRMContact } from '../../types';
 import { ModalPortal } from '../common/ModalPortal';
+import { supabase } from '../../lib/supabase';
 
 interface BulkEmailModalProps {
   contacts: CRMContact[];
@@ -57,11 +58,17 @@ export const BulkEmailModal: React.FC<BulkEmailModalProps> = ({
     setResult(null);
 
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+      };
+      if (session?.access_token) {
+        headers['Authorization'] = `Bearer ${session.access_token}`;
+      }
+
       const response = await fetch('/api/send-bulk-email', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers,
         body: JSON.stringify({
           recipients: validEmailContacts.map((c) => c.email),
           subject,

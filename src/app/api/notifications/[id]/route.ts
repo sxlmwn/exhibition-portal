@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { verifyAuthUser } from '@/lib/serverAuth';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,10 +13,10 @@ export async function PATCH(
     const body = await req.json();
     const { isRead } = body;
 
-    // Get the current user from the session
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    // Get the current user from the session token
+    const user = await verifyAuthUser(req);
     
-    if (authError || !user) {
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -46,10 +47,10 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Get the current user from the session
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    // Get the current user from the session token
+    const user = await verifyAuthUser(req);
     
-    if (authError || !user) {
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

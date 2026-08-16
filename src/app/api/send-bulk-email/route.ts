@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { verifyAuthUser } from '@/lib/serverAuth';
 
 export const dynamic = 'force-dynamic';
 
@@ -8,6 +9,18 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export async function POST(req: NextRequest) {
   try {
+    // 0. Verify authenticated user session
+    const caller = await verifyAuthUser(req);
+    if (!caller) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'UNAUTHORIZED',
+          message: 'Unauthorized: You must be logged in to dispatch emails.',
+        },
+        { status: 401 }
+      );
+    }
     const gmailUser = process.env.GMAIL_USER?.trim();
     const gmailAppPassword = process.env.GMAIL_APP_PASSWORD?.trim();
 

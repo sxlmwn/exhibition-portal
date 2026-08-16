@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { verifyAuthUser } from '@/lib/serverAuth';
 import { seedSampleNotifications } from '@/lib/seedNotifications';
 
 export const dynamic = 'force-dynamic';
@@ -7,9 +7,9 @@ export const dynamic = 'force-dynamic';
 // POST /api/notifications/seed - Seed sample notifications for testing
 export async function POST(req: Request) {
   try {
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const user = await verifyAuthUser(req);
     
-    if (authError || !user) {
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

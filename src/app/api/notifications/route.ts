@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase';
+import { verifyAuthUser } from '@/lib/serverAuth';
 
 export const dynamic = 'force-dynamic';
 
@@ -10,10 +11,10 @@ export async function GET(req: Request) {
     const limit = parseInt(searchParams.get('limit') || '10');
     const unreadOnly = searchParams.get('unreadOnly') === 'true';
 
-    // Get the current user from the session
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    // Get the current user from the token session
+    const user = await verifyAuthUser(req);
     
-    if (authError || !user) {
+    if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -43,6 +44,11 @@ export async function GET(req: Request) {
 // POST /api/notifications - Create a new notification
 export async function POST(req: Request) {
   try {
+    const user = await verifyAuthUser(req);
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await req.json();
     const { userId, type, title, message, metadata } = body;
 

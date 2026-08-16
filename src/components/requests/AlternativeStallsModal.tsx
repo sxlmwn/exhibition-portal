@@ -16,6 +16,7 @@ import {
 import { VendorRequest, StallSlot, Exhibition } from '../../types';
 import { useAdmin } from '../../context/AdminContext';
 import { ModalPortal } from '../common/ModalPortal';
+import { supabase } from '../../lib/supabase';
 
 interface AlternativeStallsModalProps {
   request: VendorRequest;
@@ -80,9 +81,15 @@ export const AlternativeStallsModal: React.FC<AlternativeStallsModalProps> = ({
     setEmailStatus(null);
 
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (session?.access_token) {
+        headers['Authorization'] = `Bearer ${session.access_token}`;
+      }
+
       const res = await fetch('/api/send-bulk-email', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({
           recipients: [request.email],
           subject: `Alternative Stall Options — ${exhibitionTitle}`,
